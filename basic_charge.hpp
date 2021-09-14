@@ -2,6 +2,10 @@
 #define LOEF_DRAWER_BASIC_CHARGE
 #include "vec2d.hpp"
 namespace LOEF {
+/**
+ * @brief basic charge class
+ * this class is immutable and therefore read-only
+ */
 class basic_charge_ {
    protected:
     double quantity_ = 0;

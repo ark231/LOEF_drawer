@@ -4,6 +4,10 @@
 
 #include "charges.hpp"
 namespace LOEF {
+namespace radius {
+constexpr double FIXED = 2.5;
+
+}
 class painter : public QPainter {
     using QPainter::QPainter;
     double dpmm_ = 0;  //! dot per millimetre

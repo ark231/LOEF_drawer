@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(LOEF_drawer LANGUAGES CXX)
+project(LOEF_drawer LANGUAGES CXX 0.1.0)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -56,6 +56,7 @@ endif()
 #add_library(painter STATIC
 #    LOEF_QPainter.cpp
 #    )
+target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra)
 target_link_libraries(LOEF_drawer PRIVATE Qt5::Widgets)
 #target_link_libraries(LOEF_drawer PRIVATE 
 #    charges

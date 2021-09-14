@@ -9,7 +9,7 @@ void painter::set_resolution(double dpmm) { this->dpmm_ = dpmm; }
 void painter::draw_fixed_charge(const fixed_charge &charge) {
     QPainter::save();
     assert(this->dpmm_ > 0);
-    double radius = 2.5 * dpmm_;
+    double radius = radius::FIXED * dpmm_;
     auto position = charge.position();
     QPen pen;
     pen.setWidth(3);

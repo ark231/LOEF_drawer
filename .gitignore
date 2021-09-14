@@ -73,5 +73,7 @@ Thumbs.db
 
 compile_commands.json
 .clang-format
+Doxyfile
+doc
 
 *build*
