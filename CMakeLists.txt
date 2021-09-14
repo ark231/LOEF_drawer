@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(LOEF_drawer LANGUAGES CXX 0.1.0)
+project(LOEF_drawer LANGUAGES CXX VERSION 0.1.0)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -25,6 +25,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #endif()
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
+
+configure_file(general_consts.template.hpp general_consts.hpp)
 
 if(ANDROID)
     add_library(LOEF_drawer SHARED
@@ -58,6 +60,9 @@ endif()
 #    )
 target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra)
 target_link_libraries(LOEF_drawer PRIVATE Qt5::Widgets)
+target_include_directories(LOEF_drawer PRIVATE
+    ${CMAKE_CURRENT_BINARY_DIR}
+    )
 #target_link_libraries(LOEF_drawer PRIVATE 
 #    charges
 #    vec2d
