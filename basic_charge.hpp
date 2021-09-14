@@ -14,6 +14,7 @@ class basic_charge_ {
    public:
     basic_charge_(double initial_quantity, int initial_x, int initial_y);
     basic_charge_(double initial_quantity, vec2d initial_position);
+    basic_charge_() {}
     double quantity() const noexcept;
     vec2d position() const noexcept;
 };

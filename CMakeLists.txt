@@ -44,6 +44,7 @@ else()
         mainwindow.ui
         loef_drawer.cpp
         basic_charge.cpp
+        charge_pen.cpp
         vec2d.cpp
         LOEF_QPainter.cpp
     )

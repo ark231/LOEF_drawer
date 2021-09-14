@@ -22,19 +22,24 @@ vec2d operator+(const vec2d &a, const vec2d &b) { return vec2d(a.x() + b.x(), a.
 vec2d operator-(const vec2d &a, const vec2d &b) { return vec2d(a.x() - b.x(), a.y() - b.y()); }
 vec2d operator*(double k, const vec2d &a) { return vec2d(k * a.x(), k * a.y()); }
 vec2d operator*(const vec2d &a, double k) { return k * a; }
+vec2d operator/(const vec2d &a, double k) { return vec2d(a.x() / k, a.y() / k); }
 vec2d operator-(const vec2d &a) { return -1 * a; }
-vec2d &vec2d::operator+=(vec2d &that) {
+void vec2d::operator+=(const vec2d &that) {
     this->x_ += that.x();
     this->y_ += that.y();
-    return that;
 }
-vec2d &vec2d::operator-=(vec2d &that) {
+void vec2d::operator-=(const vec2d &that) {
     this->x_ -= that.x();
     this->y_ -= that.y();
-    return that;
 }
 void vec2d::operator*=(double k) {
     this->x_ *= k;
     this->y_ *= k;
 }
+void vec2d::operator/=(double k) {
+    this->x_ /= k;
+    this->y_ /= k;
+}
+vec2d::operator QPoint() { return QPoint(x_, y_); }
+vec2d normalize(const vec2d &a) { return a / a.length(); }
 }  // namespace LOEF

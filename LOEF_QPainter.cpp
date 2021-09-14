@@ -3,6 +3,8 @@
 #include <QPen>
 #include <cassert>
 #include <cmath>
+
+#include "general_consts.hpp"
 namespace LOEF {
 using dots = double;  //! in order to preserve fraction for multipulication
 void painter::set_resolution(double dpmm) { this->dpmm_ = dpmm; }
@@ -40,4 +42,5 @@ void painter::draw_fixed_charge(const fixed_charge &charge) {
     }
     QPainter::restore();
 }
+void painter::draw_LOEF_path(const LOEF_path &path) { QPainter::drawPath(path); }
 }  // namespace LOEF
