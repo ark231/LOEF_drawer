@@ -44,6 +44,9 @@ bool charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map
     path->lineTo(static_cast<QPoint>(this->position_));
     if ((0 <= position_.x() && position_.x() <= max_x) && (0 <= position_.y() && position_.y() <= max_y)) {
         for (auto iterator = begin; iterator != end; iterator++) {
+            if (iterator->second.quantity() == 0) {
+                continue;  //中性電荷は突き抜ける
+            }
             if ((iterator->second.position() - position_).length() < (radius::FIXED + 1) * dpmm) {
                 return false;
             }

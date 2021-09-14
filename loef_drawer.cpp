@@ -74,7 +74,7 @@ void LOEF_drawer::paintEvent(QPaintEvent *ev) {
         if (charge.second.quantity() > 0) {
             auto pen_id = charge_pen_id_handler_->new_id();
             charge_pens_[pen_id] =
-                LOEF::charge_pen(true, charge.second.position() + LOEF::vec2d(0, -1 * dpmm_), 1, width, height);
+                LOEF::charge_pen(true, charge.second.position() + LOEF::vec2d(0, -2 * dpmm_), 1, width, height);
             charge_paths_[pen_id] = charge_pens_[pen_id].get_path();
             std::vector<id_type> ids_to_erase;
             for (auto charge_pen = charge_pens_.begin(); charge_pen != charge_pens_.end(); charge_pen++) {
