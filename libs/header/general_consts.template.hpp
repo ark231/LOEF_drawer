@@ -1,5 +1,5 @@
-#ifndef LOEF_DRAWER_GENERAL_CONSTS_TEMPLATE
-#define LOEF_DRAWER_GENERAL_CONSTS_TEMPLATE
+#ifndef LOEF_DRAWER_GENERAL_CONSTS
+#define LOEF_DRAWER_GENERAL_CONSTS
 namespace LOEF {
 constexpr const char* application_name = "LOEF_drawer";
 constexpr const int version_major = ${LOEF_drawer_VERSION_MAJOR};

@@ -26,7 +26,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-configure_file(general_consts.template.hpp general_consts.hpp)
+add_subdirectory(libs)
 
 if(ANDROID)
     add_library(LOEF_drawer SHARED
@@ -43,29 +43,17 @@ else()
         mainwindow.hpp
         mainwindow.ui
         loef_drawer.cpp
-        basic_charge.cpp
-        charge_pen.cpp
-        vec2d.cpp
-        LOEF_QPainter.cpp
     )
 endif()
 
-#add_library(charges STATIC
-#    basic_charge.cpp
-#    )
-#add_library(vec2d STATIC
-#    vec2d.cpp
-#    )
-#add_library(painter STATIC
-#    LOEF_QPainter.cpp
-#    )
 target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra)
 target_link_libraries(LOEF_drawer PRIVATE Qt5::Widgets)
-target_include_directories(LOEF_drawer PRIVATE
-    ${CMAKE_CURRENT_BINARY_DIR}
+target_link_libraries(LOEF_drawer PRIVATE 
+    charges
+    vec2d
+    painter
     )
-#target_link_libraries(LOEF_drawer PRIVATE 
-#    charges
-#    vec2d
-#    painter
-#    )
+target_include_directories(LOEF_drawer PRIVATE 
+    ${LOEF_drawer_libs_header_SOURCE_DIR}
+    ${LOEF_drawer_libs_header_BINARY_DIR}
+    )
