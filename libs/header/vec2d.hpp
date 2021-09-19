@@ -12,24 +12,24 @@ namespace LOEF {
  */
 class vec2d {
    protected:
-    millimetre_value x_;
-    millimetre_value y_;
+    millimetre_quantity x_;
+    millimetre_quantity y_;
 
    public:
-    vec2d(millimetre_value x, millimetre_value y);
-    vec2d(const QPoint &point, dot_per_millimetre_value dpmm);
-    vec2d(const QPointF &point, dot_per_millimetre_value dpmm);
+    vec2d(millimetre_quantity x, millimetre_quantity y);
+    vec2d(const QPoint &point, dot_per_millimetre_quantity dpmm);
+    vec2d(const QPointF &point, dot_per_millimetre_quantity dpmm);
     vec2d() {}
-    millimetre_value length() const;
+    millimetre_quantity length() const;
     decltype(x_ * x_) length_square() const;
-    millimetre_value x() const noexcept;
-    millimetre_value y() const noexcept;
+    millimetre_quantity x() const noexcept;
+    millimetre_quantity y() const noexcept;
     void operator+=(const vec2d &that);
     void operator-=(const vec2d &that);
     void operator*=(double k);
     void operator/=(double k);
-    QPoint to_QPoint(dot_per_millimetre_value dpmm);
-    QPointF to_QPointF(dot_per_millimetre_value dpmm);
+    QPoint to_QPoint(dot_per_millimetre_quantity dpmm);
+    QPointF to_QPointF(dot_per_millimetre_quantity dpmm);
 };
 vec2d operator+(const vec2d &a, const vec2d &b);
 vec2d operator-(const vec2d &a, const vec2d &b);

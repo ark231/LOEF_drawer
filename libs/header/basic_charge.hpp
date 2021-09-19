@@ -8,14 +8,14 @@ namespace LOEF {
  */
 class basic_charge_ {
    protected:
-    coulomb_value quantity_ = 0;
+    coulomb_quantity quantity_ = 0;
     vec2d position_;
 
    public:
-    basic_charge_(coulomb_value initial_quantity, millimetre_value initial_x, millimetre_value initial_y);
-    basic_charge_(coulomb_value initial_quantity, vec2d initial_position);
+    basic_charge_(coulomb_quantity initial_quantity, millimetre_quantity initial_x, millimetre_quantity initial_y);
+    basic_charge_(coulomb_quantity initial_quantity, vec2d initial_position);
     basic_charge_() {}
-    coulomb_value quantity() const noexcept;
+    coulomb_quantity quantity() const noexcept;
     vec2d position() const noexcept;
 };
 

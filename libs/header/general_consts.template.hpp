@@ -7,7 +7,7 @@ constexpr const int version_major = ${LOEF_drawer_VERSION_MAJOR};
 constexpr const int version_minor = ${LOEF_drawer_VERSION_MINOR};
 constexpr const int version_patch = ${LOEF_drawer_VERSION_PATCH};
 namespace radius {
-constexpr millimetre_value FIXED = 2.5 * millimetre;
+constexpr millimetre_quantity FIXED = 2.5 * millimetre;
 }  // namespace radius
 }  // namespace LOEF
 #endif

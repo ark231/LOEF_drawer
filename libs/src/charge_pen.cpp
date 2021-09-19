@@ -1,8 +1,8 @@
 #include "charge_pen.hpp"
 namespace LOEF {
 #ifdef LOEF_DRAWER_CHARGES_LIBRARY_BUILD
-charge_pen::charge_pen(bool is_positive, vec2d initial_position, millimetre_value interval, int max_x, int max_y,
-                       dot_per_millimetre_value dpmm)
+charge_pen::charge_pen(bool is_positive, vec2d initial_position, millimetre_quantity interval, int max_x, int max_y,
+                       dot_per_millimetre_quantity dpmm)
     : is_positive_(is_positive),
       position_(initial_position),
       interval_(interval),
@@ -16,7 +16,7 @@ std::shared_ptr<LOEF_path> charge_pen::get_path() { return path; }
 #endif
 template <class fixed_charge_map_iterator_>
 bool charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end,
-                              dot_per_millimetre_value dpmm) {
+                              dot_per_millimetre_quantity dpmm) {
     vec2d electric_field(0, 0);
     for (auto fixed_charge_itr = begin; fixed_charge_itr != end; fixed_charge_itr++) {
         auto fixed_charge = fixed_charge_itr->second;

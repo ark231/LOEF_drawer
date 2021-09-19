@@ -7,7 +7,7 @@
 #include "general_consts.hpp"
 namespace LOEF {
 using dots = double;  //! in order to preserve fraction for multipulication
-void painter::set_resolution(dot_per_millimetre_value dpmm) { this->dpmm_ = dpmm; }
+void painter::set_resolution(dot_per_millimetre_quantity dpmm) { this->dpmm_ = dpmm; }
 void painter::draw_fixed_charge(const fixed_charge &charge) {
     QPainter::save();
     double radius = (radius::FIXED * dpmm_);

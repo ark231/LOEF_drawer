@@ -14,17 +14,17 @@ class LOEF_path : public QPainterPath {
 class charge_pen {
     bool is_positive_ = true;
     vec2d position_;
-    millimetre_value interval_;
+    millimetre_quantity interval_;
     int max_x = 0;
     int max_y = 0;
     std::shared_ptr<LOEF_path> path;
 
    public:
-    charge_pen(bool is_positive, vec2d initial_position, millimetre_value interval, int max_x, int max_y,
-               dot_per_millimetre_value dpmm);
+    charge_pen(bool is_positive, vec2d initial_position, millimetre_quantity interval, int max_x, int max_y,
+               dot_per_millimetre_quantity dpmm);
     charge_pen() {}
     template <class fixed_charge_map_iterator_>
-    bool step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end, dot_per_millimetre_value dpmm);
+    bool step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end, dot_per_millimetre_quantity dpmm);
     std::shared_ptr<LOEF_path> get_path();
 };
 }  // namespace LOEF
