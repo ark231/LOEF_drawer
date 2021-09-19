@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(LOEF_drawer LANGUAGES CXX VERSION 0.2.1)
+project(LOEF_drawer LANGUAGES CXX VERSION 0.2.1.1)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

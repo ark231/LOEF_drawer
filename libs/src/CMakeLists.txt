@@ -36,10 +36,14 @@ add_library(charges STATIC
     )
 target_include_directories(charges PUBLIC
     ${Qt5Gui_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}
     )
 target_link_libraries(charges PRIVATE
     vec2d
     Qt5::Gui
+    )
+target_compile_definitions(charges PRIVATE
+    LOEF_DRAWER_CHARGES_LIBRARY_BUILD
     )
 add_library(painter STATIC
     LOEF_QPainter.cpp
