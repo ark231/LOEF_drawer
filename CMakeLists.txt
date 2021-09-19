@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(LOEF_drawer LANGUAGES CXX VERSION 0.2.2.0)
+project(LOEF_drawer LANGUAGES CXX VERSION 0.2.2.1)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -8,7 +8,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.

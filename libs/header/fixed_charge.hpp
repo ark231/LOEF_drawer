@@ -7,6 +7,7 @@
 #include "vec2d.hpp"
 namespace LOEF {
 class fixed_charge : public basic_charge_ {
+   public:
     using basic_charge_::basic_charge_;
     template <class fixed_charge_containter_itr>
     std::vector<vec2d> calc_pen_init_pos(fixed_charge_containter_itr begin, fixed_charge_containter_itr end,

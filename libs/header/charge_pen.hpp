@@ -8,23 +8,23 @@
 #include "general_consts.hpp"
 #include "vec2d.hpp"
 namespace LOEF {
-using screen_mm = double;
 class LOEF_path : public QPainterPath {
     using QPainterPath::QPainterPath;
 };
 class charge_pen {
     bool is_positive_ = true;
     vec2d position_;
-    screen_mm interval_ = 1;
+    millimetre_value interval_;
     int max_x = 0;
     int max_y = 0;
     std::shared_ptr<LOEF_path> path;
 
    public:
-    charge_pen(bool is_positive, vec2d initial_position, screen_mm interval, int max_x, int max_y);
+    charge_pen(bool is_positive, vec2d initial_position, millimetre_value interval, int max_x, int max_y,
+               dot_per_millimetre_value dpmm);
     charge_pen() {}
     template <class fixed_charge_map_iterator_>
-    bool step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end, double dpmm);
+    bool step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end, dot_per_millimetre_value dpmm);
     std::shared_ptr<LOEF_path> get_path();
 };
 }  // namespace LOEF

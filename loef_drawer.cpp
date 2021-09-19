@@ -7,6 +7,7 @@
 #include <iterator>
 
 #include "LOEF_QPainter.hpp"
+#include "units.hpp"
 namespace LOEF {
 class state_charge_selected_ {
     bool exists_selected_ = false;
@@ -54,13 +55,16 @@ id_type id_handler::new_id() {
 
 LOEF_drawer::LOEF_drawer(QWidget *parent) : QWidget(parent) {
     double dpi = QGuiApplication::screens().at(0)->physicalDotsPerInch();
-    this->dpmm_ = dpi / 25.4;
+    this->dpmm_ = (dpi / 25.4) * LOEF::dot_per_millimetre;
     charge_selected_ = new LOEF::state_charge_selected_;
     fixed_charge_id_handler_ = new LOEF::id_handler;
     charge_pen_id_handler_ = new LOEF::id_handler;
-    fixed_charges_[fixed_charge_id_handler_->new_id()] = LOEF::fixed_charge(+1, 200, 300);
-    fixed_charges_[fixed_charge_id_handler_->new_id()] = LOEF::fixed_charge(+0, 400, 300);
-    fixed_charges_[fixed_charge_id_handler_->new_id()] = LOEF::fixed_charge(-1, 600, 300);
+    fixed_charges_[fixed_charge_id_handler_->new_id()] =
+        LOEF::fixed_charge(+1 * LOEF::boostunits::coulomb, 200.0 / dpmm_, 300.0 / dpmm_);
+    fixed_charges_[fixed_charge_id_handler_->new_id()] =
+        LOEF::fixed_charge(+0 * LOEF::boostunits::coulomb, 400.0 / dpmm_, 300.0 / dpmm_);
+    fixed_charges_[fixed_charge_id_handler_->new_id()] =
+        LOEF::fixed_charge(-1 * LOEF::boostunits::coulomb, 600.0 / dpmm_, 300.0 / dpmm_);
 }
 void LOEF_drawer::paintEvent(QPaintEvent *ev) {
     LOEF::painter painter(this);
@@ -71,11 +75,13 @@ void LOEF_drawer::paintEvent(QPaintEvent *ev) {
     painter.drawLine(width / 2.0, 0, width / 2.0, height);
     for (const auto &charge : fixed_charges_) {
         painter.draw_fixed_charge(charge.second);
-        if (charge.second.quantity() > 0) {
+        if (charge.second.quantity() / LOEF::boostunits::coulomb > 0) {
             auto pen_id = charge_pen_id_handler_->new_id();
-            charge_pens_[pen_id] = LOEF::charge_pen(
-                true, charge.second.position() + LOEF::vec2d(0, -LOEF::radius::FIXED * dpmm_ + -0.1 * dpmm_), 1, width,
-                height);
+            charge_pens_[pen_id] =
+                LOEF::charge_pen(true,
+                                 charge.second.position() +
+                                     LOEF::vec2d(0 * LOEF::millimetre, -(LOEF::radius::FIXED + 0.1 * LOEF::millimetre)),
+                                 1 * LOEF::millimetre, width, height, dpmm_);
             charge_paths_[pen_id] = charge_pens_[pen_id].get_path();
             std::vector<id_type> ids_to_erase;
             for (auto charge_pen = charge_pens_.begin(); charge_pen != charge_pens_.end(); charge_pen++) {
@@ -100,20 +106,21 @@ void LOEF_drawer::paintEvent(QPaintEvent *ev) {
     }
 }
 void LOEF_drawer::mousePressEvent(QMouseEvent *ev) {
-    LOEF::vec2d pos_mouse(ev->pos());
+    LOEF::vec2d pos_mouse(ev->pos(), dpmm_);
     for (auto charge = fixed_charges_.begin(); charge != fixed_charges_.end(); charge++) {
         auto offset = pos_mouse - charge->second.position();
-        if (offset.length() <= LOEF::radius::FIXED * dpmm_) {
+        if (offset.length() * dpmm_ <= LOEF::radius::FIXED * dpmm_) {
             charge_selected_->set_selected(charge->first, offset);
         }
     }
 }
 void LOEF_drawer::mouseMoveEvent(QMouseEvent *ev) {
+    LOEF::vec2d pos_mouse(ev->pos(), dpmm_);
     if (*charge_selected_) {
         auto id_selected = charge_selected_->get_selected();
         auto old_charge = fixed_charges_[id_selected];
         fixed_charges_[id_selected] =
-            LOEF::fixed_charge(old_charge.quantity(), ev->pos() + charge_selected_->get_offset());
+            LOEF::fixed_charge(old_charge.quantity(), pos_mouse + charge_selected_->get_offset());
         charge_pens_.clear();
         charge_paths_.clear();
         update();

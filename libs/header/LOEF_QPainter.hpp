@@ -6,10 +6,10 @@
 namespace LOEF {
 class painter : public QPainter {
     using QPainter::QPainter;
-    double dpmm_ = 0;  //! dot per millimetre
+    dot_per_millimetre_value dpmm_;
 
    public:
-    void set_resolution(double dpmm);
+    void set_resolution(dot_per_millimetre_value dpmm);
     void draw_fixed_charge(const fixed_charge&);  // use different naming conventions to avoid confliction
     void draw_LOEF_path(const LOEF_path&);
 };
