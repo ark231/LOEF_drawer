@@ -20,7 +20,7 @@ bool charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map
     vec2d electric_field(0, 0);
     for (auto fixed_charge_itr = begin; fixed_charge_itr != end; fixed_charge_itr++) {
         auto fixed_charge = fixed_charge_itr->second;
-        auto charge_to_pen = this->position_ - fixed_charge.position();
+        vec2d charge_to_pen = this->position_ - fixed_charge.position();
         /*電場の向きさえわかればいいので、長さが定数倍されていても問題ない
          * クーロンの法則の係数は大きすぎるため、小さくする
          * 今回は、必ず固定電荷からペンに向かうベクトルに対して長さを掛けているので、固定電荷の符号とベクトルの向きが偶然一致しているため符号付きのまま計算に使用している

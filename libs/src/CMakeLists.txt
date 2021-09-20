@@ -21,6 +21,9 @@ target_link_libraries(vec2d PRIVATE
 target_include_directories(vec2d PUBLIC
     ${Qt5Core_INCLUDE_DIRS}
     )
+target_compile_definitions(vec2d PRIVATE
+    LOEF_VEC2D_LIBRARY_BUILD
+    )
 add_library(charges STATIC
     basic_charge.cpp
     charge_pen.cpp

@@ -18,7 +18,7 @@ class LOEF_drawer : public QWidget {
     explicit LOEF_drawer(QWidget *parent = nullptr);
 
    private:
-    LOEF::dot_per_millimetre_value dpmm_;
+    LOEF::dot_per_millimetre_quantity dpmm_;
     std::unordered_map<id_type, LOEF::fixed_charge> fixed_charges_;
     LOEF::id_handler *fixed_charge_id_handler_;
     std::unordered_map<id_type, LOEF::charge_pen> charge_pens_;
