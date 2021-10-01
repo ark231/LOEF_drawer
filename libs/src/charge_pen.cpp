@@ -15,8 +15,8 @@ charge_pen::charge_pen(bool is_positive, vec2d initial_position, millimetre_quan
 std::shared_ptr<LOEF_path> charge_pen::get_path() { return path; }
 #endif
 template <class fixed_charge_map_iterator_>
-bool charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end,
-                              dot_per_millimetre_quantity dpmm) {
+step_status charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end,
+                                     dot_per_millimetre_quantity dpmm) {
     vec2d electric_field(0, 0);
     for (auto fixed_charge_itr = begin; fixed_charge_itr != end; fixed_charge_itr++) {
         auto fixed_charge = fixed_charge_itr->second;
@@ -29,7 +29,16 @@ bool charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map
         electric_field += normalize(charge_to_pen) * ((fixed_charge.quantity() / boostunits::coulomb) /
                                                       ((charge_to_pen.length_square() / millimetre / millimetre)));
     }
+    if (fuzzy_compare(this->previous_delta_position_, -normalize(electric_field) * (interval_ / millimetre))) {
+        return step_status::ABORT;  // or will loop forever!
+    }
     this->position_ += normalize(electric_field) * (interval_ / millimetre);
+    this->previous_delta_position_ = normalize(electric_field) * (interval_ / millimetre);
+    /*
+    qDebug() << "    @charge_pen step_forward "
+             << "pos:" << this->position_
+             << "delta_posiiton:" << (normalize(electric_field) * (interval_ / millimetre));
+             */
     path->lineTo((this->position_).to_QPoint(dpmm));
     if ((0 <= position_.x() * dpmm && position_.x() * dpmm <= max_x) &&
         (0 <= position_.y() * dpmm && position_.y() * dpmm <= max_y)) {
@@ -38,12 +47,12 @@ bool charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map
                 continue;  //中性電荷は突き抜ける
             }
             if ((iterator->second.position() - position_).length() < (radius::FIXED + 1.0 * millimetre)) {
-                return false;
+                return step_status::FINISH;
             }
         }
-        return true;
+        return step_status::CONTINUE;
     } else {
-        return false;
+        return step_status::FINISH;
     }
 }
 }  // namespace LOEF

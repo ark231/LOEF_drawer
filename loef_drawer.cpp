@@ -68,7 +68,7 @@ LOEF_drawer::LOEF_drawer(QWidget *parent) : QWidget(parent) {
     fixed_charges_[fixed_charge_id_handler_->new_id()] =
         LOEF::fixed_charge(-2 * LOEF::boostunits::coulomb, 600.0 / dpmm_, 300.0 / dpmm_);
 }
-void LOEF_drawer::paintEvent(QPaintEvent *ev) {
+void LOEF_drawer::paintEvent(QPaintEvent *) {
     LOEF::painter painter(this);
     painter.set_resolution(dpmm_);
     auto width = this->width();
@@ -89,24 +89,37 @@ void LOEF_drawer::paintEvent(QPaintEvent *ev) {
                 qDebug() << "@LOEF_drawer paintEvent:new charge_pen id:" << pen_id;
             }
             std::vector<id_type> ids_to_erase;
-            for (auto charge_pen = charge_pens_.begin(); charge_pen != charge_pens_.end(); charge_pen++) {
-                while (true) {
-                    if (!charge_pen->second.step_forward(fixed_charges_.begin(), fixed_charges_.end(), dpmm_)) {
-                        break;
+            qDebug("@LOEF_drawer paintEvent charge_pen loop start");
+            while (!charge_pens_.empty()) {
+                for (auto charge_pen = charge_pens_.begin(); charge_pen != charge_pens_.end(); charge_pen++) {
+                    // qDebug() << "    @LOEF_drawer paintEvent call step_forward id:" << charge_pen->first;
+                    switch (charge_pen->second.step_forward(fixed_charges_.begin(), fixed_charges_.end(), dpmm_)) {
+                        case LOEF::step_status::FINISH:
+                            ids_to_erase.push_back(charge_pen->first);
+                            break;
+                        case LOEF::step_status::ABORT:
+                            ids_to_erase.push_back(charge_pen->first);
+                            break;
+                        case LOEF::step_status::CONTINUE:
+                            break;
                     }
-                    ids_to_erase.push_back(charge_pen->first);
                 }
-            }
-            for (const auto &id_to_erase : ids_to_erase) {
-                auto iterator_to_erase = charge_pens_.find(id_to_erase);
-                if (iterator_to_erase != charge_pens_.end()) {
-                    charge_pens_.erase(iterator_to_erase);
+                for (const auto &id_to_erase : ids_to_erase) {
+                    qDebug() << "@LOEF_drawer paintEvent erase charge_pen id:" << id_to_erase;
+                    auto iterator_to_erase = charge_pens_.find(id_to_erase);
+                    if (iterator_to_erase != charge_pens_.end()) {
+                        charge_pens_.erase(iterator_to_erase);
+                    }
                 }
+                ids_to_erase.clear();
             }
-            ids_to_erase.clear();
+            qDebug("@LOEF_drawer paintEvent charge_pen loop end");
+
+            qDebug("@LOEF_drawer paintEvent charge_path loop begin");
             for (auto charge_path = charge_paths_.begin(); charge_path != charge_paths_.end(); charge_path++) {
                 painter.draw_LOEF_path(*(charge_path->second));
             }
+            qDebug("@LOEF_drawer paintEvent charge_path loop end");
         }
     }
     qDebug("@LOEF_drawer paintEvent:fixed_charge loop end");
@@ -132,4 +145,4 @@ void LOEF_drawer::mouseMoveEvent(QMouseEvent *ev) {
         update();
     }
 }
-void LOEF_drawer::mouseReleaseEvent(QMouseEvent *ev) { charge_selected_->unselected(); }
+void LOEF_drawer::mouseReleaseEvent(QMouseEvent *) { charge_selected_->unselected(); }

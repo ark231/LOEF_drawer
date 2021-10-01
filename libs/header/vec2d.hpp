@@ -1,5 +1,6 @@
 #ifndef LOEF_VEC2D
 #define LOEF_VEC2D
+#include <QDebug>
 #include <QPoint>
 #include <QPointF>
 
@@ -36,6 +37,7 @@ template <class QUANTITY>
 basic_vec2d_<QUANTITY> normalize(const LOEF::basic_vec2d_<QUANTITY> &a);
 
 }  // namespace LOEF
+#ifdef LOEF_VEC2D_LIBRARY_BUILD
 template <class QUANTITY>
 LOEF::basic_vec2d_<QUANTITY> operator+(const LOEF::basic_vec2d_<QUANTITY> &a, const LOEF::basic_vec2d_<QUANTITY> &b);
 template <class QUANTITY>
@@ -47,7 +49,14 @@ LOEF::basic_vec2d_<QUANTITY> operator*(const FACTOR_TYPE k, const LOEF::basic_ve
 template <class QUANTITY, typename FACTOR_TYPE>
 LOEF::basic_vec2d_<QUANTITY> operator*(const LOEF::basic_vec2d_<QUANTITY> &a, const FACTOR_TYPE k);
 template <class QUANTITY, typename FACTOR_TYPE>
-LOEF::basic_vec2d_<QUANTITY> operator/(const FACTOR_TYPE k, const LOEF::basic_vec2d_<QUANTITY> &a);
+LOEF::basic_vec2d_<QUANTITY> operator/(const LOEF::basic_vec2d_<QUANTITY> &a, const FACTOR_TYPE k);
+// LOEF::basic_vec2d_<QUANTITY> operator/(const FACTOR_TYPE k, const LOEF::basic_vec2d_<QUANTITY> &a);
+
+template <class QUANTITY>
+QDebug &operator<<(QDebug &, const LOEF::basic_vec2d_<QUANTITY> &);
+template <class QUANTITY>
+bool fuzzy_compare(const LOEF::basic_vec2d_<QUANTITY> &a, const LOEF::basic_vec2d_<QUANTITY> &b);
+#endif
 /*
 template <class QUANTITY>
 LOEF::basic_vec2d_<QUANTITY> operator/(const LOEF::basic_vec2d_<QUANTITY> &a, double k);
@@ -57,7 +66,6 @@ LOEF::basic_vec2d_<QUANTITY> operator/(const LOEF::basic_vec2d_<QUANTITY> &a, do
  *              vec2d_position
  *------------------------------------------*/
 namespace LOEF {
-
 class vec2d_position : public basic_vec2d_<millimetre_quantity> {
    public:
     using basic_vec2d_<millimetre_quantity>::basic_vec2d_;
@@ -72,15 +80,6 @@ using vec2d = vec2d_position;  //!既存コードをできるだけ壊さない�
 using electric_field = basic_vec2d_<electric_field_strength_quantity>;
 
 }  // namespace LOEF
-/*とりあえずの策*/
-LOEF::vec2d_position operator+(const LOEF::vec2d_position &a, const LOEF::vec2d_position &b);
-LOEF::vec2d_position operator-(const LOEF::vec2d_position &a, const LOEF::vec2d_position &b);
-LOEF::vec2d_position operator-(const LOEF::vec2d_position &a);
-LOEF::vec2d_position operator*(double k, const LOEF::vec2d_position &a);
-LOEF::vec2d_position operator*(const LOEF::vec2d_position &a, double k);
-// LOEF::vec2d_position operator/(double k, const LOEF::vec2d_position &a);
-LOEF::vec2d_position operator/(const LOEF::vec2d_position &a, double k);
-LOEF::vec2d_position normalize(const LOEF::vec2d_position &a);
 
 #ifndef LOEF_VEC2D_LIBRARY_BUILD
 #include "vec2d.cpp"

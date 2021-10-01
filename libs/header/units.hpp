@@ -2,6 +2,7 @@
 #define LOEF_DRAWER_UNITS
 #include <boost/units/systems/si.hpp>
 #include <boost/units/systems/si/prefixes.hpp>
+#include <boost/units/systems/si/io.hpp>
 namespace LOEF {
 namespace boostunits = boost::units::si;
 using millimetre_unit =

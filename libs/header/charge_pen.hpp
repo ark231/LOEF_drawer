@@ -11,9 +11,11 @@ namespace LOEF {
 class LOEF_path : public QPainterPath {
     using QPainterPath::QPainterPath;
 };
+enum class step_status { CONTINUE, FINISH, ABORT };
 class charge_pen {
     bool is_positive_ = true;
     vec2d position_;
+    vec2d previous_delta_position_;
     millimetre_quantity interval_;
     int max_x = 0;
     int max_y = 0;
@@ -24,7 +26,8 @@ class charge_pen {
                dot_per_millimetre_quantity dpmm);
     charge_pen() {}
     template <class fixed_charge_map_iterator_>
-    bool step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end, dot_per_millimetre_quantity dpmm);
+    step_status step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end,
+                             dot_per_millimetre_quantity dpmm);
     std::shared_ptr<LOEF_path> get_path();
 };
 }  // namespace LOEF

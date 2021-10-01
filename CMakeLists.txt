@@ -46,7 +46,8 @@ else()
     )
 endif()
 
-target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra)
+target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra )
+target_compile_definitions(LOEF_drawer PUBLIC $<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT>)
 target_link_libraries(LOEF_drawer PRIVATE Qt5::Widgets)
 target_link_libraries(LOEF_drawer PRIVATE 
     charges

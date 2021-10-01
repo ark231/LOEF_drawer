@@ -1,6 +1,8 @@
 #include "vec2d.hpp"
 
+#include <QtGlobal>
 #include <cmath>
+#include <sstream>
 namespace LOEF {
 #ifdef LOEF_VEC2D_LIBRARY_BUILD
 template <class QUANTITY>
@@ -95,6 +97,18 @@ template <class QUANTITY>
 LOEF::basic_vec2d_<QUANTITY> operator-(const LOEF::basic_vec2d_<QUANTITY> &a) {
     return -1 * a;
 }
+template <class QUANTITY>
+QDebug &operator<<(QDebug &debug, const LOEF::basic_vec2d_<QUANTITY> &data) {
+    auto data_ = static_cast<LOEF::basic_vec2d_<QUANTITY>>(data);
+    std::stringstream output;
+    output << "(" << data_.x() << "," << data_.y() << ")";
+    debug << output.str().c_str();
+    return debug;
+}
+template <class QUANTITY>
+bool fuzzy_compare(const LOEF::basic_vec2d_<QUANTITY> &a, const LOEF::basic_vec2d_<QUANTITY> &b) {
+    return qFuzzyCompare(a.x().value(), b.x().value()) && qFuzzyCompare(a.y().value(), b.y().value());
+}
 #ifdef LOEF_VEC2D_LIBRARY_BUILD
 namespace LOEF {
 template <>
@@ -125,33 +139,3 @@ QPoint vec2d_position::to_QPoint(dot_per_millimetre_quantity dpmm) { return QPoi
 QPointF vec2d_position::to_QPointF(dot_per_millimetre_quantity dpmm) { return QPointF(x_ * dpmm, y_ * dpmm); }
 #endif
 }  // namespace LOEF
-#ifdef LOEF_VEC2D_LIBRARY_BUILD
-LOEF::vec2d_position operator+(const LOEF::vec2d_position &a, const LOEF::vec2d_position &b) {
-    return static_cast<LOEF::vec2d_position>(static_cast<LOEF::basic_vec2d_<LOEF::millimetre_quantity>>(a) +
-                                             static_cast<LOEF::basic_vec2d_<LOEF::millimetre_quantity>>(b));
-}
-LOEF::vec2d_position operator-(const LOEF::vec2d_position &a, const LOEF::vec2d_position &b) {
-    return static_cast<LOEF::vec2d_position>(static_cast<LOEF::basic_vec2d_<LOEF::millimetre_quantity>>(a) -
-                                             static_cast<LOEF::basic_vec2d_<LOEF::millimetre_quantity>>(b));
-}
-LOEF::vec2d_position operator-(const LOEF::vec2d_position &a) {
-    return static_cast<LOEF::vec2d_position>(-static_cast<LOEF::basic_vec2d_<LOEF::millimetre_quantity>>(a));
-}
-LOEF::vec2d_position operator*(const double k, const LOEF::vec2d_position &a) {
-    return static_cast<LOEF::vec2d_position>(k * static_cast<LOEF::basic_vec2d_<LOEF::millimetre_quantity>>(a));
-}
-LOEF::vec2d_position operator*(const LOEF::vec2d_position &a, const double k) {
-    return static_cast<LOEF::vec2d_position>(static_cast<LOEF::basic_vec2d_<LOEF::millimetre_quantity>>(a) * k);
-}
-/*
-LOEF::vec2d_position operator/(const double k, const LOEF::vec2d_position &a) {
-    return static_cast<LOEF::vec2d_position>(k / static_cast<LOEF::basic_vec2d_<LOEF::millimetre_quantity>>(a));
-}
-*/
-LOEF::vec2d_position operator/(const LOEF::vec2d_position &a, const double k) {
-    return static_cast<LOEF::vec2d_position>(static_cast<LOEF::basic_vec2d_<LOEF::millimetre_quantity>>(a) / k);
-}
-LOEF::vec2d_position normalize(const LOEF::vec2d_position &a) {
-    return LOEF::normalize(static_cast<LOEF::basic_vec2d_<LOEF::millimetre_quantity>>(a));
-}
-#endif
