@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(LOEF_drawer LANGUAGES CXX VERSION .0.3.1.0)
+project(LOEF_drawer LANGUAGES CXX VERSION 0.3.2.0)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -47,7 +47,7 @@ else()
 endif()
 
 target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra )
-target_compile_definitions(LOEF_drawer PUBLIC $<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT>)
+target_compile_definitions(LOEF_drawer PUBLIC $<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
 target_link_libraries(LOEF_drawer PRIVATE Qt5::Widgets)
 target_link_libraries(LOEF_drawer PRIVATE 
     charges

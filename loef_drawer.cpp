@@ -127,7 +127,7 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
 void LOEF_drawer::mousePressEvent(QMouseEvent *ev) {
     LOEF::vec2d pos_mouse(ev->pos(), dpmm_);
     for (auto charge = fixed_charges_.begin(); charge != fixed_charges_.end(); charge++) {
-        LOEF::vec2d offset = pos_mouse - charge->second.position();
+        LOEF::vec2d offset = charge->second.position() - pos_mouse;
         if (offset.length() * dpmm_ <= LOEF::radius::FIXED * dpmm_) {
             charge_selected_->set_selected(charge->first, offset);
         }
