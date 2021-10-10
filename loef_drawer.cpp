@@ -194,3 +194,8 @@ LOEF::id_type LOEF_drawer::create_fixed_charge(LOEF::coulomb_quantity initial_fi
     clear_and_redraw();
     return new_id;
 }
+std::tuple<LOEF::coulomb_quantity, LOEF::millimetre_quantity, LOEF::millimetre_quantity>
+LOEF_drawer::get_fixed_charge_info(LOEF::id_type id) {
+    auto found_charge = fixed_charges_[id];
+    return std::make_tuple(found_charge.quantity(), found_charge.position().x(), found_charge.position().y());
+}

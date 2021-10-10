@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <optional>
+#include <tuple>
 #include <unordered_map>
 #include <vector>
 
@@ -21,6 +22,8 @@ class LOEF_drawer : public QWidget {
     LOEF::id_type create_fixed_charge(LOEF::coulomb_quantity initial_charge = LOEF::initial_fixed_charge,
                                       LOEF::millimetre_quantity initial_X = LOEF::initial_fixed_pos_x,
                                       LOEF::millimetre_quantity initial_Y = LOEF::initial_fixed_pos_y);
+    std::tuple<LOEF::coulomb_quantity, LOEF::millimetre_quantity, LOEF::millimetre_quantity> get_fixed_charge_info(
+        LOEF::id_type);
 
    private:
     LOEF::dot_per_millimetre_quantity dpmm_;
