@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.5)
 
 project(LOEF_drawer_libs LANGUAGES CXX )
 
+set(CMAKE_AUTOUIC OFF)
+set(CMAKE_AUTOMOC OFF)
+set(CMAKE_AUTORCC OFF)
+
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 find_package(Qt5 COMPONENTS Core Gui REQUIRED)
