@@ -48,6 +48,7 @@ class LOEF_drawer : public QWidget {
    signals:
     void fixed_charge_position_changed(LOEF::id_type id, LOEF::millimetre_quantity new_X,
                                        LOEF::millimetre_quantity new_Y);
+    void fixed_charge_selected(LOEF::id_type id);
 
    private slots:
     void slot_fixed_charge_position_changed(LOEF::id_type id, LOEF::millimetre_quantity X, LOEF::millimetre_quantity Y);

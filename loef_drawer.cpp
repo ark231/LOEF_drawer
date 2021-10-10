@@ -60,14 +60,6 @@ LOEF_drawer::LOEF_drawer(QWidget *parent) : QWidget(parent) {
     charge_selected_ = new LOEF::state_charge_selected_;
     fixed_charge_id_handler_ = new LOEF::id_handler;
     charge_pen_id_handler_ = new LOEF::id_handler;
-    fixed_charges_[fixed_charge_id_handler_->new_id()] =
-        LOEF::fixed_charge(+1 * LOEF::boostunits::coulomb, 200.0 / dpmm_, 300.0 / dpmm_);
-    fixed_charges_[fixed_charge_id_handler_->new_id()] =
-        LOEF::fixed_charge(+1 * LOEF::boostunits::coulomb, 300.0 / dpmm_, 300.0 / dpmm_);
-    fixed_charges_[fixed_charge_id_handler_->new_id()] =
-        LOEF::fixed_charge(+0 * LOEF::boostunits::coulomb, 400.0 / dpmm_, 300.0 / dpmm_);
-    fixed_charges_[fixed_charge_id_handler_->new_id()] =
-        LOEF::fixed_charge(-2 * LOEF::boostunits::coulomb, 600.0 / dpmm_, 300.0 / dpmm_);
 }
 void LOEF_drawer::paintEvent(QPaintEvent *) {
     LOEF::painter painter(this);
@@ -131,6 +123,7 @@ void LOEF_drawer::mousePressEvent(QMouseEvent *ev) {
         LOEF::vec2d offset = charge->second.position() - pos_mouse;
         if (offset.length() * dpmm_ <= LOEF::radius::FIXED * dpmm_) {
             charge_selected_->set_selected(charge->first, offset);
+            emit fixed_charge_selected(charge->first);
         }
     }
 }
