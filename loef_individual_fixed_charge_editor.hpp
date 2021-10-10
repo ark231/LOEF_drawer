@@ -14,7 +14,11 @@ class LOEF_individual_fixed_charge_editor : public QWidget {
     Q_OBJECT
 
    public:
-    explicit LOEF_individual_fixed_charge_editor(LOEF::id_type id, QWidget *parent = nullptr);
+    explicit LOEF_individual_fixed_charge_editor(LOEF::id_type id,
+                                                 LOEF::coulomb_quantity initial_charge = LOEF::initial_fixed_charge,
+                                                 LOEF::millimetre_quantity initial_X = LOEF::initial_fixed_pos_x,
+                                                 LOEF::millimetre_quantity initial_Y = LOEF::initial_fixed_pos_y,
+                                                 QWidget *parent = nullptr);
     ~LOEF_individual_fixed_charge_editor();
     LOEF::id_type id();
 

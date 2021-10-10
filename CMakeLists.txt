@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(LOEF_drawer LANGUAGES CXX VERSION 0.3.2.0)
+project(LOEF_drawer LANGUAGES CXX VERSION 0.4.0.0)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -51,9 +51,6 @@ else()
         loef_individual_fixed_charge_editor.cpp
         loef_individual_fixed_charge_editor.hpp
         loef_individual_fixed_charge_editor.ui
-        fixed_charge_editors_container.cpp
-        fixed_charge_editors_container.hpp
-        fixed_charge_editors_container.ui
     )
 endif()
 

@@ -2,10 +2,17 @@
 
 #include "ui_loef_individual_fixed_charge_editor.h"
 
-LOEF_individual_fixed_charge_editor::LOEF_individual_fixed_charge_editor(LOEF::id_type id, QWidget *parent)
+LOEF_individual_fixed_charge_editor::LOEF_individual_fixed_charge_editor(LOEF::id_type id,
+                                                                         LOEF::coulomb_quantity initial_charge,
+                                                                         LOEF::millimetre_quantity initial_X,
+                                                                         LOEF::millimetre_quantity initial_Y,
+                                                                         QWidget *parent )
     : QWidget(parent), ui(new Ui::LOEF_individual_fixed_charge_editor) {
     ui->setupUi(this);
     this->id_ = id;
+    ui->doubleSpinBox_pox_x->setValue(initial_X.value());
+    ui->doubleSpinBox_pox_y->setValue(initial_Y.value());
+    ui->doubleSpinBox_quantity->setValue(initial_charge.value());
 }
 
 LOEF_individual_fixed_charge_editor::~LOEF_individual_fixed_charge_editor() { delete ui; }
