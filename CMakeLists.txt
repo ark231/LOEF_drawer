@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(LOEF_drawer LANGUAGES CXX VERSION 0.4.2.0)
+project(LOEF_drawer LANGUAGES CXX VERSION 0.5.0.0)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -24,11 +24,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #        endif()
 #endif()
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
-#find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
+find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
 
 add_subdirectory(libs)
-#qt5_create_translation(LOEF_QM_FILES ${CMAKE_CURRENT_SOURCE_DIR}/translations LOEF_drawer_en.ts LOEF_drawer_ja.ts )
+qt5_create_translation(LOEF_QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} 
+    ${CMAKE_CURRENT_SOURCE_DIR}/translations/LOEF_drawer_ja.ts 
+    OPTIONS -no-obsolete
+    )
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/translations)
+
 
 if(ANDROID)
     add_library(LOEF_drawer SHARED
@@ -51,6 +55,7 @@ else()
         loef_individual_fixed_charge_editor.cpp
         loef_individual_fixed_charge_editor.hpp
         loef_individual_fixed_charge_editor.ui
+        ${LOEF_QM_FILES}
     )
 endif()
 

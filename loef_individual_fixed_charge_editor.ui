@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>fixed charge editor</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -62,7 +62,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>C</string>
+          <string notr="true">C</string>
          </property>
         </widget>
        </item>
@@ -98,7 +98,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>X</string>
+          <string notr="true">X</string>
          </property>
         </widget>
        </item>
@@ -124,7 +124,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>mm</string>
+          <string notr="true">mm</string>
          </property>
         </widget>
        </item>
@@ -141,7 +141,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Y</string>
+          <string notr="true">Y</string>
          </property>
         </widget>
        </item>
@@ -167,7 +167,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>mm</string>
+          <string notr="true">mm</string>
          </property>
         </widget>
        </item>

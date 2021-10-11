@@ -1,6 +1,9 @@
 #include "mainwindow.hpp"
 
 #include <QBoxLayout>
+#include <QCoreApplication>
+#include <QMessageBox>
+#include <QSettings>
 #include <QString>
 
 #include "./ui_mainwindow.h"
@@ -8,7 +11,7 @@
 #include "loef_individual_fixed_charge_editor.hpp"
 #include "qt_consts.hpp"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QLocale locale, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     ui->label_app_info->setText(QStringLiteral("%1 \nv%2.%3.%4")
                                     .arg(LOEF::application_name)
@@ -18,6 +21,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     this->setWindowTitle(LOEF::application_name);
     QObject::connect(ui->loef_drawer, SIGNAL(fixed_charge_selected(LOEF::id_type)), this,
                      SLOT(slot_fixed_charge_selected(LOEF::id_type)));
+    if (locale == QLocale("en")) {
+        ui->actionEnglish->setChecked(true);
+    } else if (locale == QLocale("ja")) {
+        ui->actionJapanese->setChecked(true);
+    }
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -87,3 +95,52 @@ void MainWindow::slot_fixed_charge_selected(LOEF::id_type id) {
         this->on_list_fixed_charges_itemClicked(selected_item);
     }
 }
+
+void MainWindow::on_actionEnglish_triggered(bool arg1) {
+    if (arg1) {
+        QSettings settings(QCoreApplication::applicationDirPath() + "/settings/settings.ini", QSettings::IniFormat);
+        settings.beginGroup("init");
+        settings.setValue("locale", QLocale("en"));
+        settings.endGroup();
+        settings.sync();
+        if (confirm_restart()) {
+            restart();
+        }
+    }
+    this->ui->actionJapanese->setChecked(!arg1);  // sadly, actiongroup didn't work well..
+}
+
+void MainWindow::on_actionJapanese_triggered(bool arg1) {
+    if (arg1) {
+        QSettings settings(QCoreApplication::applicationDirPath() + "/settings/settings.ini", QSettings::IniFormat);
+        settings.beginGroup("init");
+        settings.setValue("locale", QLocale("ja"));
+        settings.endGroup();
+        settings.sync();
+        if (confirm_restart()) {
+            restart();
+        }
+    }
+    this->ui->actionEnglish->setChecked(!arg1);
+}
+
+bool MainWindow::confirm_restart() {
+    QMessageBox msgbox(this);
+    msgbox.setText(tr("This change require restarting this program.\nDo you want to restart this program?"));
+    msgbox.setWindowTitle(tr("confirm restart"));
+    msgbox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgbox.setDefaultButton(QMessageBox::Yes);
+    msgbox.setIcon(QMessageBox::Question);
+    bool result = false;
+    switch (msgbox.exec()) {
+        case QMessageBox::Yes:
+            result = true;
+            break;
+        case QMessageBox::No:
+            result = false;
+            break;
+    }
+    return result;
+}
+
+void MainWindow::restart() { QCoreApplication::exit(LOEF::restart_code); }
