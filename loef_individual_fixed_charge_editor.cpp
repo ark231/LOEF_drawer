@@ -1,12 +1,14 @@
 #include "loef_individual_fixed_charge_editor.hpp"
 
+#include <QMoveEvent>
+
 #include "ui_loef_individual_fixed_charge_editor.h"
 
 LOEF_individual_fixed_charge_editor::LOEF_individual_fixed_charge_editor(LOEF::id_type id,
                                                                          LOEF::coulomb_quantity initial_charge,
                                                                          LOEF::millimetre_quantity initial_X,
                                                                          LOEF::millimetre_quantity initial_Y,
-                                                                         QWidget *parent )
+                                                                         QWidget* parent)
     : QWidget(parent), ui(new Ui::LOEF_individual_fixed_charge_editor) {
     ui->setupUi(this);
     this->id_ = id;
@@ -45,3 +47,13 @@ void LOEF_individual_fixed_charge_editor::on_remove_button_clicked() {
     emit fixed_charge_destroyed(this->id_);
     this->close();
 }
+void LOEF_individual_fixed_charge_editor::closeEvent(QCloseEvent*) {
+    QPoint pos_to_send = LOEF::invalid_position;
+    if (moved_pos_ == LOEF::invalid_position) {
+        pos_to_send = this->pos();
+    } else {
+        pos_to_send = this->moved_pos_;
+    }
+    emit editor_fixed_charge_closed(pos_to_send);
+}
+void LOEF_individual_fixed_charge_editor::moveEvent(QMoveEvent* ev) { this->moved_pos_ = ev->pos(); }

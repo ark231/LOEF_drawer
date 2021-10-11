@@ -131,31 +131,31 @@ version</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="77"/>
-        <location filename="../mainwindow.cpp" line="84"/>
+        <location filename="../mainwindow.cpp" line="80"/>
+        <location filename="../mainwindow.cpp" line="87"/>
         <source>positive charge</source>
         <translation>正電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="86"/>
+        <location filename="../mainwindow.cpp" line="89"/>
         <source>null charge</source>
         <translatorcomment>もっとマシな呼び方募集中</translatorcomment>
         <translation>非荷電電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="88"/>
+        <location filename="../mainwindow.cpp" line="91"/>
         <source>negative charge</source>
         <translation>負電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="129"/>
+        <location filename="../mainwindow.cpp" line="132"/>
         <source>This change require restarting this program.
 Do you want to restart this program?</source>
         <translation>この変更を反映させるにはプログラムの再起動が必要です。
 このプログラムを再起動しますか？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="130"/>
+        <location filename="../mainwindow.cpp" line="133"/>
         <source>confirm restart</source>
         <translation>再起動を確認</translation>
     </message>
@@ -180,7 +180,7 @@ Do you want to restart this program?</source>
         <location filename="../build-LOEF_drawer-unknown-Debug/fixed_charge_editor_autogen/include/ui_individual_fixed_charge_editor.h" line="164"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_individual_fixed_charge_editor.h" line="164"/>
         <source>Quantity of electricity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">電気量</translation>
     </message>
     <message>
         <location filename="../build-LOEF_drawer-unknown-Debug/fixed_charge_editor_autogen/include/ui_individual_fixed_charge_editor.h" line="165"/>
@@ -192,7 +192,7 @@ Do you want to restart this program?</source>
         <location filename="../build-LOEF_drawer-unknown-Debug/fixed_charge_editor_autogen/include/ui_individual_fixed_charge_editor.h" line="166"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_individual_fixed_charge_editor.h" line="166"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">座標</translation>
     </message>
     <message>
         <location filename="../build-LOEF_drawer-unknown-Debug/fixed_charge_editor_autogen/include/ui_individual_fixed_charge_editor.h" line="167"/>

@@ -4,6 +4,7 @@
 #include <QWidget>
 
 #include "general_consts.hpp"
+#include "qt_consts.hpp"
 #include "units.hpp"
 
 namespace Ui {
@@ -25,11 +26,15 @@ class LOEF_individual_fixed_charge_editor : public QWidget {
    private:
     Ui::LOEF_individual_fixed_charge_editor *ui;
     LOEF::id_type id_;
+    QPoint moved_pos_ = LOEF::invalid_position;
+    void closeEvent(QCloseEvent *) override;
+    void moveEvent(QMoveEvent *) override;
 
    signals:
     void fixed_charge_position_changed(LOEF::id_type id, LOEF::millimetre_quantity X, LOEF::millimetre_quantity Y);
     void fixed_charge_charge_changed(LOEF::id_type id, LOEF::coulomb_quantity C);
     void fixed_charge_destroyed(LOEF::id_type id);
+    void editor_fixed_charge_closed(QPoint);
 
    private slots:
     void slot_fixed_charge_position_changed(LOEF::id_type id, LOEF::millimetre_quantity X, LOEF::millimetre_quantity Y);

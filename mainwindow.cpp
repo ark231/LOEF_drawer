@@ -42,24 +42,31 @@ void MainWindow::on_list_fixed_charges_itemClicked(QListWidgetItem *item) {
         new LOEF_individual_fixed_charge_editor(id_selected_charge, std::get<0>(selected_charge_infos),
                                                 std::get<1>(selected_charge_infos), std::get<2>(selected_charge_infos));
     this->current_selected_editor_ = selected_editor;
-    QObject::connect(
+    selected_editor->setAttribute(Qt::WA_DeleteOnClose);
+    if (fixed_charge_editor_last_pos_ != LOEF::invalid_position) {
+        selected_editor->move(fixed_charge_editor_last_pos_);
+    }
+    connect(
         ui->loef_drawer,
         SIGNAL(fixed_charge_position_changed(LOEF::id_type, LOEF::millimetre_quantity, LOEF::millimetre_quantity)),
         selected_editor,
         SLOT(slot_fixed_charge_position_changed(LOEF::id_type, LOEF::millimetre_quantity, LOEF::millimetre_quantity)));
-    QObject::connect(
+    connect(
         selected_editor,
         SIGNAL(fixed_charge_position_changed(LOEF::id_type, LOEF::millimetre_quantity, LOEF::millimetre_quantity)),
         ui->loef_drawer,
         SLOT(slot_fixed_charge_position_changed(LOEF::id_type, LOEF::millimetre_quantity, LOEF::millimetre_quantity)));
-    QObject::connect(selected_editor, SIGNAL(fixed_charge_charge_changed(LOEF::id_type, LOEF::coulomb_quantity)),
-                     ui->loef_drawer, SLOT(slot_fixed_charge_charge_changed(LOEF::id_type, LOEF::coulomb_quantity)));
-    QObject::connect(selected_editor, SIGNAL(fixed_charge_destroyed(LOEF::id_type)), ui->loef_drawer,
-                     SLOT(slot_fixed_charge_destroyed(LOEF::id_type)));
-    QObject::connect(selected_editor, SIGNAL(fixed_charge_destroyed(LOEF::id_type)), this,
-                     SLOT(slot_fixed_charge_destroyed(LOEF::id_type)));
-    QObject::connect(selected_editor, SIGNAL(fixed_charge_charge_changed(LOEF::id_type, LOEF::coulomb_quantity)), this,
-                     SLOT(slot_fixed_charge_charge_changed(LOEF::id_type, LOEF::coulomb_quantity)));
+    connect(selected_editor, SIGNAL(fixed_charge_charge_changed(LOEF::id_type, LOEF::coulomb_quantity)),
+            ui->loef_drawer, SLOT(slot_fixed_charge_charge_changed(LOEF::id_type, LOEF::coulomb_quantity)));
+    connect(selected_editor, SIGNAL(fixed_charge_destroyed(LOEF::id_type)), ui->loef_drawer,
+            SLOT(slot_fixed_charge_destroyed(LOEF::id_type)));
+    connect(selected_editor, SIGNAL(fixed_charge_destroyed(LOEF::id_type)), this,
+            SLOT(slot_fixed_charge_destroyed(LOEF::id_type)));
+    connect(selected_editor, SIGNAL(fixed_charge_charge_changed(LOEF::id_type, LOEF::coulomb_quantity)), this,
+            SLOT(slot_fixed_charge_charge_changed(LOEF::id_type, LOEF::coulomb_quantity)));
+    connect(selected_editor, SIGNAL(editor_fixed_charge_closed(QPoint)), this,
+            SLOT(slot_editor_fixed_charge_closed(QPoint)));
+
     selected_editor->show();
 }
 void MainWindow::slot_fixed_charge_destroyed(LOEF::id_type id) {
@@ -144,3 +151,8 @@ bool MainWindow::confirm_restart() {
 }
 
 void MainWindow::restart() { QCoreApplication::exit(LOEF::restart_code); }
+void MainWindow::slot_editor_fixed_charge_closed(QPoint pos) {
+    this->current_selected_editor_ = nullptr;
+    this->fixed_charge_editor_last_pos_ = pos;
+}
+void MainWindow::closeEvent(QCloseEvent *) { QApplication::closeAllWindows(); }
