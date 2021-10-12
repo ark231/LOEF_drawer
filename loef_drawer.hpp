@@ -33,6 +33,7 @@ class LOEF_drawer : public QWidget {
     std::unordered_map<LOEF::id_type, std::shared_ptr<LOEF::LOEF_path>> charge_paths_;
     LOEF::id_handler *charge_pen_id_handler_;
     LOEF::state_charge_selected_ *charge_selected_;
+    LOEF::inverse_permittivity_quantity inverse_permittivity_;
 
     void paintEvent(QPaintEvent *ev) override;
     void mousePressEvent(QMouseEvent *ev) override;
@@ -55,6 +56,7 @@ class LOEF_drawer : public QWidget {
     void slot_fixed_charge_position_changed(LOEF::id_type id, LOEF::millimetre_quantity X, LOEF::millimetre_quantity Y);
     void slot_fixed_charge_charge_changed(LOEF::id_type id, LOEF::coulomb_quantity);
     void slot_fixed_charge_destroyed(const LOEF::id_type id);
+    void slot_inverse_permittivity_changed(double new_value);
 };
 
 #endif  // LOEF_DRAWER_HPP

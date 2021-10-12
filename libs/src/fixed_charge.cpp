@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QtGlobal>
+#include <cmath>
 #include <utility>
 
 #include "general_consts.hpp"
@@ -65,4 +66,24 @@ std::vector<vec2d> fixed_charge::calc_pen_init_pos(fixed_charge_containter_itr b
     }
     return result;
 }
+template <class fixed_charge_containter_itr>
+void clear_pens_arrival_to_fixed_charges(fixed_charge_containter_itr begin, fixed_charge_containter_itr end) {
+    for (auto fixed_itr = begin; fixed_itr != end; fixed_itr++) {
+        fixed_itr->second.offsets_enterd_pen_.clear();
+    }
+}
+#ifdef LOEF_DRAWER_CHARGES_LIBRARY_BUILD
+bool fixed_charge::pen_arrive(vec2d offset, decltype(1.0 / boostunits::coulomb) inverse_permittivity) {
+    // qDebug() << "@fixed_charge " << __func__ << "charge pen arrives num_offset:" << offsets_enterd_pen_.size();
+    if (this->needs_pens(inverse_permittivity)) {
+        offsets_enterd_pen_.push_back(offset);
+        return true;
+    } else {
+        return false;
+    }
+}
+bool fixed_charge::needs_pens(decltype(1.0 / boostunits::coulomb) inverse_permittivity) {
+    return offsets_enterd_pen_.size() < std::abs(this->quantity_ * inverse_permittivity);
+}
+#endif
 }  // namespace LOEF

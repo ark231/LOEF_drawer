@@ -31,6 +31,7 @@ target_compile_definitions(vec2d PRIVATE
     )
 add_library(charges STATIC
     basic_charge.cpp
+    fixed_charge.cpp
     charge_pen.cpp
     )
 target_include_directories(charges PUBLIC

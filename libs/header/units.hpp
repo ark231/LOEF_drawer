@@ -1,8 +1,8 @@
 #ifndef LOEF_DRAWER_UNITS
 #define LOEF_DRAWER_UNITS
 #include <boost/units/systems/si.hpp>
-#include <boost/units/systems/si/prefixes.hpp>
 #include <boost/units/systems/si/io.hpp>
+#include <boost/units/systems/si/prefixes.hpp>
 namespace LOEF {
 namespace boostunits = boost::units::si;
 using millimetre_unit =
@@ -20,5 +20,7 @@ using electric_field_strength_quantity =
     decltype(1.0 * boostunits::coulomb / (millimetre * millimetre));  //!クーロンの法則の変形から導かれる次元そのまま
 inline auto electric_field_strength_unit_quantity = 1.0 * boostunits::coulomb / (millimetre * millimetre);
 using dimensionless_quantity = boost::units::quantity<boost::units::si::dimensionless, double>;
+using inverse_permittivity_quantity = decltype(1.0 / boostunits::coulomb);
+inline auto inverse_permittiviti_unit_quantity = 1.0 / boostunits::coulomb;
 }  // namespace LOEF
 #endif

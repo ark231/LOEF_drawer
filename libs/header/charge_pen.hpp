@@ -27,7 +27,7 @@ class charge_pen {
     charge_pen() {}
     template <class fixed_charge_map_iterator_>
     step_status step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end,
-                             dot_per_millimetre_quantity dpmm);
+                             dot_per_millimetre_quantity dpmm, inverse_permittivity_quantity inverse_permittivity);
     std::shared_ptr<LOEF_path> get_path();
 };
 }  // namespace LOEF

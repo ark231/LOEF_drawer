@@ -19,8 +19,11 @@ MainWindow::MainWindow(QLocale locale, QWidget *parent) : QMainWindow(parent), u
                                     .arg(LOEF::version_minor)
                                     .arg(LOEF::version_patch));
     this->setWindowTitle(LOEF::application_name);
-    QObject::connect(ui->loef_drawer, SIGNAL(fixed_charge_selected(LOEF::id_type)), this,
-                     SLOT(slot_fixed_charge_selected(LOEF::id_type)));
+    connect(ui->loef_drawer, SIGNAL(fixed_charge_selected(LOEF::id_type)), this,
+            SLOT(slot_fixed_charge_selected(LOEF::id_type)));
+    connect(ui->doubleSpinBox_inverse_permittivity, SIGNAL(valueChanged(double)), ui->loef_drawer,
+            SLOT(slot_inverse_permittivity_changed(double)));
+    ui->doubleSpinBox_inverse_permittivity->setValue(12.0);
     if (locale == QLocale("en")) {
         ui->actionEnglish->setChecked(true);
     } else if (locale == QLocale("ja")) {
