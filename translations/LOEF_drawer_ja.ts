@@ -5,6 +5,7 @@
     <name>LOEF_individual_fixed_charge_editor</name>
     <message>
         <location filename="../loef_individual_fixed_charge_editor.ui" line="14"/>
+        <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="272"/>
         <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="272"/>
         <source>fixed charge editor</source>
         <translation>固定電荷を編集</translation>
@@ -29,11 +30,6 @@
         <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="275"/>
         <source>remove</source>
         <translation>電荷を削除</translation>
-    </message>
-    <message>
-        <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="272"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -131,86 +127,70 @@ version</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="80"/>
-        <location filename="../mainwindow.cpp" line="87"/>
+        <location filename="../mainwindow.cpp" line="84"/>
+        <location filename="../mainwindow.cpp" line="91"/>
         <source>positive charge</source>
         <translation>正電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="89"/>
+        <location filename="../mainwindow.cpp" line="93"/>
         <source>null charge</source>
         <translatorcomment>もっとマシな呼び方募集中</translatorcomment>
         <translation>非荷電電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="91"/>
+        <location filename="../mainwindow.cpp" line="95"/>
         <source>negative charge</source>
         <translation>負電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="132"/>
+        <location filename="../mainwindow.cpp" line="136"/>
         <source>This change require restarting this program.
 Do you want to restart this program?</source>
         <translation>この変更を反映させるにはプログラムの再起動が必要です。
 このプログラムを再起動しますか？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="133"/>
+        <location filename="../mainwindow.cpp" line="137"/>
         <source>confirm restart</source>
         <translation>再起動を確認</translation>
-    </message>
-</context>
-<context>
-    <name>fixed_charge_editors_container</name>
-    <message>
-        <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_fixed_charge_editors_container.h" line="52"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>indivitual_fixed_charge_editor</name>
     <message>
         <location filename="../build-LOEF_drawer-unknown-Debug/fixed_charge_editor_autogen/include/ui_individual_fixed_charge_editor.h" line="163"/>
-        <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_individual_fixed_charge_editor.h" line="163"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../build-LOEF_drawer-unknown-Debug/fixed_charge_editor_autogen/include/ui_individual_fixed_charge_editor.h" line="164"/>
-        <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_individual_fixed_charge_editor.h" line="164"/>
         <source>Quantity of electricity</source>
         <translation type="unfinished">電気量</translation>
     </message>
     <message>
         <location filename="../build-LOEF_drawer-unknown-Debug/fixed_charge_editor_autogen/include/ui_individual_fixed_charge_editor.h" line="165"/>
-        <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_individual_fixed_charge_editor.h" line="165"/>
         <source>C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../build-LOEF_drawer-unknown-Debug/fixed_charge_editor_autogen/include/ui_individual_fixed_charge_editor.h" line="166"/>
-        <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_individual_fixed_charge_editor.h" line="166"/>
         <source>Position</source>
         <translation type="unfinished">座標</translation>
     </message>
     <message>
         <location filename="../build-LOEF_drawer-unknown-Debug/fixed_charge_editor_autogen/include/ui_individual_fixed_charge_editor.h" line="167"/>
-        <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_individual_fixed_charge_editor.h" line="167"/>
         <source>X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../build-LOEF_drawer-unknown-Debug/fixed_charge_editor_autogen/include/ui_individual_fixed_charge_editor.h" line="168"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/fixed_charge_editor_autogen/include/ui_individual_fixed_charge_editor.h" line="170"/>
-        <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_individual_fixed_charge_editor.h" line="168"/>
-        <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_individual_fixed_charge_editor.h" line="170"/>
         <source>mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../build-LOEF_drawer-unknown-Debug/fixed_charge_editor_autogen/include/ui_individual_fixed_charge_editor.h" line="169"/>
-        <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_individual_fixed_charge_editor.h" line="169"/>
         <source>Y</source>
         <translation type="unfinished"></translation>
     </message>

@@ -10,6 +10,7 @@ using id_type = size_t;
 namespace radius {
 constexpr millimetre_quantity FIXED = 2.5 * millimetre;  /// note: in the future, this will be inline var for config
 }  // namespace radius
+constexpr millimetre_quantity ARROW_HEIGHT = 3.0 * millimetre;
 constexpr millimetre_quantity initial_fixed_pos_x = 50 * millimetre;
 constexpr millimetre_quantity initial_fixed_pos_y = 50 * millimetre;
 constexpr coulomb_quantity initial_fixed_charge = 1.0 * boostunits::coulomb;

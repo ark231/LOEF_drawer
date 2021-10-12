@@ -32,7 +32,6 @@ class MainWindow : public QMainWindow {
     void slot_editor_fixed_charge_closed(QPoint);
 
     void on_actionEnglish_triggered(bool arg1);
-
     void on_actionJapanese_triggered(bool arg1);
 
    private:

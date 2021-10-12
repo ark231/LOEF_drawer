@@ -56,22 +56,16 @@ void basic_vec2d_<QUANTITY>::operator/=(const double k) {
     this->y_ = this->y_ / k;
 }
 
-template <>
-basic_vec2d_<millimetre_quantity> normalize(const basic_vec2d_<millimetre_quantity> &a) {
-    return a / (a.length() / millimetre);
-}
-/*
-template <>
-basic_vec2d_<electric_field_strength_quantity> normalize(const basic_vec2d_<electric_field_strength_quantity> &a) {
-    return a / (a.length() / (boostunits::coulomb / (millimetre * millimetre)));
-}
-*/
-
 template class basic_vec2d_<millimetre_quantity>;
 template class basic_vec2d_<electric_field_strength_quantity>;
 template class basic_vec2d_<dimensionless_quantity>;
-}  // namespace LOEF
 #endif
+template <class QUANTITY>
+basic_vec2d_<QUANTITY> normalize(const basic_vec2d_<QUANTITY> &a) {
+    Q_ASSERT_X(!qFuzzyIsNull(a.length().value()), __func__, "dividion by zero (given vector's length is 0)");
+    return a / a.length().value();
+}
+}  // namespace LOEF
 
 template <class QUANTITY>
 LOEF::basic_vec2d_<QUANTITY> operator+(const LOEF::basic_vec2d_<QUANTITY> &a, const LOEF::basic_vec2d_<QUANTITY> &b) {
@@ -110,12 +104,6 @@ bool fuzzy_compare(const LOEF::basic_vec2d_<QUANTITY> &a, const LOEF::basic_vec2
     return qFuzzyCompare(a.x().value(), b.x().value()) && qFuzzyCompare(a.y().value(), b.y().value());
 }
 #ifdef LOEF_VEC2D_LIBRARY_BUILD
-namespace LOEF {
-template <>
-basic_vec2d_<electric_field_strength_quantity> normalize(const basic_vec2d_<electric_field_strength_quantity> &a) {
-    return a / (a.length() / (boostunits::coulomb / (millimetre * millimetre)));
-}
-}  // namespace LOEF
 
 /*------------------------------------------
  *              vec2d_position
@@ -137,5 +125,5 @@ decltype(vec2d_position::x_ * vec2d_position::x_) vec2d_position::length_square(
 
 QPoint vec2d_position::to_QPoint(dot_per_millimetre_quantity dpmm) { return QPoint(x_ * dpmm, y_ * dpmm); }
 QPointF vec2d_position::to_QPointF(dot_per_millimetre_quantity dpmm) { return QPointF(x_ * dpmm, y_ * dpmm); }
-#endif
 }  // namespace LOEF
+#endif

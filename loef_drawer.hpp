@@ -39,6 +39,7 @@ class LOEF_drawer : public QWidget {
     void mouseMoveEvent(QMouseEvent *ev) override;
     void mouseReleaseEvent(QMouseEvent *ev) override;
 
+    void prepare_LOEF_pathes();
     void replace_fixed_charge(const LOEF::id_type id, const std::optional<LOEF::coulomb_quantity> &maybe_new_charge,
                               const std::optional<LOEF::vec2d> &maybe_new_pos);
     void replace_fixed_charge(const LOEF::id_type id, const std::optional<LOEF::coulomb_quantity> &maybe_new_charge,
