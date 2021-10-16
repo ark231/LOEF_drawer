@@ -1,6 +1,5 @@
 #include "loef_drawer.hpp"
 
-#include <QDebug>
 #include <QGuiApplication>
 #include <QMouseEvent>
 #include <QScreen>
@@ -9,6 +8,7 @@
 #include <iterator>
 
 #include "LOEF_QPainter.hpp"
+#include "debug_outputs.hpp"
 #include "units.hpp"
 namespace LOEF {
 class state_charge_selected_ {
@@ -75,19 +75,23 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
     LOEF::clear_pens_arrival_to_fixed_charges(fixed_charges_.begin(), fixed_charges_.end());
     decltype(fixed_charges_) positive_fixed_charges;
     decltype(fixed_charges_) newtral_fixed_charges;
+    decltype(fixed_charges_) nonpositive_fixed_charges;
     decltype(fixed_charges_) negative_fixed_charges;
     std::partition_copy(fixed_charges_.begin(), fixed_charges_.end(),
                         std::inserter(positive_fixed_charges, positive_fixed_charges.end()),
-                        std::inserter(negative_fixed_charges, negative_fixed_charges.end()),
+                        std::inserter(nonpositive_fixed_charges, nonpositive_fixed_charges.end()),
                         [](decltype(*(fixed_charges_.begin())) &charge) {
                             return charge.second.quantity() > 0.0 * LOEF::boostunits::coulomb;
                         });
-    std::partition_copy(negative_fixed_charges.begin(), negative_fixed_charges.end(),
+    std::partition_copy(nonpositive_fixed_charges.begin(), nonpositive_fixed_charges.end(),
                         std::inserter(newtral_fixed_charges, newtral_fixed_charges.end()),
                         std::inserter(negative_fixed_charges, negative_fixed_charges.end()),
                         [](decltype(*(fixed_charges_.begin())) &charge) {
                             return charge.second.quantity() == 0.0 * LOEF::boostunits::coulomb;
                         });
+    qDebug() << "positives" << positive_fixed_charges.size();
+    qDebug() << "newtrals" << newtral_fixed_charges.size();
+    qDebug() << "negatives" << negative_fixed_charges.size();
     calc_LOEF_from_fixed_charges(positive_fixed_charges, width, height);
     calc_LOEF_from_fixed_charges(negative_fixed_charges, width, height);
     for (auto charge_path = charge_paths_.begin(); charge_path != charge_paths_.end(); charge_path++) {

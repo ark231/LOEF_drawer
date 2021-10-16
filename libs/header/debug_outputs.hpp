@@ -7,6 +7,7 @@
 #include <sstream>
 #include <vector>
 
+#include "charges.hpp"
 #include "units.hpp"
 #include "vec2d.hpp"
 /*qtのSTLライブラリ出力対応の中で自作クラスを格納したコンテナを表示するときに必要になるので、グローバル名前空間に*/
@@ -19,6 +20,8 @@ QDebug operator<<(QDebug debug, const DATA_TYPE &data) {
         output << "(" << data.x() << "," << data.y() << ")";
     } else if constexpr (std::is_same_v<DATA_TYPE, LOEF::radian_quantity>) {
         output << data << " (" << static_cast<decltype(1.0 * boost::units::degree::degree)>(data) << ")";
+    } else if constexpr (std::is_same_v<DATA_TYPE, LOEF::fixed_charge>) {
+        output << "charge{" << data.quantity() << " " << data.pos() << "}";
     } else {
         output << data;
     }

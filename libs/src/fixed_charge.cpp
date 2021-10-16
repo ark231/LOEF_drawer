@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QtGlobal>
 #include <cmath>
+#include <limits>
 #include <optional>
 #include <utility>
 
@@ -50,7 +51,8 @@ std::vector<vec2d> fixed_charge::calc_pen_init_pos(fixed_charge_containter_itr b
     }
     const decltype(current_max_strength) max_strength = current_max_strength;
     const size_t max_index = index_current_max.value_or(0);
-    Q_ASSERT_X(max_strength.value() >= 0.0 && index_current_max, "calc_pen_init_pos", "no strongest point found ");
+    Q_ASSERT_X(!qFuzzyIsNull(max_strength.value()) && max_strength.value() >= 0.0 && index_current_max,
+               "calc_pen_init_pos", "no strongest point found ");
     electric_field_strength_quantity current_sum = 0.0 * electric_field_strength_unit_quantity;
     result.push_back(samples[max_index].first);  //起点は必ず入る
     /*添字をmax_index分ずらして参照する*/
@@ -68,28 +70,31 @@ std::vector<vec2d> fixed_charge::calc_pen_init_pos(fixed_charge_containter_itr b
         if (offsets_entered_pen_->empty()) {
             return naive_results;  //何も考える必要はない
         }
-        std::vector<vec2d> naive_offsets(naive_results.size());
+        std::vector<vec2d> naive_offsets;
+        naive_offsets.reserve(naive_results.size());
         std::transform(naive_results.begin(), naive_results.end(), std::back_inserter(naive_offsets),
                        [this](const vec2d& pos) { return pos - this->position_; });
-        std::vector<vec2d> negative_results(num_result);
+        std::vector<vec2d> negative_results;
+        negative_results.reserve(num_result);
         auto offsets_entered_pen_tmp = this->offsets_entered_pen_;
         std::sort(offsets_entered_pen_tmp->begin(), offsets_entered_pen_tmp->end(), less_argument);
         std::sort(naive_offsets.begin(), naive_offsets.end(), less_argument);
-        qDebug() << "offsets      :" << *offsets_entered_pen_;
-        qDebug() << "naive_offsets:" << naive_offsets;
         std::vector<std::pair<vec2d, radian_quantity>> accuracy_naive_offsets;
         for (const auto& naive_offset : naive_offsets) {
-            auto range = std::equal_range(offsets_entered_pen_tmp->begin(), offsets_entered_pen_tmp->end(),
-                                          naive_offset, less_argument);
-            auto diff_1 = boost::units::abs((argument(naive_offset) - argument(*(range.first))));
-            diff_1 = boost::units::fmod(diff_1, pi * boostunits::radian);
-            auto diff_2 = boost::units::abs((argument(*(range.second)) - argument(naive_offset)));
-            diff_2 = boost::units::fmod(diff_2, pi * boostunits::radian);
-            accuracy_naive_offsets.push_back(std::make_pair(naive_offset, boost::units::fmin(diff_1, diff_2)));
+            radian_quantity current_min_diff_arg = std::numeric_limits<double>::infinity() * boostunits::radian;
+            for (const auto& offset_entered_pen : *offsets_entered_pen_tmp) {
+                auto diff_arg = boost::units::abs(argument(offset_entered_pen) - argument(naive_offset));
+                if (diff_arg > pi * boostunits::radian) {
+                    diff_arg = 2 * pi * boostunits::radian - diff_arg;
+                }
+                if (diff_arg < current_min_diff_arg) {
+                    current_min_diff_arg = diff_arg;
+                }
+            }
+            accuracy_naive_offsets.push_back(std::make_pair(naive_offset, current_min_diff_arg));
         }
         std::sort(accuracy_naive_offsets.begin(), accuracy_naive_offsets.end(),
                   [](auto a, auto b) { return a.second > b.second; });  //降順
-        qDebug() << "accuracy_naive_result after  sort:" << accuracy_naive_offsets;
         for (size_t i = 0; i < num_needed_pens(); i++) {
             negative_results.push_back(this->position_ + accuracy_naive_offsets[i].first);
         }
