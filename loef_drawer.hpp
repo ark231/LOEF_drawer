@@ -33,13 +33,14 @@ class LOEF_drawer : public QWidget {
     std::unordered_map<LOEF::id_type, std::shared_ptr<LOEF::LOEF_path>> charge_paths_;
     LOEF::id_handler *charge_pen_id_handler_;
     LOEF::state_charge_selected_ *charge_selected_;
-    LOEF::inverse_permittivity_quantity inverse_permittivity_;
+    LOEF::inverse_permittivity_quantity inverse_permittivity_ = LOEF::initial_inverse_permittivity;
 
     void paintEvent(QPaintEvent *ev) override;
     void mousePressEvent(QMouseEvent *ev) override;
     void mouseMoveEvent(QMouseEvent *ev) override;
     void mouseReleaseEvent(QMouseEvent *ev) override;
 
+    void calc_LOEF_from_fixed_charges(decltype(fixed_charges_) &, int width, int height);
     void prepare_LOEF_pathes();
     void replace_fixed_charge(const LOEF::id_type id, const std::optional<LOEF::coulomb_quantity> &maybe_new_charge,
                               const std::optional<LOEF::vec2d> &maybe_new_pos);

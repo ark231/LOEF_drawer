@@ -103,21 +103,11 @@ version</string>
           </property>
           <item>
            <widget class="QDoubleSpinBox" name="doubleSpinBox_inverse_permittivity">
+            <property name="suffix">
+             <string>  lines/C</string>
+            </property>
             <property name="value">
              <double>12.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>lines/C</string>
             </property>
            </widget>
           </item>

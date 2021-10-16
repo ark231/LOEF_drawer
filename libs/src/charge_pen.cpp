@@ -16,8 +16,7 @@ std::shared_ptr<LOEF_path> charge_pen::get_path() { return path; }
 #endif
 template <class fixed_charge_map_iterator_>
 step_status charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end,
-                                     dot_per_millimetre_quantity dpmm,
-                                     inverse_permittivity_quantity inverse_permittivity) {
+                                     dot_per_millimetre_quantity dpmm) {
     vec2d electric_field(0, 0);
     for (auto fixed_charge_itr = begin; fixed_charge_itr != end; fixed_charge_itr++) {
         auto fixed_charge = fixed_charge_itr->second;
@@ -33,13 +32,12 @@ step_status charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_cha
     if (fuzzy_compare(this->previous_delta_position_, -normalize(electric_field) * (interval_ / millimetre))) {
         return step_status::ABORT;  // or will loop forever!
     }
-    this->position_ += normalize(electric_field) * (interval_ / millimetre);
+    if (this->is_positive_) {
+        this->position_ += normalize(electric_field) * (interval_ / millimetre);
+    } else {  // negative
+        this->position_ += -normalize(electric_field) * (interval_ / millimetre);
+    }
     this->previous_delta_position_ = normalize(electric_field) * (interval_ / millimetre);
-    /*
-    qDebug() << "    @charge_pen step_forward "
-             << "pos:" << this->position_
-             << "delta_posiiton:" << (normalize(electric_field) * (interval_ / millimetre));
-             */
     path->lineTo((this->position_).to_QPoint(dpmm));
     if ((0 <= position_.x() * dpmm && position_.x() * dpmm <= max_x) &&
         (0 <= position_.y() * dpmm && position_.y() * dpmm <= max_y)) {
@@ -48,8 +46,7 @@ step_status charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_cha
                 continue;  //中性電荷は突き抜ける
             }
             if ((fixed_iterator->second.position() - position_).length() < (radius::FIXED + 1.0 * millimetre)) {
-                if (fixed_iterator->second.pen_arrive(this->position_ - fixed_iterator->second.position(),
-                                                      inverse_permittivity)) {
+                if (fixed_iterator->second.pen_arrive(this->position_ - fixed_iterator->second.position())) {
                     return step_status::FINISH;
                 } else {
                     return step_status::ABORT;

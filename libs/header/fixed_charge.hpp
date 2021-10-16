@@ -1,9 +1,11 @@
 #ifndef LOEF_DRAWER_FIXED_CHARGE
 #define LOEF_DRAWER_FIXED_CHARGE
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
 #include "basic_charge.hpp"
+#include "general_consts.hpp"
 #include "vec2d.hpp"
 namespace LOEF {
 class fixed_charge : public basic_charge_ {
@@ -12,10 +14,12 @@ class fixed_charge : public basic_charge_ {
     friend void clear_pens_arrival_to_fixed_charges(fixed_charge_containter_itr begin, fixed_charge_containter_itr end);
 
    public:
-    using basic_charge_::basic_charge_;
+    fixed_charge();
+    fixed_charge(coulomb_quantity initial_quantity, millimetre_quantity initial_x, millimetre_quantity initial_y);
+    fixed_charge(coulomb_quantity initial_quantity, vec2d initial_position);
     template <class fixed_charge_containter_itr>
     std::vector<vec2d> calc_pen_init_pos(fixed_charge_containter_itr begin, fixed_charge_containter_itr end,
-                                         int num_result, int num_sample) const;
+                                         unsigned int num_result, unsigned int num_sample) const;
     /**
      * @brief ペンが到着したときに呼び出す
      *
@@ -25,11 +29,15 @@ class fixed_charge : public basic_charge_ {
      * @retval false 定員オーバーで、到着してはならないはずである
      * @retval true 到着して良いはずである
      */
-    bool pen_arrive(vec2d offset, decltype(1.0 / boostunits::coulomb) inverse_permittivity);
-    bool needs_pens(decltype(1.0 / boostunits::coulomb) inverse_permittivity);
+    bool pen_arrive(vec2d offset);
+    bool needs_pens() const;
+    size_t num_needed_pens() const;
+    void update_inverse_permittivity(inverse_permittivity_quantity);
 
    private:
-    std::vector<vec2d> offsets_enterd_pen_;
+    //描画時にコピーしても共有されるように。全体をポインタにするのは修正箇所が多すぎたのでやめた
+    std::shared_ptr<std::vector<vec2d>> offsets_entered_pen_;
+    inverse_permittivity_quantity inverse_permittivity_ = LOEF::initial_inverse_permittivity;
 };
 template <class fixed_charge_containter_itr>
 void clear_pens_arrival_to_fixed_charges(fixed_charge_containter_itr begin, fixed_charge_containter_itr end);

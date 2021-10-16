@@ -13,6 +13,7 @@ constexpr millimetre_quantity FIXED = 2.5 * millimetre;  /// note: in the future
 constexpr millimetre_quantity ARROW_HEIGHT = 3.0 * millimetre;
 constexpr millimetre_quantity initial_fixed_pos_x = 50 * millimetre;
 constexpr millimetre_quantity initial_fixed_pos_y = 50 * millimetre;
-constexpr coulomb_quantity initial_fixed_charge = 1.0 * boostunits::coulomb;
+constexpr coulomb_quantity initial_fixed_charge = 0.0 * boostunits::coulomb;
+inline const inverse_permittivity_quantity initial_inverse_permittivity = 12.0 * inverse_permittivity_unit_quantity;
 }  // namespace LOEF
 #endif

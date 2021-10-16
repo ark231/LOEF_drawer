@@ -88,26 +88,30 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
                         [](decltype(*(fixed_charges_.begin())) &charge) {
                             return charge.second.quantity() == 0.0 * LOEF::boostunits::coulomb;
                         });
-    for (const auto &positive_charge : positive_fixed_charges) {
-        for (const auto &position : positive_charge.second.calc_pen_init_pos(
-                 fixed_charges_.begin(), fixed_charges_.end(),
-                 std::abs(positive_charge.second.quantity() * inverse_permittivity_), 360)) {
+    calc_LOEF_from_fixed_charges(positive_fixed_charges, width, height);
+    calc_LOEF_from_fixed_charges(negative_fixed_charges, width, height);
+    for (auto charge_path = charge_paths_.begin(); charge_path != charge_paths_.end(); charge_path++) {
+        painter.draw_LOEF_path(*(charge_path->second));
+    }
+}
+void LOEF_drawer::calc_LOEF_from_fixed_charges(decltype(fixed_charges_) &fixed_charges, int width, int height) {
+    for (const auto &charge : fixed_charges) {
+        for (const auto &position :
+             charge.second.calc_pen_init_pos(fixed_charges_.begin(), fixed_charges_.end(),
+                                             std::abs(charge.second.quantity() * inverse_permittivity_), 360)) {
             auto pen_id = charge_pen_id_handler_->new_id();
-            charge_pens_[pen_id] = LOEF::charge_pen(true, position, 1 * LOEF::millimetre, width, height, dpmm_);
+            charge_pens_[pen_id] = LOEF::charge_pen(charge.second.quantity() > 0.0 * LOEF::boostunits::coulomb,
+                                                    position, 1 * LOEF::millimetre, width, height, dpmm_);
             charge_paths_[pen_id] = charge_pens_[pen_id].get_path();
         }
         prepare_LOEF_pathes();
-        for (auto charge_path = charge_paths_.begin(); charge_path != charge_paths_.end(); charge_path++) {
-            painter.draw_LOEF_path(*(charge_path->second));
-        }
     }
 }
 void LOEF_drawer::prepare_LOEF_pathes() {
     std::vector<LOEF::id_type> ids_to_erase;
     while (!charge_pens_.empty()) {
         for (auto charge_pen = charge_pens_.begin(); charge_pen != charge_pens_.end(); charge_pen++) {
-            switch (charge_pen->second.step_forward(fixed_charges_.begin(), fixed_charges_.end(), dpmm_,
-                                                    inverse_permittivity_)) {
+            switch (charge_pen->second.step_forward(fixed_charges_.begin(), fixed_charges_.end(), dpmm_)) {
                 case LOEF::step_status::FINISH:
                     ids_to_erase.push_back(charge_pen->first);
                     break;
@@ -205,4 +209,8 @@ LOEF_drawer::get_fixed_charge_info(LOEF::id_type id) {
 }
 void LOEF_drawer::slot_inverse_permittivity_changed(double new_value) {
     this->inverse_permittivity_ = new_value / LOEF::boostunits::coulomb;
+    for (auto &fixed_charge : fixed_charges_) {
+        fixed_charge.second.update_inverse_permittivity(inverse_permittivity_);
+    }
+    clear_and_redraw();
 }

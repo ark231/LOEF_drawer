@@ -1,8 +1,9 @@
 #include "vec2d.hpp"
 
 #include <QtGlobal>
-#include <cmath>
 #include <sstream>
+
+#include "math.hpp"
 namespace LOEF {
 #ifdef LOEF_VEC2D_LIBRARY_BUILD
 template <class QUANTITY>
@@ -91,6 +92,7 @@ template <class QUANTITY>
 LOEF::basic_vec2d_<QUANTITY> operator-(const LOEF::basic_vec2d_<QUANTITY> &a) {
     return -1 * a;
 }
+/*
 template <class QUANTITY>
 QDebug &operator<<(QDebug &debug, const LOEF::basic_vec2d_<QUANTITY> &data) {
     auto data_ = static_cast<LOEF::basic_vec2d_<QUANTITY>>(data);
@@ -99,6 +101,7 @@ QDebug &operator<<(QDebug &debug, const LOEF::basic_vec2d_<QUANTITY> &data) {
     debug << output.str().c_str();
     return debug;
 }
+*/
 template <class QUANTITY>
 bool fuzzy_compare(const LOEF::basic_vec2d_<QUANTITY> &a, const LOEF::basic_vec2d_<QUANTITY> &b) {
     return qFuzzyCompare(a.x().value(), b.x().value()) && qFuzzyCompare(a.y().value(), b.y().value());
@@ -125,5 +128,7 @@ decltype(vec2d_position::x_ * vec2d_position::x_) vec2d_position::length_square(
 
 QPoint vec2d_position::to_QPoint(dot_per_millimetre_quantity dpmm) { return QPoint(x_ * dpmm, y_ * dpmm); }
 QPointF vec2d_position::to_QPointF(dot_per_millimetre_quantity dpmm) { return QPointF(x_ * dpmm, y_ * dpmm); }
+
+radian_quantity argument(vec2d_position pos) { return boost::units::atan2(pos.y(), pos.x()); }
 }  // namespace LOEF
 #endif

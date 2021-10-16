@@ -3,37 +3,36 @@
 #include <QDebug>
 #include <QtGlobal>
 #include <cmath>
+#include <optional>
 #include <utility>
 
+#include "debug_outputs.hpp"
 #include "general_consts.hpp"
 #include "math.hpp"
 namespace LOEF {
+inline const auto less_argument = [](const vec2d& a, const vec2d& b) { return argument(a) < argument(b); };
 template <class fixed_charge_containter_itr>
 std::vector<vec2d> fixed_charge::calc_pen_init_pos(fixed_charge_containter_itr begin, fixed_charge_containter_itr end,
-                                                   int num_result, int num_sample) const {
+                                                   unsigned int num_result, unsigned int num_sample) const {
+    if (this->quantity_ < 0.0 * boostunits::coulomb && !this->needs_pens()) {
+        return std::vector<vec2d>();
+    }
     std::vector<vec2d> result;
     result.reserve(num_result);
     std::vector<std::pair<vec2d, electric_field_strength_quantity>> samples;
     samples.reserve(num_sample);
-    /*
-    std::vector<electric_field_strength_quantity> sample_electric_field_strengths;  //μN/C
-    sample_electric_field_strengths.reserve(num_sample);
-    std::vector<vec2d> sample_positions;
-    sample_positions.reserve(num_sample);
-    */
     decltype(1.0 * electric_field_strength_unit_quantity) sum_electric_field_strength;
     millimetre_quantity radius = radius::FIXED + 0.1 * millimetre;
     electric_field_strength_quantity current_max_strength = -1.0 * electric_field_strength_unit_quantity;
-    size_t index_current_max = -1;
-    for (auto i = 0; i < num_sample; i++) {
+    std::optional<size_t> index_current_max;
+    /*サンプル生成*/
+    for (size_t i = 0; i < num_sample; i++) {
         auto current_argument = (static_cast<double>(i) / num_sample) * 2 * pi * boostunits::radian;
         electric_field sample_electric_field = {0.0 * (electric_field_strength_unit_quantity),
                                                 0.0 * (electric_field_strength_unit_quantity)};
         vec2d sample_position =
-            this->position_ +
-            (radius / millimetre) * vec2d(std::cos(current_argument / boostunits::radian) * millimetre,
-                                          std::sin(current_argument / boostunits::radian) * millimetre);
-        // sample_positions.push_back(sample_position);
+            this->position_ + (radius / millimetre) * vec2d(boost::units::cos(current_argument) * millimetre,
+                                                            boost::units::sin(current_argument) * millimetre);
         for (auto fixed_charge = begin; fixed_charge != end; fixed_charge++) {
             vec2d charge_to_sample = sample_position - fixed_charge->second.position();
             electric_field_strength_quantity sample_field_strength =
@@ -42,7 +41,6 @@ std::vector<vec2d> fixed_charge::calc_pen_init_pos(fixed_charge_containter_itr b
             sample_electric_field += electric_field(field_direction.x() * sample_field_strength,
                                                     field_direction.y() * sample_field_strength);
         }
-        // sample_electric_field_strengths.push_back(sample_electric_field.length());
         samples.push_back(std::make_pair(sample_position, sample_electric_field.length()));
         sum_electric_field_strength += sample_electric_field.length();
         if (sample_electric_field.length() > current_max_strength) {
@@ -51,9 +49,8 @@ std::vector<vec2d> fixed_charge::calc_pen_init_pos(fixed_charge_containter_itr b
         }
     }
     const decltype(current_max_strength) max_strength = current_max_strength;
-    const decltype(index_current_max) max_index = index_current_max;
-    Q_ASSERT_X(max_strength >= 0.0 * electric_field_strength_unit_quantity, "calc_pen_init_pos",
-               "not found strongest point");
+    const size_t max_index = index_current_max.value_or(0);
+    Q_ASSERT_X(max_strength.value() >= 0.0 && index_current_max, "calc_pen_init_pos", "no strongest point found ");
     electric_field_strength_quantity current_sum = 0.0 * electric_field_strength_unit_quantity;
     result.push_back(samples[max_index].first);  //起点は必ず入る
     /*添字をmax_index分ずらして参照する*/
@@ -64,26 +61,75 @@ std::vector<vec2d> fixed_charge::calc_pen_init_pos(fixed_charge_containter_itr b
         }
         current_sum += samples[j].second;
     }
-    return result;
+    if (this->quantity_ > 0.0 * boostunits::coulomb) {
+        return result;
+    } else if (this->quantity_ < 0.0 * boostunits::coulomb) {
+        std::vector<vec2d>& naive_results = result;  // rename
+        if (offsets_entered_pen_->empty()) {
+            return naive_results;  //何も考える必要はない
+        }
+        std::vector<vec2d> naive_offsets(naive_results.size());
+        std::transform(naive_results.begin(), naive_results.end(), std::back_inserter(naive_offsets),
+                       [this](const vec2d& pos) { return pos - this->position_; });
+        std::vector<vec2d> negative_results(num_result);
+        auto offsets_entered_pen_tmp = this->offsets_entered_pen_;
+        std::sort(offsets_entered_pen_tmp->begin(), offsets_entered_pen_tmp->end(), less_argument);
+        std::sort(naive_offsets.begin(), naive_offsets.end(), less_argument);
+        qDebug() << "offsets      :" << *offsets_entered_pen_;
+        qDebug() << "naive_offsets:" << naive_offsets;
+        std::vector<std::pair<vec2d, radian_quantity>> accuracy_naive_offsets;
+        for (const auto& naive_offset : naive_offsets) {
+            auto range = std::equal_range(offsets_entered_pen_tmp->begin(), offsets_entered_pen_tmp->end(),
+                                          naive_offset, less_argument);
+            auto diff_1 = boost::units::abs((argument(naive_offset) - argument(*(range.first))));
+            diff_1 = boost::units::fmod(diff_1, pi * boostunits::radian);
+            auto diff_2 = boost::units::abs((argument(*(range.second)) - argument(naive_offset)));
+            diff_2 = boost::units::fmod(diff_2, pi * boostunits::radian);
+            accuracy_naive_offsets.push_back(std::make_pair(naive_offset, boost::units::fmin(diff_1, diff_2)));
+        }
+        std::sort(accuracy_naive_offsets.begin(), accuracy_naive_offsets.end(),
+                  [](auto a, auto b) { return a.second > b.second; });  //降順
+        qDebug() << "accuracy_naive_result after  sort:" << accuracy_naive_offsets;
+        for (size_t i = 0; i < num_needed_pens(); i++) {
+            negative_results.push_back(this->position_ + accuracy_naive_offsets[i].first);
+        }
+        return negative_results;
+    } else {
+        return std::vector<vec2d>();
+    }
 }
 template <class fixed_charge_containter_itr>
 void clear_pens_arrival_to_fixed_charges(fixed_charge_containter_itr begin, fixed_charge_containter_itr end) {
     for (auto fixed_itr = begin; fixed_itr != end; fixed_itr++) {
-        fixed_itr->second.offsets_enterd_pen_.clear();
+        fixed_itr->second.offsets_entered_pen_->clear();
     }
 }
 #ifdef LOEF_DRAWER_CHARGES_LIBRARY_BUILD
-bool fixed_charge::pen_arrive(vec2d offset, decltype(1.0 / boostunits::coulomb) inverse_permittivity) {
-    // qDebug() << "@fixed_charge " << __func__ << "charge pen arrives num_offset:" << offsets_enterd_pen_.size();
-    if (this->needs_pens(inverse_permittivity)) {
-        offsets_enterd_pen_.push_back(offset);
+fixed_charge::fixed_charge() : offsets_entered_pen_(new std::vector<vec2d>) {}
+fixed_charge::fixed_charge(coulomb_quantity initial_quantity, millimetre_quantity initial_x,
+                           millimetre_quantity initial_y)
+    : fixed_charge(initial_quantity, vec2d(initial_x, initial_y)) {}
+fixed_charge::fixed_charge(coulomb_quantity initial_quantity, vec2d initial_position)
+    : offsets_entered_pen_(new std::vector<vec2d>) {
+    this->quantity_ = initial_quantity;
+    this->position_ = initial_position;
+}
+bool fixed_charge::pen_arrive(vec2d offset) {
+    if (this->needs_pens()) {
+        offsets_entered_pen_->push_back(offset);
         return true;
     } else {
         return false;
     }
 }
-bool fixed_charge::needs_pens(decltype(1.0 / boostunits::coulomb) inverse_permittivity) {
-    return offsets_enterd_pen_.size() < std::abs(this->quantity_ * inverse_permittivity);
+bool fixed_charge::needs_pens() const {
+    return offsets_entered_pen_->size() < std::abs(this->quantity_ * inverse_permittivity_);
+}
+size_t fixed_charge::num_needed_pens() const {
+    return std::abs(this->quantity_ * inverse_permittivity_) - offsets_entered_pen_->size();
+}
+void fixed_charge::update_inverse_permittivity(inverse_permittivity_quantity new_quantity) {
+    this->inverse_permittivity_ = new_quantity;
 }
 #endif
 }  // namespace LOEF

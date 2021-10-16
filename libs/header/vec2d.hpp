@@ -52,8 +52,10 @@ template <class QUANTITY, typename FACTOR_TYPE>
 LOEF::basic_vec2d_<QUANTITY> operator/(const LOEF::basic_vec2d_<QUANTITY> &a, const FACTOR_TYPE k);
 // LOEF::basic_vec2d_<QUANTITY> operator/(const FACTOR_TYPE k, const LOEF::basic_vec2d_<QUANTITY> &a);
 
+/*
 template <class QUANTITY>
-QDebug &operator<<(QDebug &, const LOEF::basic_vec2d_<QUANTITY> &);
+QDebug operator<<(QDebug, const LOEF::basic_vec2d_<QUANTITY> &);
+*/
 template <class QUANTITY>
 bool fuzzy_compare(const LOEF::basic_vec2d_<QUANTITY> &a, const LOEF::basic_vec2d_<QUANTITY> &b);
 #endif
@@ -76,9 +78,9 @@ class vec2d_position : public basic_vec2d_<millimetre_quantity> {
     QPoint to_QPoint(dot_per_millimetre_quantity dpmm);
     QPointF to_QPointF(dot_per_millimetre_quantity dpmm);
 };
+radian_quantity argument(vec2d_position);
 using vec2d = vec2d_position;  //!既存コードをできるだけ壊さないため
 using electric_field = basic_vec2d_<electric_field_strength_quantity>;
-
 }  // namespace LOEF
 
 #ifndef LOEF_VEC2D_LIBRARY_BUILD
