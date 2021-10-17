@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2 
     - uses: jurplel/install-qt-action@v2
-    - name: Install boost
+    - name: Install_boost
       uses: MarkusJx/install-boost@v2.0.0
       with:
         boost_version: 1.71.0
@@ -30,7 +30,7 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
         echo "BOOST_ROOT="${BOOST_ROOT}
-        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install -DLOEF_NOUPDATE="yes" -DBOOST_ROOT=${BOOST_ROOT}
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install -DLOEF_NOUPDATE="yes" -DBOOST_ROOT=${{steps.Install_boost.ouputs.BOOST_ROOT}}
       shell: bash
     - name: Build
       # Build your program with the given configuration
