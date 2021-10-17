@@ -24,14 +24,14 @@ jobs:
       uses: MarkusJx/install-boost@v2.0.0
       with:
         boost_version: 1.71.0
+        boost_install_dir: ${{github.workspace}}/boost
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
-        echo "BOOST_ROOT="${BOOST_ROOT}
-        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install -DLOEF_NOUPDATE="yes" -DBOOST_ROOT=${{steps.Install_boost.ouputs.BOOST_ROOT}}
-      shell: bash
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install -DLOEF_NOUPDATE="yes" -DBOOST_ROOT=${{github.workspace}}/boost
+
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
