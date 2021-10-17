@@ -27,6 +27,9 @@ class LOEF_drawer : public QWidget {
         LOEF::id_type);
     void request_draw_LOEF(bool yes_or_no);
     QJsonObject create_save_data();
+    void select_fixed_charge(LOEF::id_type);
+    void unselect_fixed_charge(LOEF::id_type);
+    void unselect_all_selected_fixed_charge();
 
    private:
     LOEF::dot_per_millimetre_quantity dpmm_;
