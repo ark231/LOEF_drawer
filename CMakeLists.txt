@@ -27,10 +27,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
 
 add_subdirectory(libs)
+if(${LOEF_NOUPDATE}=="yes")
+qt5_add_translation(LOEF_QM_FILES ${CMAKE_CURRENT_SOURCE_DIR}/translations/LOEF_drawer_ja.ts )
+else()
 qt5_create_translation(LOEF_QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} 
     ${CMAKE_CURRENT_SOURCE_DIR}/translations/LOEF_drawer_ja.ts 
     OPTIONS -no-obsolete
     )
+endif()
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/translations)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/settings)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/saves)
