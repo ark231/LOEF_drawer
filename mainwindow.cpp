@@ -2,6 +2,12 @@
 
 #include <QBoxLayout>
 #include <QCoreApplication>
+#include <QFile>
+#include <QFileDialog>
+#include <QInputDialog>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QMessageBox>
 #include <QSettings>
 #include <QString>
@@ -93,9 +99,10 @@ void MainWindow::add_fixed_charge(const LOEF::coulomb_quantity initial_quantity,
 void MainWindow::add_fixed_charge() { set_new_fixed_charge(ui->loef_drawer->create_fixed_charge()); }
 void MainWindow::set_new_fixed_charge(const LOEF::id_type id_new_charge) {
     QString charge_list_item_title;
-    if (LOEF::initial_fixed_charge > 0.0 * LOEF::boostunits::coulomb) {
+    auto new_charge_quantity = std::get<0>(ui->loef_drawer->get_fixed_charge_info(id_new_charge));
+    if (new_charge_quantity > 0.0 * LOEF::boostunits::coulomb) {
         charge_list_item_title = tr("positive charge");
-    } else if (LOEF::initial_fixed_charge == 0.0 * LOEF::boostunits::coulomb) {
+    } else if (new_charge_quantity == 0.0 * LOEF::boostunits::coulomb) {
         charge_list_item_title = tr("null charge");
     } else {
         charge_list_item_title = tr("negative charge");
@@ -178,6 +185,64 @@ void MainWindow::closeEvent(QCloseEvent *) { QApplication::closeAllWindows(); }
 
 void MainWindow::on_radio_draw_toggled(bool checked) { this->ui->loef_drawer->request_draw_LOEF(checked); }
 
-void MainWindow::on_button_save_clicked() {}
+void save_to_file(QFile &savefile, QJsonObject &save_data);
+void MainWindow::on_button_save_clicked() {
+    QJsonObject save_data;
+    save_data = ui->loef_drawer->create_save_data();
+    bool save_confirmed;
+    QString save_name = QInputDialog::getText(this, tr("enter save name"), tr("save name:"), QLineEdit::Normal,
+                                              tr("untitled"), &save_confirmed);
+    bool successfully_saved = false;
+    if (save_confirmed && !save_name.isEmpty()) {
+        while (!successfully_saved) {
+            QFile save_file(QCoreApplication::applicationDirPath() + "/saves/" + save_name + ".json");
+            if (!save_file.exists()) {
+                save_to_file(save_file, save_data);
+                successfully_saved = true;  // breakするので意味はないが、、、
+                break;
+            } else {
+                QMessageBox msgbox(this);
+                msgbox.setText(tr("save file with entered name already exists.\ndo you want to overwrite it?"));
+                msgbox.setWindowTitle(tr("save file exists"));
+                msgbox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+                msgbox.setDefaultButton(QMessageBox::No);
+                msgbox.setIcon(QMessageBox::Warning);
+                switch (msgbox.exec()) {
+                    case QMessageBox::Yes:
+                        save_to_file(save_file, save_data);
+                        successfully_saved = true;
+                        break;
+                    case QMessageBox::No:
+                        save_name = QInputDialog::getText(this, tr("enter save name"), tr("save name:"),
+                                                          QLineEdit::Normal, tr("untitled"), &save_confirmed);
+                        successfully_saved = false;
+                        break;
+                }
+            }
+        }
+    }
+}
+void save_to_file(QFile &savefile, QJsonObject &save_data) {
+    savefile.open(QIODevice::WriteOnly);  //失敗処理の実装は後回し
+    savefile.write(QJsonDocument(save_data).toJson());
+}
 
-void MainWindow::on_button_open_clicked() {}
+void MainWindow::on_button_open_clicked() {
+    auto saved_filename = QFileDialog::getOpenFileName(
+        this, tr("open save file"), QCoreApplication::applicationDirPath() + "/saves", tr("JSON files (*.json)"));
+    Q_ASSERT(QFile::exists(saved_filename));
+    QFile saved_file(saved_filename);
+    saved_file.open(QIODevice::ReadOnly);
+    QJsonDocument saved_json(QJsonDocument::fromJson(saved_file.readAll()));
+    QJsonObject saved_data = saved_json.object();
+    ui->doubleSpinBox_inverse_permittivity->setValue(saved_data["inverse permittivity"].toDouble());
+    for (const auto &json_fixed_charge : saved_data["fixed_charges"].toArray()) {
+        auto json_object_fixed_charge = json_fixed_charge.toObject();
+        LOEF::coulomb_quantity saved_charge_quantity =
+            json_object_fixed_charge["charge quantity"].toDouble() * LOEF::boostunits::coulomb;
+        QJsonObject json_position = json_object_fixed_charge["position"].toObject();
+        LOEF::millimetre_quantity saved_position_x = json_position["x"].toDouble() * LOEF::millimetre;
+        LOEF::millimetre_quantity saved_position_y = json_position["y"].toDouble() * LOEF::millimetre;
+        this->add_fixed_charge(saved_charge_quantity, saved_position_x, saved_position_y);
+    }
+}

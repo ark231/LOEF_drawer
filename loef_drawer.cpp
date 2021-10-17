@@ -1,6 +1,7 @@
 #include "loef_drawer.hpp"
 
 #include <QGuiApplication>
+#include <QJsonArray>
 #include <QMouseEvent>
 #include <QScreen>
 #include <QtGlobal>
@@ -12,11 +13,6 @@
 #include "units.hpp"
 namespace LOEF {
 class state_charge_selected_ {
-    /*
-    bool exists_selected_ = false;
-    LOEF::id_type id_selected_charge_ = -1;  // this must be super big number ,as so much instances can't be stored
-    vec2d offset_ = {0, 0};
-    */
     std::vector<std::pair<id_type, vec2d>> selected_ids_and_offsets_;
 
    public:
@@ -28,29 +24,12 @@ class state_charge_selected_ {
     vec2d get_offset(id_type);
     bool is_selected(id_type);
 };
-state_charge_selected_::state_charge_selected_() {
-    /*
-    exists_selected_ = false;
-    id_selected_charge_ = -1;
-    offset_ = {0, 0};
-    */
-}
+state_charge_selected_::state_charge_selected_() {}
 state_charge_selected_::operator bool() { return !selected_ids_and_offsets_.empty(); }
 void state_charge_selected_::set_selected(LOEF::id_type id, vec2d offset) {
-    /*
-    exists_selected_ = true;
-    id_selected_charge_ = id;
-    offset_ = offset;
-    */
     selected_ids_and_offsets_.push_back(std::make_pair(id, offset));
 }
-void state_charge_selected_::unselected() {
-    /*
-    exists_selected_ = false;
-    id_selected_charge_ = -1;
-    */
-    selected_ids_and_offsets_.clear();
-}
+void state_charge_selected_::unselected() { selected_ids_and_offsets_.clear(); }
 std::vector<LOEF::id_type> state_charge_selected_::get_selected() {
     std::vector<LOEF::id_type> result;
     std::transform(selected_ids_and_offsets_.begin(), selected_ids_and_offsets_.end(), std::back_inserter(result),
@@ -252,4 +231,20 @@ void LOEF_drawer::slot_inverse_permittivity_changed(double new_value) {
 void LOEF_drawer::request_draw_LOEF(bool yes_or_no) {
     this->draw_LOEF_requested = yes_or_no;
     clear_and_redraw();
+}
+QJsonObject LOEF_drawer::create_save_data() {
+    QJsonObject save_data;
+    save_data["inverse permittivity"] = this->inverse_permittivity_.value();
+    QJsonArray json_fixed_charges;
+    for (const auto &fixed_charge : fixed_charges_) {
+        QJsonObject json_fixed_charge;
+        json_fixed_charge["charge quantity"] = fixed_charge.second.quantity().value();
+        QJsonObject json_position;
+        json_position["x"] = fixed_charge.second.position().x().value();
+        json_position["y"] = fixed_charge.second.position().y().value();
+        json_fixed_charge["position"] = json_position;
+        json_fixed_charges.append(json_fixed_charge);
+    }
+    save_data["fixed_charges"] = json_fixed_charges;
+    return save_data;
 }

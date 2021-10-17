@@ -1,6 +1,7 @@
 #ifndef LOEF_DRAWER_HPP
 #define LOEF_DRAWER_HPP
 
+#include <QJsonObject>
 #include <QWidget>
 #include <optional>
 #include <tuple>
@@ -25,6 +26,7 @@ class LOEF_drawer : public QWidget {
     std::tuple<LOEF::coulomb_quantity, LOEF::millimetre_quantity, LOEF::millimetre_quantity> get_fixed_charge_info(
         LOEF::id_type);
     void request_draw_LOEF(bool yes_or_no);
+    QJsonObject create_save_data();
 
    private:
     LOEF::dot_per_millimetre_quantity dpmm_;

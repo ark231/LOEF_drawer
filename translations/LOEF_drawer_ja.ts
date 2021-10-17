@@ -68,7 +68,7 @@ version</source>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="213"/>
         <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="213"/>
         <source>  lines/C</source>
-        <translation type="unfinished"></translation>
+        <translation>  本/C</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="119"/>
@@ -127,35 +127,76 @@ version</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="97"/>
-        <location filename="../mainwindow.cpp" line="110"/>
+        <location filename="../mainwindow.cpp" line="103"/>
+        <location filename="../mainwindow.cpp" line="116"/>
         <source>positive charge</source>
         <translation>正電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="99"/>
-        <location filename="../mainwindow.cpp" line="112"/>
+        <location filename="../mainwindow.cpp" line="105"/>
+        <location filename="../mainwindow.cpp" line="118"/>
         <source>null charge</source>
         <translatorcomment>もっとマシな呼び方募集中</translatorcomment>
         <translation>非荷電電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="101"/>
-        <location filename="../mainwindow.cpp" line="114"/>
+        <location filename="../mainwindow.cpp" line="107"/>
+        <location filename="../mainwindow.cpp" line="120"/>
         <source>negative charge</source>
         <translation>負電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="155"/>
+        <location filename="../mainwindow.cpp" line="161"/>
         <source>This change require restarting this program.
 Do you want to restart this program?</source>
         <translation>この変更を反映させるにはプログラムの再起動が必要です。
 このプログラムを再起動しますか？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="156"/>
+        <location filename="../mainwindow.cpp" line="162"/>
         <source>confirm restart</source>
         <translation>再起動を確認</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="192"/>
+        <location filename="../mainwindow.cpp" line="215"/>
+        <source>enter save name</source>
+        <translation>保存名を入力してください</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="192"/>
+        <location filename="../mainwindow.cpp" line="215"/>
+        <source>save name:</source>
+        <translatorcomment>もうちょっといい呼び名がある気がするが、、、</translatorcomment>
+        <translation>保存タイトル:</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="193"/>
+        <location filename="../mainwindow.cpp" line="216"/>
+        <source>untitled</source>
+        <translation>無題</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="204"/>
+        <source>save file with entered name already exists.
+do you want to overwrite it?</source>
+        <translation>同名のファイルがすでに存在しています。
+上書きしますか？</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="205"/>
+        <source>save file exists</source>
+        <translation>ファイルがすでに存在します</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="231"/>
+        <source>open save file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="231"/>
+        <source>JSON files (*.json)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
