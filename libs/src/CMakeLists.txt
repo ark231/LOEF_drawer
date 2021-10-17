@@ -10,7 +10,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 find_package(Qt5 COMPONENTS Core Gui REQUIRED)
 
+if(${LOEF_NOUPDATE}!="yes")
 add_compile_options(-Wall -Wextra)
+endif()
 add_compile_definitions($<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
 include_directories(
     ${LOEF_drawer_libs_header_SOURCE_DIR}
