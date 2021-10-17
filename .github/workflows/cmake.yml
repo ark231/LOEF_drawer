@@ -33,8 +33,8 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
       
     - name: Install
-      run: cmake --install ${{github.workspace}}/build
-      run: $RUNNER_WORKSPACE/bin/windeployqt ${{github.workspace}}/install/LOEF_drawer.exe
+      - run: cmake --install ${{github.workspace}}/build
+      - run: $RUNNER_WORKSPACE/bin/windeployqt ${{github.workspace}}/install/LOEF_drawer.exe
 
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
