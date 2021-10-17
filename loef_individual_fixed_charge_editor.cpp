@@ -9,7 +9,7 @@ LOEF_individual_fixed_charge_editor::LOEF_individual_fixed_charge_editor(LOEF::i
                                                                          LOEF::millimetre_quantity initial_X,
                                                                          LOEF::millimetre_quantity initial_Y,
                                                                          QWidget* parent)
-    : QWidget(parent), ui(new Ui::LOEF_individual_fixed_charge_editor) {
+    : QWidget(parent, Qt::WindowStaysOnTopHint), ui(new Ui::LOEF_individual_fixed_charge_editor) {
     ui->setupUi(this);
     this->id_ = id;
     ui->doubleSpinBox_pox_x->setValue(initial_X.value());
@@ -57,3 +57,12 @@ void LOEF_individual_fixed_charge_editor::closeEvent(QCloseEvent*) {
     emit editor_fixed_charge_closed(pos_to_send);
 }
 void LOEF_individual_fixed_charge_editor::moveEvent(QMoveEvent* ev) { this->moved_pos_ = ev->pos(); }
+void LOEF_individual_fixed_charge_editor::slot_fixed_charge_select_changed(LOEF::id_type new_id,
+                                                                           LOEF::coulomb_quantity new_C,
+                                                                           LOEF::millimetre_quantity new_X,
+                                                                           LOEF::millimetre_quantity new_Y) {
+    this->id_ = new_id;
+    ui->doubleSpinBox_pox_x->setValue(new_X / LOEF::millimetre);
+    ui->doubleSpinBox_pox_y->setValue(new_Y / LOEF::millimetre);
+    ui->doubleSpinBox_quantity->setValue(new_C / LOEF::boostunits::coulomb);
+}

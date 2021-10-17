@@ -72,6 +72,9 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
     for (const auto &charge : fixed_charges_) {
         painter.draw_fixed_charge(charge.second);
     }
+    if (!draw_LOEF_requested) {
+        return;
+    }
     LOEF::clear_pens_arrival_to_fixed_charges(fixed_charges_.begin(), fixed_charges_.end());
     decltype(fixed_charges_) positive_fixed_charges;
     decltype(fixed_charges_) newtral_fixed_charges;
@@ -213,5 +216,9 @@ void LOEF_drawer::slot_inverse_permittivity_changed(double new_value) {
     for (auto &fixed_charge : fixed_charges_) {
         fixed_charge.second.update_inverse_permittivity(inverse_permittivity_);
     }
+    clear_and_redraw();
+}
+void LOEF_drawer::request_draw_LOEF(bool yes_or_no) {
+    this->draw_LOEF_requested = yes_or_no;
     clear_and_redraw();
 }

@@ -24,6 +24,7 @@ class LOEF_drawer : public QWidget {
                                       LOEF::millimetre_quantity initial_Y = LOEF::initial_fixed_pos_y);
     std::tuple<LOEF::coulomb_quantity, LOEF::millimetre_quantity, LOEF::millimetre_quantity> get_fixed_charge_info(
         LOEF::id_type);
+    void request_draw_LOEF(bool yes_or_no);
 
    private:
     LOEF::dot_per_millimetre_quantity dpmm_;
@@ -34,6 +35,7 @@ class LOEF_drawer : public QWidget {
     LOEF::id_handler *charge_pen_id_handler_;
     LOEF::state_charge_selected_ *charge_selected_;
     LOEF::inverse_permittivity_quantity inverse_permittivity_ = LOEF::initial_inverse_permittivity;
+    bool draw_LOEF_requested = true;
 
     void paintEvent(QPaintEvent *ev) override;
     void mousePressEvent(QMouseEvent *ev) override;

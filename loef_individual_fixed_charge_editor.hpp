@@ -38,6 +38,8 @@ class LOEF_individual_fixed_charge_editor : public QWidget {
 
    private slots:
     void slot_fixed_charge_position_changed(LOEF::id_type id, LOEF::millimetre_quantity X, LOEF::millimetre_quantity Y);
+    void slot_fixed_charge_select_changed(LOEF::id_type new_id, LOEF::coulomb_quantity new_C,
+                                          LOEF::millimetre_quantity new_X, LOEF::millimetre_quantity new_Y);
     void on_doubleSpinBox_quantity_valueChanged(double arg1);
     void on_doubleSpinBox_pox_x_valueChanged(double arg1);
     void on_doubleSpinBox_pox_y_valueChanged(double arg1);

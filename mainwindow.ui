@@ -149,14 +149,14 @@ version</string>
            <enum>QLayout::SetDefaultConstraint</enum>
           </property>
           <item>
-           <widget class="QPushButton" name="pushButton_3">
+           <widget class="QPushButton" name="button_save">
             <property name="text">
              <string>save</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="button_open">
             <property name="text">
              <string>open</string>
             </property>

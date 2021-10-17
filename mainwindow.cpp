@@ -23,7 +23,7 @@ MainWindow::MainWindow(QLocale locale, QWidget *parent) : QMainWindow(parent), u
             SLOT(slot_fixed_charge_selected(LOEF::id_type)));
     connect(ui->doubleSpinBox_inverse_permittivity, SIGNAL(valueChanged(double)), ui->loef_drawer,
             SLOT(slot_inverse_permittivity_changed(double)));
-    ui->doubleSpinBox_inverse_permittivity->setValue(12.0);
+    ui->doubleSpinBox_inverse_permittivity->setValue(LOEF::initial_inverse_permittivity.value());
     if (locale == QLocale("en")) {
         ui->actionEnglish->setChecked(true);
     } else if (locale == QLocale("ja")) {
@@ -36,11 +36,13 @@ MainWindow::~MainWindow() { delete ui; }
 void MainWindow::on_button_add_fixed_charge_clicked() { add_fixed_charge(); }
 
 void MainWindow::on_list_fixed_charges_itemClicked(QListWidgetItem *item) {
-    if (this->current_selected_editor_) {
-        this->current_selected_editor_->close();
-    }
     auto id_selected_charge = item->data(static_cast<int>(LOEF::item_data_role::id_role)).value<LOEF::id_type>();
     auto selected_charge_infos = ui->loef_drawer->get_fixed_charge_info(id_selected_charge);
+    if (this->current_selected_editor_) {
+        emit fixed_charge_select_changed(id_selected_charge, std::get<0>(selected_charge_infos),
+                                         std::get<1>(selected_charge_infos), std::get<2>(selected_charge_infos));
+        return;
+    }
     auto selected_editor =
         new LOEF_individual_fixed_charge_editor(id_selected_charge, std::get<0>(selected_charge_infos),
                                                 std::get<1>(selected_charge_infos), std::get<2>(selected_charge_infos));
@@ -69,6 +71,12 @@ void MainWindow::on_list_fixed_charges_itemClicked(QListWidgetItem *item) {
             SLOT(slot_fixed_charge_charge_changed(LOEF::id_type, LOEF::coulomb_quantity)));
     connect(selected_editor, SIGNAL(editor_fixed_charge_closed(QPoint)), this,
             SLOT(slot_editor_fixed_charge_closed(QPoint)));
+    connect(this,
+            SIGNAL(fixed_charge_select_changed(LOEF::id_type, LOEF::coulomb_quantity, LOEF::millimetre_quantity,
+                                               LOEF::millimetre_quantity)),
+            selected_editor,
+            SLOT(slot_fixed_charge_select_changed(LOEF::id_type, LOEF::coulomb_quantity, LOEF::millimetre_quantity,
+                                                  LOEF::millimetre_quantity)));
 
     selected_editor->show();
 }
@@ -84,7 +92,15 @@ void MainWindow::add_fixed_charge(const LOEF::coulomb_quantity initial_quantity,
 }
 void MainWindow::add_fixed_charge() { set_new_fixed_charge(ui->loef_drawer->create_fixed_charge()); }
 void MainWindow::set_new_fixed_charge(const LOEF::id_type id_new_charge) {
-    auto item = new QListWidgetItem(tr("positive charge"));
+    QString charge_list_item_title;
+    if (LOEF::initial_fixed_charge > 0.0 * LOEF::boostunits::coulomb) {
+        charge_list_item_title = tr("positive charge");
+    } else if (LOEF::initial_fixed_charge == 0.0 * LOEF::boostunits::coulomb) {
+        charge_list_item_title = tr("null charge");
+    } else {
+        charge_list_item_title = tr("negative charge");
+    }
+    auto item = new QListWidgetItem(charge_list_item_title);
     item->setData(static_cast<int>(LOEF::item_data_role::id_role), QVariant::fromValue(id_new_charge));
     ui->list_fixed_charges->addItem(item);
     id_to_item_[id_new_charge] = item;
@@ -159,3 +175,9 @@ void MainWindow::slot_editor_fixed_charge_closed(QPoint pos) {
     this->fixed_charge_editor_last_pos_ = pos;
 }
 void MainWindow::closeEvent(QCloseEvent *) { QApplication::closeAllWindows(); }
+
+void MainWindow::on_radio_draw_toggled(bool checked) { this->ui->loef_drawer->request_draw_LOEF(checked); }
+
+void MainWindow::on_button_save_clicked() {}
+
+void MainWindow::on_button_open_clicked() {}
