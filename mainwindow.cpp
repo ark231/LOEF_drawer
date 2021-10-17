@@ -44,7 +44,9 @@ void MainWindow::on_button_add_fixed_charge_clicked() { add_fixed_charge(); }
 void MainWindow::on_list_fixed_charges_itemClicked(QListWidgetItem *item) {
     auto id_selected_charge = item->data(static_cast<int>(LOEF::item_data_role::id_role)).value<LOEF::id_type>();
     auto selected_charge_infos = ui->loef_drawer->get_fixed_charge_info(id_selected_charge);
+    ui->loef_drawer->select_fixed_charge(id_selected_charge);
     if (this->current_selected_editor_) {
+        ui->loef_drawer->unselect_fixed_charge(current_selected_editor_->id());
         emit fixed_charge_select_changed(id_selected_charge, std::get<0>(selected_charge_infos),
                                          std::get<1>(selected_charge_infos), std::get<2>(selected_charge_infos));
         return;
@@ -126,6 +128,8 @@ void MainWindow::slot_fixed_charge_selected(LOEF::id_type id) {
         auto selected_item = id_to_item_[id];
         this->ui->list_fixed_charges->scrollToItem(selected_item);
         this->on_list_fixed_charges_itemClicked(selected_item);
+    } else {
+        this->ui->loef_drawer->unselect_all_selected_fixed_charge();
     }
 }
 
@@ -180,6 +184,7 @@ void MainWindow::restart() { QCoreApplication::exit(LOEF::restart_code); }
 void MainWindow::slot_editor_fixed_charge_closed(QPoint pos) {
     this->current_selected_editor_ = nullptr;
     this->fixed_charge_editor_last_pos_ = pos;
+    this->ui->loef_drawer->unselect_all_selected_fixed_charge();
 }
 void MainWindow::closeEvent(QCloseEvent *) { QApplication::closeAllWindows(); }
 
@@ -235,6 +240,11 @@ void MainWindow::on_button_open_clicked() {
     saved_file.open(QIODevice::ReadOnly);
     QJsonDocument saved_json(QJsonDocument::fromJson(saved_file.readAll()));
     QJsonObject saved_data = saved_json.object();
+    for (auto &id_item : id_to_item_) {
+        delete id_item.second;
+    }
+    id_to_item_.clear();
+    ui->loef_drawer->destroy_all_fixed_charges();
     ui->doubleSpinBox_inverse_permittivity->setValue(saved_data["inverse permittivity"].toDouble());
     for (const auto &json_fixed_charge : saved_data["fixed_charges"].toArray()) {
         auto json_object_fixed_charge = json_fixed_charge.toObject();

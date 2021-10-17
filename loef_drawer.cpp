@@ -13,38 +13,68 @@
 #include "units.hpp"
 namespace LOEF {
 class state_charge_selected_ {
-    std::vector<std::pair<id_type, vec2d>> selected_ids_and_offsets_;
+    //時短のためgetが必要になるtupleはやめた id <offset,previous_mouse_pos>
+    std::vector<std::pair<id_type, std::pair<vec2d, vec2d>>> selected_ids_and_offsets_;
 
    public:
     state_charge_selected_();
     operator bool();
-    void set_selected(size_t idx, vec2d offset);
-    void unselected();
+    void set_selected(id_type idx, vec2d offset = vec2d());
+    void set_final_mouse_pos(vec2d);
+    void unselect(id_type id);
+    void unselect_all();
     std::vector<LOEF::id_type> get_selected();
     vec2d get_offset(id_type);
+    vec2d get_mouse_pos(id_type);
+    void update_offset(vec2d);
     bool is_selected(id_type);
 };
 state_charge_selected_::state_charge_selected_() {}
 state_charge_selected_::operator bool() { return !selected_ids_and_offsets_.empty(); }
 void state_charge_selected_::set_selected(LOEF::id_type id, vec2d offset) {
-    selected_ids_and_offsets_.push_back(std::make_pair(id, offset));
+    selected_ids_and_offsets_.push_back({id, {offset, vec2d()}});
 }
-void state_charge_selected_::unselected() { selected_ids_and_offsets_.clear(); }
+void state_charge_selected_::unselect(id_type id) {
+    auto itr_to_erase =
+        std::find_if(selected_ids_and_offsets_.begin(), selected_ids_and_offsets_.end(),
+                     [id](std::pair<id_type, std::pair<vec2d, vec2d>> element) { return element.first == id; });
+    selected_ids_and_offsets_.erase(itr_to_erase);
+}
+void state_charge_selected_::unselect_all() { selected_ids_and_offsets_.clear(); }
 std::vector<LOEF::id_type> state_charge_selected_::get_selected() {
     std::vector<LOEF::id_type> result;
     std::transform(selected_ids_and_offsets_.begin(), selected_ids_and_offsets_.end(), std::back_inserter(result),
-                   [](std::pair<id_type, vec2d> element) { return element.first; });
+                   [](std::pair<id_type, std::pair<vec2d, vec2d>> element) { return element.first; });
     return result;
 }
 vec2d state_charge_selected_::get_offset(id_type id) {
     Q_ASSERT(is_selected(id));
-    auto result_pair = std::find_if(selected_ids_and_offsets_.begin(), selected_ids_and_offsets_.end(),
-                                    [id](std::pair<id_type, vec2d> element) { return element.first == id; });
-    return result_pair->second;
+    auto result_pair =
+        std::find_if(selected_ids_and_offsets_.begin(), selected_ids_and_offsets_.end(),
+                     [id](std::pair<id_type, std::pair<vec2d, vec2d>> element) { return element.first == id; });
+    return result_pair->second.first;
+}
+vec2d state_charge_selected_::get_mouse_pos(id_type id) {
+    Q_ASSERT(is_selected(id));
+    auto result_pair =
+        std::find_if(selected_ids_and_offsets_.begin(), selected_ids_and_offsets_.end(),
+                     [id](std::pair<id_type, std::pair<vec2d, vec2d>> element) { return element.first == id; });
+    return result_pair->second.second;
+}
+void state_charge_selected_::update_offset(vec2d mouse_pos) {
+    for (auto &selected_id_and_offset : selected_ids_and_offsets_) {
+        auto tmp = selected_id_and_offset;
+        vec2d mouse_diff = tmp.second.second - mouse_pos;
+        tmp = {tmp.first, {tmp.second.first + mouse_diff, mouse_pos}};
+    }
+}
+void state_charge_selected_::set_final_mouse_pos(vec2d mouse_pos) {
+    auto tmp = selected_ids_and_offsets_.back();
+    selected_ids_and_offsets_.back() = {tmp.first, {tmp.second.first, mouse_pos}};
 }
 bool state_charge_selected_::is_selected(id_type id) {
     return std::any_of(selected_ids_and_offsets_.begin(), selected_ids_and_offsets_.end(),
-                       [id](std::pair<id_type, vec2d> element) { return element.first == id; });
+                       [id](std::pair<id_type, std::pair<vec2d, vec2d>> element) { return element.first == id; });
 }
 
 class id_handler {
@@ -63,19 +93,48 @@ LOEF::id_type id_handler::new_id() {
 LOEF_drawer::LOEF_drawer(QWidget *parent) : QWidget(parent) {
     double dpi = QGuiApplication::screens().at(0)->physicalDotsPerInch();
     this->dpmm_ = (dpi / 25.4) * LOEF::dot_per_millimetre;
-    charge_selected_ = new LOEF::state_charge_selected_;
+    charge_selected_manually_ = new LOEF::state_charge_selected_;
+    charge_selected_automatically_ = new LOEF::state_charge_selected_;
     fixed_charge_id_handler_ = new LOEF::id_handler;
     charge_pen_id_handler_ = new LOEF::id_handler;
+    this->setFocusPolicy(Qt::StrongFocus);
 }
 void LOEF_drawer::paintEvent(QPaintEvent *) {
     LOEF::painter painter(this);
     painter.set_resolution(dpmm_);
-    auto width = this->width();
-    auto height = this->height();
-    painter.drawLine(0, height / 2.0, width, height / 2.0);
-    painter.drawLine(width / 2.0, 0, width / 2.0, height);
+    int width = this->width();
+    int height = this->height();
+    for (LOEF::millimetre_quantity x = 0.0 * LOEF::millimetre; x < static_cast<double>(width) / dpmm_;
+         x += 1.0 * LOEF::millimetre) {
+        switch (static_cast<int>(x.value()) % 10) {
+            case 0:
+                painter.drawLine(x * dpmm_, 0, x * dpmm_, 3.0 * LOEF::millimetre * dpmm_);
+                break;
+            case 5:
+                painter.drawLine(x * dpmm_, 0, x * dpmm_, 2.0 * LOEF::millimetre * dpmm_);
+                break;
+            default:
+                painter.drawLine(x * dpmm_, 0, x * dpmm_, 1.0 * LOEF::millimetre * dpmm_);
+                break;
+        }
+    }
+    for (LOEF::millimetre_quantity y = 0.0 * LOEF::millimetre; y < static_cast<double>(width) / dpmm_;
+         y += 1.0 * LOEF::millimetre) {
+        switch (static_cast<int>(y.value()) % 10) {
+            case 0:
+                painter.drawLine(0, y * dpmm_, 3.0 * LOEF::millimetre * dpmm_, y * dpmm_);
+                break;
+            case 5:
+                painter.drawLine(0, y * dpmm_, 2.0 * LOEF::millimetre * dpmm_, y * dpmm_);
+                break;
+            default:
+                painter.drawLine(0, y * dpmm_, 1.0 * LOEF::millimetre * dpmm_, y * dpmm_);
+                break;
+        }
+    }
     for (const auto &charge : fixed_charges_) {
-        painter.draw_fixed_charge(charge.second, charge_selected_->is_selected(charge.first));
+        painter.draw_fixed_charge(charge.second, charge_selected_manually_->is_selected(charge.first) ||
+                                                     charge_selected_automatically_->is_selected(charge.first));
     }
     if (!draw_LOEF_requested) {
         return;
@@ -146,25 +205,34 @@ void LOEF_drawer::mousePressEvent(QMouseEvent *ev) {
     for (auto charge = fixed_charges_.begin(); charge != fixed_charges_.end(); charge++) {
         LOEF::vec2d offset = charge->second.position() - pos_mouse;
         if (offset.length() * dpmm_ <= LOEF::radius::FIXED * dpmm_) {
-            charge_selected_->set_selected(charge->first, offset);
-            emit fixed_charge_selected(charge->first);
+            if (this->is_multi_selecting && charge_selected_manually_->is_selected(charge->first)) {
+                charge_selected_manually_->unselect(charge->first);
+            } else {
+                charge_selected_manually_->update_offset(pos_mouse);
+                charge_selected_manually_->set_selected(charge->first, offset);
+                charge_selected_automatically_->unselect_all();
+                charge_selected_automatically_->set_selected(charge->first, offset);
+                emit fixed_charge_selected(charge->first);
+            }
         }
     }
 }
 void LOEF_drawer::mouseMoveEvent(QMouseEvent *ev) {
     LOEF::vec2d pos_mouse(ev->pos(), dpmm_);
-    if (*charge_selected_) {
-        auto id_selecteds = charge_selected_->get_selected();
+    if (*charge_selected_manually_) {
+        auto id_selecteds = charge_selected_manually_->get_selected();
         for (const auto &id_selected : id_selecteds) {
-            auto new_pos = pos_mouse + charge_selected_->get_offset(id_selected);
+            auto new_pos = pos_mouse + charge_selected_manually_->get_offset(id_selected);
             replace_fixed_charge(id_selected, std::nullopt, new_pos);
             emit fixed_charge_position_changed(id_selected, new_pos.x(), new_pos.y());
         }
     }
 }
 void LOEF_drawer::mouseReleaseEvent(QMouseEvent *) {
-    charge_selected_->unselected();
-    clear_and_redraw();
+    if (!this->is_multi_selecting) {
+        charge_selected_manually_->unselect_all();
+        clear_and_redraw();
+    }
 }
 void LOEF_drawer::slot_fixed_charge_position_changed(LOEF::id_type id, LOEF::millimetre_quantity X,
                                                      LOEF::millimetre_quantity Y) {
@@ -247,4 +315,26 @@ QJsonObject LOEF_drawer::create_save_data() {
     }
     save_data["fixed_charges"] = json_fixed_charges;
     return save_data;
+}
+void LOEF_drawer::select_fixed_charge(LOEF::id_type id) { this->charge_selected_automatically_->set_selected(id); }
+void LOEF_drawer::unselect_fixed_charge(LOEF::id_type id) { this->charge_selected_automatically_->unselect(id); }
+void LOEF_drawer::unselect_all_selected_fixed_charge() { this->charge_selected_automatically_->unselect_all(); }
+void LOEF_drawer::destroy_all_fixed_charges() {
+    fixed_charges_.clear();
+    this->charge_selected_manually_->unselect_all();
+    this->charge_selected_automatically_->unselect_all();
+}
+void LOEF_drawer::keyPressEvent(QKeyEvent *ev) {
+    if (!ev->isAutoRepeat() && ev->key() == Qt::Key_Control) {
+        this->is_multi_selecting = true;
+    } else {
+        QWidget::keyPressEvent(ev);
+    }
+}
+void LOEF_drawer::keyReleaseEvent(QKeyEvent *ev) {
+    if (ev->key() == Qt::Key_Control) {
+        this->is_multi_selecting = false;
+    } else {
+        QWidget::keyPressEvent(ev);
+    }
 }
