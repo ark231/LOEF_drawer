@@ -33,9 +33,8 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
         #ls ${{github.workspace}}/boost/boost
-        export Boost_DIR=${{github.workspace}}/boost
+          $env:Boost_DIR=${{github.workspace}}/boost
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install -DLOEF_NOUPDATE="yes" #-DBoost_ROOT=${{github.workspace}}/boost/boost -DBoost_ARCHITECTURE=-x86_64 -DBoost_NO_BOOST_CMAKE=ON -DBOOST_ROOT=${{github.workspace}}/boost/boost
-      shell: bash
 
     - name: Build
       # Build your program with the given configuration
