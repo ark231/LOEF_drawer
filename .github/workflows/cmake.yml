@@ -20,9 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2 
     - uses: jurplel/install-qt-action@v2
-      with: 
-        setup-python: false
-    - uses: MarkusJx/install-boost@v2
+    - uses: MarkusJx/install-boost@v2.0.0
       with:
         boost_version: 1.71.0
 
