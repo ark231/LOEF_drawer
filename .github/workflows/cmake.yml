@@ -20,6 +20,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2 
     - uses: jurplel/install-qt-action@v2
+    - name: show directories
+      run: ls ${{github.workspace}}
     - name: Install_boost
       uses: MarkusJx/install-boost@v2.0.0
       with:
