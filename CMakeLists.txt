@@ -32,6 +32,8 @@ qt5_create_translation(LOEF_QM_FILES ${CMAKE_CURRENT_SOURCE_DIR}
     OPTIONS -no-obsolete
     )
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/translations)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/settings)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/saves)
 
 
 if(ANDROID)
@@ -70,4 +72,14 @@ target_link_libraries(LOEF_drawer PRIVATE
 target_include_directories(LOEF_drawer PRIVATE 
     ${LOEF_drawer_libs_header_SOURCE_DIR}
     ${LOEF_drawer_libs_header_BINARY_DIR}
+    )
+
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/LOEF_drawer${CMAKE_EXECUTABLE_SUFFIX}
+    DESTINATION ${CMAKE_INSTALL_PREFIX}
+    )
+install(FILES ${LOEF_QM_FILES}
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/translations
+    )
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/settings ${CMAKE_CURRENT_BINARY_DIR}/saves
+    DESTINATION ${CMAKE_INSTALL_PREFIX}
     )
