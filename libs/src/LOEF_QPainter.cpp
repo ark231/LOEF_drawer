@@ -12,7 +12,7 @@
 namespace LOEF {
 using dots = double;  //! in order to preserve fraction for multipulication
 void painter::set_resolution(dot_per_millimetre_quantity dpmm) { this->dpmm_ = dpmm; }
-void painter::draw_fixed_charge(const fixed_charge &charge) {
+void painter::draw_fixed_charge(const fixed_charge &charge, bool is_selected) {
     QPainter::save();
     double radius = (radius::FIXED * dpmm_);
     auto position = charge.position();
@@ -24,6 +24,10 @@ void painter::draw_fixed_charge(const fixed_charge &charge) {
         pen.setColor(Qt::green);
     } else {
         pen.setColor(Qt::black);
+    }
+    if (is_selected) {
+        pen.setColor(pen.color().darker());
+        pen.setStyle(Qt::DotLine);
     }
     QPainter::setPen(pen);
     QPainter::drawEllipse(position.x() * dpmm_ - radius, position.y() * dpmm_ - radius, 2 * radius,

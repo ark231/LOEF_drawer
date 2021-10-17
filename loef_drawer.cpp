@@ -12,35 +12,61 @@
 #include "units.hpp"
 namespace LOEF {
 class state_charge_selected_ {
+    /*
     bool exists_selected_ = false;
     LOEF::id_type id_selected_charge_ = -1;  // this must be super big number ,as so much instances can't be stored
     vec2d offset_ = {0, 0};
+    */
+    std::vector<std::pair<id_type, vec2d>> selected_ids_and_offsets_;
 
    public:
     state_charge_selected_();
     operator bool();
     void set_selected(size_t idx, vec2d offset);
     void unselected();
-    LOEF::id_type get_selected();
-    vec2d get_offset();
+    std::vector<LOEF::id_type> get_selected();
+    vec2d get_offset(id_type);
+    bool is_selected(id_type);
 };
 state_charge_selected_::state_charge_selected_() {
+    /*
     exists_selected_ = false;
     id_selected_charge_ = -1;
     offset_ = {0, 0};
+    */
 }
-state_charge_selected_::operator bool() { return exists_selected_; }
+state_charge_selected_::operator bool() { return !selected_ids_and_offsets_.empty(); }
 void state_charge_selected_::set_selected(LOEF::id_type id, vec2d offset) {
+    /*
     exists_selected_ = true;
     id_selected_charge_ = id;
     offset_ = offset;
+    */
+    selected_ids_and_offsets_.push_back(std::make_pair(id, offset));
 }
 void state_charge_selected_::unselected() {
+    /*
     exists_selected_ = false;
     id_selected_charge_ = -1;
+    */
+    selected_ids_and_offsets_.clear();
 }
-LOEF::id_type state_charge_selected_::get_selected() { return id_selected_charge_; }
-vec2d state_charge_selected_::get_offset() { return offset_; }
+std::vector<LOEF::id_type> state_charge_selected_::get_selected() {
+    std::vector<LOEF::id_type> result;
+    std::transform(selected_ids_and_offsets_.begin(), selected_ids_and_offsets_.end(), std::back_inserter(result),
+                   [](std::pair<id_type, vec2d> element) { return element.first; });
+    return result;
+}
+vec2d state_charge_selected_::get_offset(id_type id) {
+    Q_ASSERT(is_selected(id));
+    auto result_pair = std::find_if(selected_ids_and_offsets_.begin(), selected_ids_and_offsets_.end(),
+                                    [id](std::pair<id_type, vec2d> element) { return element.first == id; });
+    return result_pair->second;
+}
+bool state_charge_selected_::is_selected(id_type id) {
+    return std::any_of(selected_ids_and_offsets_.begin(), selected_ids_and_offsets_.end(),
+                       [id](std::pair<id_type, vec2d> element) { return element.first == id; });
+}
 
 class id_handler {
     LOEF::id_type next_id;
@@ -70,7 +96,7 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
     painter.drawLine(0, height / 2.0, width, height / 2.0);
     painter.drawLine(width / 2.0, 0, width / 2.0, height);
     for (const auto &charge : fixed_charges_) {
-        painter.draw_fixed_charge(charge.second);
+        painter.draw_fixed_charge(charge.second, charge_selected_->is_selected(charge.first));
     }
     if (!draw_LOEF_requested) {
         return;
@@ -149,13 +175,18 @@ void LOEF_drawer::mousePressEvent(QMouseEvent *ev) {
 void LOEF_drawer::mouseMoveEvent(QMouseEvent *ev) {
     LOEF::vec2d pos_mouse(ev->pos(), dpmm_);
     if (*charge_selected_) {
-        auto id_selected = charge_selected_->get_selected();
-        auto new_pos = pos_mouse + charge_selected_->get_offset();
-        replace_fixed_charge(id_selected, std::nullopt, new_pos);
-        emit fixed_charge_position_changed(id_selected, new_pos.x(), new_pos.y());
+        auto id_selecteds = charge_selected_->get_selected();
+        for (const auto &id_selected : id_selecteds) {
+            auto new_pos = pos_mouse + charge_selected_->get_offset(id_selected);
+            replace_fixed_charge(id_selected, std::nullopt, new_pos);
+            emit fixed_charge_position_changed(id_selected, new_pos.x(), new_pos.y());
+        }
     }
 }
-void LOEF_drawer::mouseReleaseEvent(QMouseEvent *) { charge_selected_->unselected(); }
+void LOEF_drawer::mouseReleaseEvent(QMouseEvent *) {
+    charge_selected_->unselected();
+    clear_and_redraw();
+}
 void LOEF_drawer::slot_fixed_charge_position_changed(LOEF::id_type id, LOEF::millimetre_quantity X,
                                                      LOEF::millimetre_quantity Y) {
     replace_fixed_charge(id, std::nullopt, X, Y);

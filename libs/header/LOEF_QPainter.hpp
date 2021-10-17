@@ -10,7 +10,8 @@ class painter : public QPainter {
 
    public:
     void set_resolution(dot_per_millimetre_quantity dpmm);
-    void draw_fixed_charge(const fixed_charge&);  // use different naming conventions to avoid confliction
+    // use different naming conventions to avoid confliction
+    void draw_fixed_charge(const fixed_charge&, bool is_selected = false);
     void draw_LOEF_path(const LOEF_path&);
 };
 }  // namespace LOEF
