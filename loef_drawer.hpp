@@ -7,6 +7,7 @@
 #include <tuple>
 #include <unordered_map>
 #include <vector>
+#include<QKeyEvent>
 
 #include "charges.hpp"
 #include "general_consts.hpp"
@@ -23,10 +24,14 @@ class LOEF_drawer : public QWidget {
     LOEF::id_type create_fixed_charge(LOEF::coulomb_quantity initial_charge = LOEF::initial_fixed_charge,
                                       LOEF::millimetre_quantity initial_X = LOEF::initial_fixed_pos_x,
                                       LOEF::millimetre_quantity initial_Y = LOEF::initial_fixed_pos_y);
+    void destroy_all_fixed_charges();
     std::tuple<LOEF::coulomb_quantity, LOEF::millimetre_quantity, LOEF::millimetre_quantity> get_fixed_charge_info(
         LOEF::id_type);
     void request_draw_LOEF(bool yes_or_no);
     QJsonObject create_save_data();
+    void select_fixed_charge(LOEF::id_type);
+    void unselect_fixed_charge(LOEF::id_type);
+    void unselect_all_selected_fixed_charge();
 
    private:
     LOEF::dot_per_millimetre_quantity dpmm_;
@@ -35,14 +40,18 @@ class LOEF_drawer : public QWidget {
     std::unordered_map<LOEF::id_type, LOEF::charge_pen> charge_pens_;
     std::unordered_map<LOEF::id_type, std::shared_ptr<LOEF::LOEF_path>> charge_paths_;
     LOEF::id_handler *charge_pen_id_handler_;
-    LOEF::state_charge_selected_ *charge_selected_;
+    LOEF::state_charge_selected_ *charge_selected_manually_;
+    LOEF::state_charge_selected_ *charge_selected_automatically_;
     LOEF::inverse_permittivity_quantity inverse_permittivity_ = LOEF::initial_inverse_permittivity;
     bool draw_LOEF_requested = true;
+    bool is_multi_selecting=false;
 
     void paintEvent(QPaintEvent *ev) override;
     void mousePressEvent(QMouseEvent *ev) override;
     void mouseMoveEvent(QMouseEvent *ev) override;
     void mouseReleaseEvent(QMouseEvent *ev) override;
+    void keyPressEvent(QKeyEvent *ev)override;
+    void keyReleaseEvent(QKeyEvent *ev)override;
 
     void calc_LOEF_from_fixed_charges(decltype(fixed_charges_) &, int width, int height);
     void prepare_LOEF_pathes();
