@@ -19,7 +19,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2 
-    - uses: jurplel/install-qt-action@2.14.0
+    - uses: jurplel/install-qt-action@v2
       with: 
         setup-python: false
 
