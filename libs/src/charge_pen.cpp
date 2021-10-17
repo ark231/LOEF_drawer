@@ -1,6 +1,9 @@
 #include "charge_pen.hpp"
 namespace LOEF {
 #ifdef LOEF_DRAWER_CHARGES_LIBRARY_BUILD
+void LOEF_path::set_is_positive(bool new_value) noexcept { this->is_positive_ = new_value; }
+bool LOEF_path::is_positive() const noexcept { return this->is_positive_; }
+
 charge_pen::charge_pen(bool is_positive, vec2d initial_position, millimetre_quantity interval, int max_x, int max_y,
                        dot_per_millimetre_quantity dpmm)
     : is_positive_(is_positive),
@@ -10,6 +13,7 @@ charge_pen::charge_pen(bool is_positive, vec2d initial_position, millimetre_quan
       max_y(max_y),
       path(new LOEF_path) {
     path->moveTo((initial_position.to_QPoint(dpmm)));
+    path->set_is_positive(is_positive);
 }
 
 std::shared_ptr<LOEF_path> charge_pen::get_path() { return path; }

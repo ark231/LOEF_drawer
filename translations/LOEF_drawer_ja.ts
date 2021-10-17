@@ -6,28 +6,28 @@
     <message>
         <location filename="../loef_individual_fixed_charge_editor.ui" line="14"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="248"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="272"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="248"/>
         <source>fixed charge editor</source>
         <translation>固定電荷を編集</translation>
     </message>
     <message>
         <location filename="../loef_individual_fixed_charge_editor.ui" line="31"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="249"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="273"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="249"/>
         <source>Quantity of electricity</source>
         <translation>電気量</translation>
     </message>
     <message>
         <location filename="../loef_individual_fixed_charge_editor.ui" line="73"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="250"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="274"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="250"/>
         <source>Position</source>
         <translation>座標</translation>
     </message>
     <message>
         <location filename="../loef_individual_fixed_charge_editor.ui" line="612"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="251"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="275"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_loef_individual_fixed_charge_editor.h" line="251"/>
         <source>remove</source>
         <translation>電荷を削除</translation>
     </message>
@@ -37,14 +37,14 @@
     <message>
         <location filename="../mainwindow.ui" line="20"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="206"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="214"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="206"/>
         <source>MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="62"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="209"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="217"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="209"/>
         <source>appname
 version</source>
         <translation type="unfinished"></translation>
@@ -52,81 +52,77 @@ version</source>
     <message>
         <location filename="../mainwindow.ui" line="79"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="211"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="219"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="211"/>
         <source>draw</source>
         <translation>描画</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="95"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="212"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="220"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="212"/>
         <source>reciprocal permittivity?</source>
         <translation>誘電率の逆数？</translation>
     </message>
     <message>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="221"/>
-        <source>lines/C</source>
-        <translation>本/C</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="107"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="213"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="213"/>
         <source>  lines/C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="119"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="214"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="222"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="214"/>
         <source>add a Fixed charge</source>
         <translation>固定電荷を追加</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="132"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="215"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="223"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="215"/>
         <source>Fixed charges</source>
         <translation>固定電荷一覧</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="154"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="216"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="224"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="216"/>
         <source>save</source>
         <translation>保存</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="161"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="217"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="225"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="217"/>
         <source>open</source>
         <translation>開く</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="184"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="218"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="226"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="218"/>
         <source>settings</source>
         <translation>設定</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="188"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="219"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="227"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="219"/>
         <source>language</source>
         <translation>言語</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="206"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="207"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="215"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="207"/>
         <source>English</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="214"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="208"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="216"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="208"/>
         <source>日本語</source>
         <translation></translation>
     </message>

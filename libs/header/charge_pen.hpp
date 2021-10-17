@@ -10,6 +10,11 @@
 namespace LOEF {
 class LOEF_path : public QPainterPath {
     using QPainterPath::QPainterPath;
+    bool is_positive_ = true;
+
+   public:
+    void set_is_positive(bool) noexcept;
+    bool is_positive() const noexcept;
 };
 enum class step_status { CONTINUE, FINISH, ABORT };
 class charge_pen {

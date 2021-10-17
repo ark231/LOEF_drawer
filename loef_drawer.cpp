@@ -89,9 +89,6 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
                         [](decltype(*(fixed_charges_.begin())) &charge) {
                             return charge.second.quantity() == 0.0 * LOEF::boostunits::coulomb;
                         });
-    qDebug() << "positives" << positive_fixed_charges.size();
-    qDebug() << "newtrals" << newtral_fixed_charges.size();
-    qDebug() << "negatives" << negative_fixed_charges.size();
     calc_LOEF_from_fixed_charges(positive_fixed_charges, width, height);
     calc_LOEF_from_fixed_charges(negative_fixed_charges, width, height);
     for (auto charge_path = charge_paths_.begin(); charge_path != charge_paths_.end(); charge_path++) {
@@ -105,7 +102,7 @@ void LOEF_drawer::calc_LOEF_from_fixed_charges(decltype(fixed_charges_) &fixed_c
                                              std::abs(charge.second.quantity() * inverse_permittivity_), 360)) {
             auto pen_id = charge_pen_id_handler_->new_id();
             charge_pens_[pen_id] = LOEF::charge_pen(charge.second.quantity() > 0.0 * LOEF::boostunits::coulomb,
-                                                    position, 1 * LOEF::millimetre, width, height, dpmm_);
+                                                    position, LOEF::interval_steps, width, height, dpmm_);
             charge_paths_[pen_id] = charge_pens_[pen_id].get_path();
         }
         prepare_LOEF_pathes();

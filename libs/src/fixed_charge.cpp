@@ -29,10 +29,13 @@ std::vector<vec2d> fixed_charge::calc_pen_init_pos(fixed_charge_containter_itr b
     /*サンプル生成*/
     for (size_t i = 0; i < num_sample; i++) {
         auto current_argument = (static_cast<double>(i) / num_sample) * 2 * pi * boostunits::radian;
+        if (this->quantity_ < 0.0 * boostunits::coulomb && !this->offsets_entered_pen_->empty()) {
+            current_argument += argument(this->offsets_entered_pen_->at(0));
+        }
         electric_field sample_electric_field = {0.0 * (electric_field_strength_unit_quantity),
                                                 0.0 * (electric_field_strength_unit_quantity)};
-        vec2d sample_position =
-            this->position_ + (radius / millimetre) * vec2d(boost::units::cos(current_argument) * millimetre,
+        vec2d sample_position = this->position_ + ((radius + 1.0 * millimetre) / millimetre) *
+                                                      vec2d(boost::units::cos(current_argument) * millimetre,
                                                             boost::units::sin(current_argument) * millimetre);
         for (auto fixed_charge = begin; fixed_charge != end; fixed_charge++) {
             vec2d charge_to_sample = sample_position - fixed_charge->second.position();

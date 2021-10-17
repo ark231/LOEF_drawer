@@ -56,6 +56,9 @@ void painter::draw_LOEF_path(const LOEF_path &path) {
         //真ん中での平均の接線
         auto arrow_start_element = path.elementAt((num_element / 2) - 2);
         auto arrow_end_element = path.elementAt(num_element / 2);
+        if (!path.is_positive()) {
+            std::swap(arrow_start_element, arrow_end_element);
+        }
         vec2d vec_arrow((arrow_end_element.x - arrow_start_element.x) / dpmm_,
                         (arrow_end_element.y - arrow_start_element.y) / dpmm_);
         vec_arrow = normalize(vec_arrow) * ARROW_HEIGHT.value();
