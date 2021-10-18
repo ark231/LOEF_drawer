@@ -10,6 +10,9 @@ env:
   BUILD_TYPE: Release
 
 jobs:
+  defaults:
+    run:
+      shell: msys2 {0}
   build:
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
@@ -18,6 +21,12 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - uses: 
+    - uses: msys2/setup-msys2@v2
+#      with:
+#        update: true
+#        install: >-
+#          base-devel
     - uses: actions/checkout@v2 
     - uses: jurplel/install-qt-action@v2
     - name: prepare_directory
@@ -33,7 +42,7 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
         $env:Boost_DIR="${{github.workspace}}/boost/boost"
-        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install -DLOEF_NOUPDATE="yes" 
+        cmake -G "MSYS Makefiles" -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install -DLOEF_NOUPDATE="yes" 
         
     - name: Build
       # Build your program with the given configuration
