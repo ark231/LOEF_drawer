@@ -21,10 +21,11 @@ jobs:
         shell: msys2 {0}
     steps:
     - uses: msys2/setup-msys2@v2
-#      with:
-#        update: true
-#        install: >-
-#          base-devel
+      with:
+        update: true
+        install: >-
+          base-devel
+          mingw-w64-cmake
     - uses: actions/checkout@v2 
     - uses: jurplel/install-qt-action@v2
 #    - name: prepare_directory
