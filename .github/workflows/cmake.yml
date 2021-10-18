@@ -38,7 +38,7 @@ jobs:
   #        mingw-w64-cmake
     - uses: actions/checkout@v2 
 
-   - name: '${{ matrix.icon }} Setup MSYS2'
+    - name: '${{ matrix.icon }} Setup MSYS2'
       with:
         msystem: ${{matrix.sys}}
         update: true
