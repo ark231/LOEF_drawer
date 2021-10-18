@@ -29,6 +29,7 @@ jobs:
     - uses: jurplel/install-qt-action@v2
     - name: prepare_directory
       run: mkdir ${{github.workspace}}/boost
+      shell: pwsh
     - name: Install_boost
       uses: MarkusJx/install-boost@v2.0.0
       with:
