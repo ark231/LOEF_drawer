@@ -16,17 +16,38 @@ jobs:
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: windows-latest
+    strategy:
+      matrix:
+        fail-fast: false
+        include:
+          - { icon: '⬛', sys: mingw32, env: i686 }
+          - { icon: '🟦', sys: mingw64, env: x86_64 }
+          - { icon: '🟨', sys: ucrt64,  env: ucrt-x86_64 }  # Experimental!
+          - { icon: '🟧', sys: clang64, env: clang-x86_64 } # Experimental!
+    name: 🚧${{ matrix.icon }} ${{ matrix.sys }}
+
     defaults:
       run:
         shell: msys2 {0}
     steps:
-    - uses: msys2/setup-msys2@v2
+  #  - uses: msys2/setup-msys2@v2
+  #    with:
+  #      update: true
+  #      install: >-
+  #        base-devel
+  #        mingw-w64-cmake
+    - uses: actions/checkout@v2 
+
+   - name: '${{ matrix.icon }} Setup MSYS2'
       with:
+        msystem: ${{matrix.sys}}
         update: true
         install: >-
-          base-devel
-          mingw-w64-cmake
-    - uses: actions/checkout@v2 
+          git
+          make
+          mingw-w64-${{matrix.env}}-toolchain
+          mingw-w64-${{matrix.env}}-cmake
+
     - uses: jurplel/install-qt-action@v2
 #    - name: prepare_directory
 #      run: mkdir ${{github.workspace}}\boost
