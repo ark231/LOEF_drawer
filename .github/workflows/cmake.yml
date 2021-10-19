@@ -49,13 +49,13 @@ jobs:
           mingw-w64-${{matrix.env}}-toolchain
           mingw-w64-${{matrix.env}}-cmake
 
-    - name: ${{matrix.icon} mingw-w64 jurplel/install-qt-action@v2
+    - name: ${{matrix.icon}} mingw-w64 jurplel/install-qt-action@v2
       uses: jurplel/install-qt-action@v2
       if: matrix.sys==mingw64
       with:
         arch: win64_mingw81
 
-    - name: ${{matrix.icon} mingw-w32 jurplel/install-qt-action@v2
+    - name: ${{matrix.icon}} mingw-w32 jurplel/install-qt-action@v2
       uses: jurplel/install-qt-action@v2
       if: matrix.sys==mingw32
       with:
