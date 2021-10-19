@@ -55,11 +55,11 @@ jobs:
       with:
         arch: win64_mingw81
 
-    - name: ${{matrix.icon}} mingw-w32 jurplel/install-qt-action@v2
-      uses: jurplel/install-qt-action@v2
-      if: ${{matrix.sys}}=='mingw32'
-      with:
-        arch: win32_mingw53
+  #  - name: ${{matrix.icon}} mingw-w32 jurplel/install-qt-action@v2
+ #     uses: jurplel/install-qt-action@v2
+#      if: ${{matrix.sys}}=='mingw32'
+ #     with:
+  #      arch: win32_mingw53
 
 #    - name: prepare_directory
 #      run: mkdir ${{github.workspace}}\boost
