@@ -51,13 +51,13 @@ jobs:
 
     - name: ${{matrix.icon}} mingw-w64 jurplel/install-qt-action@v2
       uses: jurplel/install-qt-action@v2
-      if: matrix.sys==mingw64
+      if: ${{matrix.sys}}==mingw64
       with:
         arch: win64_mingw81
 
     - name: ${{matrix.icon}} mingw-w32 jurplel/install-qt-action@v2
       uses: jurplel/install-qt-action@v2
-      if: matrix.sys==mingw32
+      if: ${{matrix.sys}}==mingw32
       with:
         arch: win32_mingw53
 
