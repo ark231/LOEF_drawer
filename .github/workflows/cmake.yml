@@ -20,8 +20,8 @@ jobs:
       matrix:
       #  fail-fast: false
         include:
-          - { icon: '⬛', sys: mingw32, env: i686 }
-          - { icon: '🟦', sys: mingw64, env: x86_64 }
+          - { icon: '3️⃣2️⃣', sys: mingw32, env: i686 }
+          - { icon: '6️⃣4️⃣', sys: mingw64, env: x86_64 }
          # - { icon: '🟨', sys: ucrt64,  env: ucrt-x86_64 }  # Experimental!
          # - { icon: '🟧', sys: clang64, env: clang-x86_64 } # Experimental!
     name: 🚧${{ matrix.icon }} ${{ matrix.sys }}
@@ -49,7 +49,18 @@ jobs:
           mingw-w64-${{matrix.env}}-toolchain
           mingw-w64-${{matrix.env}}-cmake
 
-    - uses: jurplel/install-qt-action@v2
+    - name: ${{matrix.icon} mingw-w64 jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v2
+      if: matrix.sys==mingw64
+      with:
+        arch: win64_mingw81
+
+    - name: ${{matrix.icon} mingw-w32 jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v2
+      if: matrix.sys==mingw32
+      with:
+        arch: win32_mingw53
+
 #    - name: prepare_directory
 #      run: mkdir ${{github.workspace}}\boost
       #shell: pwsh
