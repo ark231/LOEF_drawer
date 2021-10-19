@@ -20,7 +20,7 @@ jobs:
       matrix:
       #  fail-fast: false
         include:
-          - { icon: '3️⃣2️⃣', sys: mingw32, env: i686 }
+        #  - { icon: '3️⃣2️⃣', sys: mingw32, env: i686 }
           - { icon: '6️⃣4️⃣', sys: mingw64, env: x86_64 }
          # - { icon: '🟨', sys: ucrt64,  env: ucrt-x86_64 }  # Experimental!
          # - { icon: '🟧', sys: clang64, env: clang-x86_64 } # Experimental!
