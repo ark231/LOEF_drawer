@@ -20,6 +20,7 @@ include_directories(
     ${LOEF_drawer_libs_header_BINARY_DIR}
     ${Boost_INCLUDE_DIRS}
     )
+message (STATUS "Boost_INSTALL_DIR:"${Boost_INCLUDE_DIR}")
 
 add_library(vec2d STATIC
     vec2d.cpp
