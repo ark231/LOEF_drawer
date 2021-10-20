@@ -20,8 +20,8 @@ jobs:
       matrix:
       #  fail-fast: false
         include:
-        #  - { icon: '3️⃣2️⃣', sys: mingw32, env: i686 }
-          - { icon: '6️⃣4️⃣', sys: mingw64, env: x86_64 }
+          - { icon: '3️⃣2️⃣', sys: mingw32, env: i686 }
+        #  - { icon: '6️⃣4️⃣', sys: mingw64, env: x86_64 }
          # - { icon: '🟨', sys: ucrt64,  env: ucrt-x86_64 }  # Experimental!
          # - { icon: '🟧', sys: clang64, env: clang-x86_64 } # Experimental!
     name: 🚧${{ matrix.icon }} ${{ matrix.sys }}
@@ -50,17 +50,17 @@ jobs:
           mingw-w64-${{matrix.env}}-cmake
 
 #    - name: ${{matrix.icon}}-mingw-w64-jurplel/install-qt-action@v2
-    - name: mingw-w64-install-qt-action
-      uses: jurplel/install-qt-action@v2
-      if: matrix.sys=='mingw64'
-      with:
-        arch: win64_mingw81
-
-  #  - name: ${{matrix.icon}} mingw-w32 jurplel/install-qt-action@v2
+ #   - name: mingw-w64-install-qt-action
  #     uses: jurplel/install-qt-action@v2
-#      if: ${{matrix.sys}}=='mingw32'
+ #     #if: matrix.sys=='mingw64'
  #     with:
-  #      arch: win32_mingw53
+ #       arch: win64_mingw81
+
+    - name: ${{matrix.icon}} mingw-w32 jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v2
+      if: ${{matrix.sys}}=='mingw32'
+      with:
+        arch: win32_mingw53
 
 #    - name: prepare_directory
 #      run: mkdir ${{github.workspace}}\boost
@@ -86,7 +86,7 @@ jobs:
     - name: Install
       run: |
         cmake --install '${{github.workspace}}\build'
-        ${RUNNER_WORKSPACE}'\Qt\5.15.2\mingw81_64\bin\windeployqt.exe' '${{github.workspace}}\install\LOEF_drawer.exe'
+        ${RUNNER_WORKSPACE}'\Qt\5.15.2\mingw53_32\bin\windeployqt.exe' '${{github.workspace}}\install\LOEF_drawer.exe'
       shell: bash
 
     - name: Archive production artifacts
