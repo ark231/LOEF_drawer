@@ -81,8 +81,8 @@ target_link_libraries(LOEF_drawer PRIVATE
     charges
     vec2d
     painter
-    gcc
-    stdc++
+    -static-libgcc
+    -static-libstdc++
     )
 target_include_directories(LOEF_drawer PRIVATE 
     ${LOEF_drawer_libs_header_SOURCE_DIR}
