@@ -83,6 +83,7 @@ target_link_libraries(LOEF_drawer PRIVATE
 target_include_directories(LOEF_drawer PRIVATE 
     ${LOEF_drawer_libs_header_SOURCE_DIR}
     ${LOEF_drawer_libs_header_BINARY_DIR}
+    ${Boost_INCLUDE_DIRS}
     )
 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/LOEF_drawer${CMAKE_EXECUTABLE_SUFFIX}
