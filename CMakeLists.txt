@@ -25,6 +25,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #endif()
 
 find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
+find_package(Boost REQUIRED)
 
 add_subdirectory(libs)
 #if(${LOEF_NOUPDATE}=="yes")
