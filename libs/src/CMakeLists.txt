@@ -22,8 +22,6 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     )
 link_libraries(
-    gcc
-    stdc++
     -static-libgcc
     -static-libstdc++
     )
