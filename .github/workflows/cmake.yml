@@ -90,7 +90,7 @@ jobs:
       shell: bash
       
     - name: copy dlls
-      run: cp D:/a/_temp/msys64/mingw64/bin/libgcc_s_dw2-1.dll D:/a/_temp/msys64/mingw64/bin/libwinpthread-1.dll D:/a/_temp/msys64/mingw64/bin/libstdc++-6.dll
+      run: cp D:/a/_temp/msys64/mingw64/bin/libgcc_s_dw2-1.dll D:/a/_temp/msys64/mingw64/bin/libwinpthread-1.dll D:/a/_temp/msys64/mingw64/bin/libstdc++-6.dll '${{github.workspace}}\install'
 
 
     - name: Archive production artifacts
