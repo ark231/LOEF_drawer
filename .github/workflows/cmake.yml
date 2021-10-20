@@ -88,6 +88,10 @@ jobs:
         cmake --install '${{github.workspace}}\build'
         ${RUNNER_WORKSPACE}'\Qt\5.15.2\mingw81_64\bin\windeployqt.exe' '${{github.workspace}}\install\LOEF_drawer.exe'
       shell: bash
+      
+    - name: copy dlls
+      run: cp D:/a/_temp/msys64/mingw64/bin/libgcc_s_dw2-1.dll D:/a/_temp/msys64/mingw64/bin/libwinpthread-1.dll D:/a/_temp/msys64/mingw64/bin/libstdc++-6.dll
+
 
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
