@@ -49,7 +49,8 @@ jobs:
           mingw-w64-${{matrix.env}}-toolchain
           mingw-w64-${{matrix.env}}-cmake
 
-    - name: ${{matrix.icon}} mingw-w64 jurplel/install-qt-action@v2
+#    - name: ${{matrix.icon}}-mingw-w64-jurplel/install-qt-action@v2
+    - name: mingw-w64-install-qt-action
       uses: jurplel/install-qt-action@v2
       if: matrix.sys=='mingw64'
       with:
@@ -85,7 +86,7 @@ jobs:
     - name: Install
       run: |
         cmake --install '${{github.workspace}}\build'
-        ${Qt5_DIR}'\bin\windeployqt.exe' '${{github.workspace}}\install\LOEF_drawer.exe'
+        ${{mingw-w64-install-qt-action.env.Qt5_DIR}}'\bin\windeployqt.exe' '${{github.workspace}}\install\LOEF_drawer.exe'
       shell: bash
 
     - name: Archive production artifacts
