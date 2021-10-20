@@ -22,6 +22,8 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     )
 link_libraries(
+    -static
+    winpthread
     -static-libgcc
     -static-libstdc++
     )
