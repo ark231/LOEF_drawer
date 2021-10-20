@@ -86,7 +86,7 @@ jobs:
     - name: Install
       run: |
         cmake --install '${{github.workspace}}\build'
-        ${{jobs.build.mingw-w64-install-qt-action.env.Qt5_DIR}}'\bin\windeployqt.exe' '${{github.workspace}}\install\LOEF_drawer.exe'
+        ${{GitHub.workspace}}'\bin\windeployqt.exe' '${{github.workspace}}\install\LOEF_drawer.exe'
       shell: bash
 
     - name: Archive production artifacts
