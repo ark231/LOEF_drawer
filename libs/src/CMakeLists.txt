@@ -14,6 +14,7 @@ find_package(Boost  REQUIRED)
 if(${LOEF_NOUPDATE}!="yes")
 add_compile_options(-Wall -Wextra)
 endif()
+add_compile_options(-static-libgcc -static-libstdc++)
 add_compile_definitions($<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
 include_directories(
     ${LOEF_drawer_libs_header_SOURCE_DIR}
@@ -23,6 +24,8 @@ include_directories(
 link_libraries(
     gcc
     stdc++
+    -static-libgcc
+    -static-libstdc++
     )
 message (STATUS "Boost_INSTALL_DIR:"${Boost_INCLUDE_DIR})
 
