@@ -81,6 +81,8 @@ target_link_libraries(LOEF_drawer PRIVATE
     charges
     vec2d
     painter
+    -static
+    winpthread
     -static-libgcc
     -static-libstdc++
     )
