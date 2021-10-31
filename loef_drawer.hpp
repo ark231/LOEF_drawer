@@ -2,12 +2,12 @@
 #define LOEF_DRAWER_HPP
 
 #include <QJsonObject>
+#include <QKeyEvent>
 #include <QWidget>
 #include <optional>
 #include <tuple>
 #include <unordered_map>
 #include <vector>
-#include<QKeyEvent>
 
 #include "charges.hpp"
 #include "general_consts.hpp"
@@ -44,14 +44,14 @@ class LOEF_drawer : public QWidget {
     LOEF::state_charge_selected_ *charge_selected_automatically_;
     LOEF::inverse_permittivity_quantity inverse_permittivity_ = LOEF::initial_inverse_permittivity;
     bool draw_LOEF_requested = true;
-    bool is_multi_selecting=false;
+    bool is_multi_selecting = false;
 
     void paintEvent(QPaintEvent *ev) override;
     void mousePressEvent(QMouseEvent *ev) override;
     void mouseMoveEvent(QMouseEvent *ev) override;
     void mouseReleaseEvent(QMouseEvent *ev) override;
-    void keyPressEvent(QKeyEvent *ev)override;
-    void keyReleaseEvent(QKeyEvent *ev)override;
+    void keyPressEvent(QKeyEvent *ev) override;
+    void keyReleaseEvent(QKeyEvent *ev) override;
 
     void calc_LOEF_from_fixed_charges(decltype(fixed_charges_) &, int width, int height);
     void prepare_LOEF_pathes();
