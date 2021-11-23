@@ -33,9 +33,28 @@ class basic_vec2d_ {
     void operator*=(double k);
     void operator/=(double k);
 };
+
 template <class QUANTITY>
 basic_vec2d_<QUANTITY> normalize(const LOEF::basic_vec2d_<QUANTITY> &a);
 
+template <class A_CLASS_WHICH_IS_NOT_BASIC_VEC2D>
+struct is_basic_vec2d_ {
+    static constexpr bool value = false;
+};
+
+template <class QUANTITY>
+struct is_basic_vec2d_<basic_vec2d_<QUANTITY>> {
+    static constexpr bool value = true;
+};
+
+template <class T>
+inline constexpr bool is_basic_vec2d_v = is_basic_vec2d_<T>::value;
+
+namespace {
+template <class QUANTITY, typename FACTOR_TYPE>
+using multiplied = decltype(std::declval<QUANTITY>() * std::declval<FACTOR_TYPE>());
+// using multiplied = boost::units::multiply_typeof_helper<QUANTITY, FACTOR_TYPE>;
+}  // namespace
 }  // namespace LOEF
 #ifdef LOEF_VEC2D_LIBRARY_BUILD
 template <class QUANTITY>
@@ -45,9 +64,12 @@ LOEF::basic_vec2d_<QUANTITY> operator-(const LOEF::basic_vec2d_<QUANTITY> &a, co
 template <class QUANTITY>
 LOEF::basic_vec2d_<QUANTITY> operator-(const LOEF::basic_vec2d_<QUANTITY> &a);
 template <class QUANTITY, typename FACTOR_TYPE>
-LOEF::basic_vec2d_<QUANTITY> operator*(const FACTOR_TYPE k, const LOEF::basic_vec2d_<QUANTITY> &a);
+LOEF::basic_vec2d_<LOEF::multiplied<QUANTITY, FACTOR_TYPE>> operator*(const FACTOR_TYPE k,
+                                                                      const LOEF::basic_vec2d_<QUANTITY> &a);
+
 template <class QUANTITY, typename FACTOR_TYPE>
-LOEF::basic_vec2d_<QUANTITY> operator*(const LOEF::basic_vec2d_<QUANTITY> &a, const FACTOR_TYPE k);
+LOEF::basic_vec2d_<LOEF::multiplied<QUANTITY, FACTOR_TYPE>> operator*(const LOEF::basic_vec2d_<QUANTITY> &a,
+                                                                      const FACTOR_TYPE k);
 template <class QUANTITY, typename FACTOR_TYPE>
 LOEF::basic_vec2d_<QUANTITY> operator/(const LOEF::basic_vec2d_<QUANTITY> &a, const FACTOR_TYPE k);
 // LOEF::basic_vec2d_<QUANTITY> operator/(const FACTOR_TYPE k, const LOEF::basic_vec2d_<QUANTITY> &a);

@@ -12,21 +12,13 @@ basic_vec2d_<QUANTITY>::basic_vec2d_(QUANTITY x, QUANTITY y) {
     this->y_ = y;
 }
 
-template <>
-millimetre_quantity basic_vec2d_<millimetre_quantity>::length() const {
-    auto val_x = this->x_ / millimetre;  //無次元の値を取り出す
-    auto val_y = this->y_ / millimetre;
-    return std::sqrt(val_x * val_x + val_y * val_y) * millimetre;
+template <class QUANTITY>
+QUANTITY basic_vec2d_<QUANTITY>::length() const {
+    return boost::units::sqrt(x_ * x_ + y_ * y_);
 }
-template <>
-electric_field_strength_quantity basic_vec2d_<electric_field_strength_quantity>::length() const {
-    auto val_x = this->x_ / (boostunits::coulomb / (millimetre * millimetre));  //無次元の値を取り出す
-    auto val_y = this->y_ / (boostunits::coulomb / (millimetre * millimetre));
-    return std::sqrt(val_x * val_x + val_y * val_y) * (boostunits::coulomb / (millimetre * millimetre));
-}
-template <>
-basic_vec2d_<dimensionless_quantity> basic_vec2d_<millimetre_quantity>::to_dimentionless() {
-    return basic_vec2d_<dimensionless_quantity>(this->x_ / millimetre, this->y_ / millimetre);
+template <class QUANTITY>
+basic_vec2d_<dimensionless_quantity> basic_vec2d_<QUANTITY>::to_dimentionless() {
+    return basic_vec2d_<dimensionless_quantity>(this->x_.value(), this->y_.value());
 }
 template <class QUANTITY>
 QUANTITY basic_vec2d_<QUANTITY>::x() const noexcept {
@@ -77,12 +69,14 @@ LOEF::basic_vec2d_<QUANTITY> operator-(const LOEF::basic_vec2d_<QUANTITY> &a, co
     return LOEF::basic_vec2d_<QUANTITY>(a.x() - b.x(), a.y() - b.y());
 }
 template <class QUANTITY, typename FACTOR_TYPE>
-LOEF::basic_vec2d_<QUANTITY> operator*(const FACTOR_TYPE k, const LOEF::basic_vec2d_<QUANTITY> &a) {
-    return LOEF::basic_vec2d_<QUANTITY>(static_cast<double>(k) * a.x(), static_cast<double>(k) * a.y());
+LOEF::basic_vec2d_<LOEF::multiplied<QUANTITY, FACTOR_TYPE>> operator*(const FACTOR_TYPE k,
+                                                                      const LOEF::basic_vec2d_<QUANTITY> &a) {
+    return LOEF::basic_vec2d_<LOEF::multiplied<QUANTITY, FACTOR_TYPE>>(k * a.x(), k * a.y());
 }
 template <class QUANTITY, typename FACTOR_TYPE>
-LOEF::basic_vec2d_<QUANTITY> operator*(const LOEF::basic_vec2d_<QUANTITY> &a, const FACTOR_TYPE k) {
-    return static_cast<double>(k) * a;
+LOEF::basic_vec2d_<LOEF::multiplied<QUANTITY, FACTOR_TYPE>> operator*(const LOEF::basic_vec2d_<QUANTITY> &a,
+                                                                      const FACTOR_TYPE k) {
+    return k * a;
 }
 template <class QUANTITY, typename FACTOR_TYPE>
 LOEF::basic_vec2d_<QUANTITY> operator/(const LOEF::basic_vec2d_<QUANTITY> &a, const FACTOR_TYPE k) {
@@ -90,7 +84,7 @@ LOEF::basic_vec2d_<QUANTITY> operator/(const LOEF::basic_vec2d_<QUANTITY> &a, co
 }
 template <class QUANTITY>
 LOEF::basic_vec2d_<QUANTITY> operator-(const LOEF::basic_vec2d_<QUANTITY> &a) {
-    return -1 * a;
+    return -1.0 * a;
 }
 /*
 template <class QUANTITY>

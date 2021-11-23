@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(LOEF_drawer LANGUAGES CXX VERSION 1.0.1.0)
+project(LOEF_drawer LANGUAGES CXX VERSION 1.0.2.0)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -54,6 +54,7 @@ if(ANDROID)
 else()
     add_executable(LOEF_drawer
         main.cpp
+        qt_message_handler.cpp
         mainwindow.cpp
         mainwindow.hpp
         mainwindow.ui
@@ -66,12 +67,14 @@ else()
 endif()
 
 target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra )
-target_compile_definitions(LOEF_drawer PUBLIC $<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
+target_compile_definitions(LOEF_drawer PUBLIC $<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG$<SEMICOLON>BOOST_STACKTRACE_LINK>)
 target_link_libraries(LOEF_drawer PRIVATE Qt5::Widgets)
 target_link_libraries(LOEF_drawer PRIVATE 
     charges
     vec2d
     painter
+
+    $<$<CONFIG:Release>:boost_stacktrace_backtrace$<SEMICOLON>dl$<SEMICOLON>backtrace>
     )
 target_include_directories(LOEF_drawer PRIVATE 
     ${LOEF_drawer_libs_header_SOURCE_DIR}

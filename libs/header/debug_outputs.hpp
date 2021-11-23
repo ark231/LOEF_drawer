@@ -11,12 +11,11 @@
 #include "units.hpp"
 #include "vec2d.hpp"
 /*qtのSTLライブラリ出力対応の中で自作クラスを格納したコンテナを表示するときに必要になるので、グローバル名前空間に*/
-template <class DATA_TYPE, class DATA_TEMPLATE_ARG = void>
+template <class DATA_TYPE>
 QDebug operator<<(QDebug debug, const DATA_TYPE &data) {
     QDebugStateSaver saver(debug);
     std::stringstream output;
-    if constexpr (std::is_same_v<DATA_TYPE, LOEF::basic_vec2d_<DATA_TEMPLATE_ARG>> ||
-                  std::is_same_v<DATA_TYPE, LOEF::vec2d_position>) {
+    if constexpr (LOEF::is_basic_vec2d_v<DATA_TYPE> || std::is_same_v<DATA_TYPE, LOEF::vec2d_position>) {
         output << "(" << data.x() << "," << data.y() << ")";
     } else if constexpr (std::is_same_v<DATA_TYPE, LOEF::radian_quantity>) {
         output << data << " (" << static_cast<decltype(1.0 * boost::units::degree::degree)>(data) << ")";

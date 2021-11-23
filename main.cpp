@@ -7,12 +7,14 @@
 #include "general_consts.hpp"
 #include "mainwindow.hpp"
 #include "qt_consts.hpp"
+#include "qt_message_handler.hpp"
 
 void init_global_vars(QSettings &);
 void generate_settings_file(QSettings &);
 int main(int argc, char *argv[]) {
     int exit_code;
     do {
+        qInstallMessageHandler(LOEF::qt::message_hander);
         QApplication a(argc, argv);
 
         QSettings settings(QCoreApplication::applicationDirPath() + "/settings/settings.ini", QSettings::IniFormat);
