@@ -1,0 +1,13 @@
+[general]
+charge_radius=2.5 #mm
+start_offset=1.0 #mm
+gap=1.0 #mm
+
+[[patterns.lines]]
+quantity=1.0
+start={x=0,y=50}
+end={x=200,y=50}
+[[patterns.lines]]
+quantity=-1.0
+start={x=0,y=100}
+end={x=200,y=100}
