@@ -24,6 +24,8 @@ using inverse_permittivity_quantity = decltype(1.0 / boostunits::coulomb);
 inline auto inverse_permittivity_unit_quantity = 1.0 / boostunits::coulomb;
 using radian_quantity = boost::units::quantity<boostunits::plane_angle, double>;
 
+// lazy
+using metre_quantity = boost::units::quantity<boostunits::length, double>;
 using volt_quantity = boost::units::quantity<boostunits::electric_potential, double>;
 namespace experimental {
 constexpr auto V = boostunits::volt;
@@ -32,5 +34,6 @@ constexpr auto C = boostunits::coulomb;
 constexpr auto m = boostunits::metre;
 constexpr auto mm = millimetre;
 }  // namespace experimental
+// end lazy
 }  // namespace LOEF
 #endif

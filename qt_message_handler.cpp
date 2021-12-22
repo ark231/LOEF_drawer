@@ -1,7 +1,7 @@
 #include "qt_message_handler.hpp"
 
 #ifndef QT_NO_DEBUG_OUTPUT
-#include <boost/stacktrace.hpp>
+//#include <boost/stacktrace.hpp>
 #endif
 
 namespace LOEF {
@@ -10,7 +10,7 @@ void message_hander(QtMsgType type, const QMessageLogContext&, const QString& me
 #ifndef QT_NO_DEBUG_OUTPUT
     std::cerr << message.toStdString() << std::endl;
     if (type == QtFatalMsg) {
-        std::cerr << boost::stacktrace::stacktrace() << std::endl;
+        // std::cerr << boost::stacktrace::stacktrace() << std::endl;
         abort();
     }
 #else

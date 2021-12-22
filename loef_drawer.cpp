@@ -1,5 +1,6 @@
 #include "loef_drawer.hpp"
 
+#include <QDebug>
 #include <QGuiApplication>
 #include <QJsonArray>
 #include <QMouseEvent>
@@ -12,6 +13,7 @@
 #include "debug_outputs.hpp"
 #include "experimental/electric_potential.hpp"
 #include "experimental/lazy_helper.hpp"
+#include "general_consts.hpp"
 #include "units.hpp"
 namespace LOEF {
 class state_charge_selected_ {
@@ -127,11 +129,14 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
     if (!draw_LOEF_requested) {
         return;
     }
-    // experimental
+    // lazy
+    if (this->electric_potential_handler->color_enabled) {
+        painter.drawImage(0, 0, prepare_electric_potential_image());
+    }
     if (this->electric_potential_handler->disable_LOEF == true) {
         return;
     }
-    // end experimental
+    // end lazy
     LOEF::clear_pens_arrival_to_fixed_charges(fixed_charges_.begin(), fixed_charges_.end());
     decltype(fixed_charges_) positive_fixed_charges;
     decltype(fixed_charges_) newtral_fixed_charges;
@@ -259,6 +264,13 @@ void LOEF_drawer::replace_fixed_charge(const LOEF::id_type id,
 void LOEF_drawer::clear_and_redraw() {
     charge_pens_.clear();
     charge_paths_.clear();
+    // lazy
+    this->electric_potential_handler->set_current_max_abs_positive(0.0 * LOEF::experimental::V);
+    this->electric_potential_handler->set_current_max_abs_negative(0.0 * LOEF::experimental::V);
+    for (const auto &fixed_charge : this->fixed_charges_) {
+        this->electric_potential_handler->hint_add_charge(fixed_charge.second.quantity());
+    }
+    // end lazy
     update();
 }
 void LOEF_drawer::replace_fixed_charge(const LOEF::id_type id,
@@ -338,5 +350,40 @@ void LOEF_drawer::keyReleaseEvent(QKeyEvent *ev) {
 // lazy
 void LOEF_drawer::set_electric_potential(LOEF::experimental::electric_potential *of_parent) {
     this->electric_potential_handler = of_parent;
+}
+QImage LOEF_drawer::prepare_electric_potential_image() {
+    auto width = this->width();
+    auto height = this->height();
+    qDebug() << "width=" << width << " , height=" << height;
+    QImage result(width, height, QImage::Format_ARGB32);
+    for (auto y = 0; y < height; y++) {
+        for (auto x = 0; x < width; x++) {
+            LOEF::vec2d current_position(QPoint(x, y), this->dpmm_);
+            LOEF::volt_quantity potential = 0.0 * LOEF::experimental::V;
+            QColor current_color("white");
+            auto max_abs_positive = this->electric_potential_handler->get_current_max_abs_positive();
+            auto max_abs_negative = this->electric_potential_handler->get_current_max_abs_negative();
+            for (const auto &fixed_charge_tuple : this->fixed_charges_) {
+                const auto &fixed_charge = fixed_charge_tuple.second;
+                auto charge_to_pos = fixed_charge.position() - current_position;
+                if (charge_to_pos.length() <= LOEF::radius::FIXED) {
+                    result.setPixel(x, y, QColor(0xff, 0xff, 0xff, 0x00).rgba());
+                    goto CONTINUE_TO_NEXT_POS;
+                }
+                potential += LOEF::experimental::k0 * fixed_charge.quantity() /
+                             static_cast<LOEF::metre_quantity>(charge_to_pos.length());
+            }
+            if (potential >= 0.0 * LOEF::experimental::V) {
+                auto diff = 0xff * (potential / max_abs_positive);
+                current_color = QColor(0xff, 0xff - diff, 0xff - diff);
+            } else {
+                auto diff = 0xff * (potential / max_abs_negative);
+                current_color = QColor(0xff - diff, 0xff - diff, 0xff);
+            }
+            result.setPixel(x, y, current_color.rgb());
+        CONTINUE_TO_NEXT_POS:;
+        }
+    }
+    return result;
 }
 // end lazy

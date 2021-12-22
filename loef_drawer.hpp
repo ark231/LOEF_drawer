@@ -1,6 +1,7 @@
 #ifndef LOEF_DRAWER_HPP
 #define LOEF_DRAWER_HPP
 
+#include <QImage>
 #include <QJsonObject>
 #include <QKeyEvent>
 #include <QWidget>
@@ -77,6 +78,10 @@ class LOEF_drawer : public QWidget {
     void replace_fixed_charge(const LOEF::id_type id, const std::optional<LOEF::coulomb_quantity> &maybe_new_charge,
                               const LOEF::millimetre_quantity new_pos_x, const LOEF::millimetre_quantity new_pos_y);
     void clear_and_redraw();
+
+    // lazy impl
+    QImage prepare_electric_potential_image();
+    // end lazy impl
 
    signals:
     void fixed_charge_position_changed(LOEF::id_type id, LOEF::millimetre_quantity new_X,
