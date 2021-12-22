@@ -61,14 +61,12 @@ add_executable(LOEF_drawer
 )
 
 target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra )
-target_compile_definitions(LOEF_drawer PUBLIC $<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG$<SEMICOLON>BOOST_STACKTRACE_LINK>)
+target_compile_definitions(LOEF_drawer PUBLIC $<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
 target_link_libraries(LOEF_drawer PRIVATE Qt5::Widgets)
 target_link_libraries(LOEF_drawer PRIVATE 
     charges
     vec2d
     painter
-
-    $<$<CONFIG:Release>:boost_stacktrace_backtrace$<SEMICOLON>dl$<SEMICOLON>backtrace>
     )
 target_include_directories(LOEF_drawer PRIVATE 
     ${LOEF_drawer_libs_header_SOURCE_DIR}
