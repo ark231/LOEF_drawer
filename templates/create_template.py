@@ -96,7 +96,7 @@ def main(argc,argv):
     template_template=toml.load(f"./{input_infos['title']}_template.toml")
     general_infos=template_template["general"]
     result={
-            "inverse permittivity":12,
+            "inverse permittivity":general_infos["inverse_permittivity"],
             "fixed_charges":[]
             }
     if "lines" in template_template["patterns"]:
