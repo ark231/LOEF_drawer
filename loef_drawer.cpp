@@ -10,6 +10,8 @@
 
 #include "LOEF_QPainter.hpp"
 #include "debug_outputs.hpp"
+#include "experimental/electric_potential.hpp"
+#include "experimental/lazy_helper.hpp"
 #include "units.hpp"
 namespace LOEF {
 class state_charge_selected_ {
@@ -125,6 +127,11 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
     if (!draw_LOEF_requested) {
         return;
     }
+    // experimental
+    if (this->electric_potential_handler->disable_LOEF == true) {
+        return;
+    }
+    // end experimental
     LOEF::clear_pens_arrival_to_fixed_charges(fixed_charges_.begin(), fixed_charges_.end());
     decltype(fixed_charges_) positive_fixed_charges;
     decltype(fixed_charges_) newtral_fixed_charges;
@@ -328,3 +335,8 @@ void LOEF_drawer::keyReleaseEvent(QKeyEvent *ev) {
         QWidget::keyPressEvent(ev);
     }
 }
+// lazy
+void LOEF_drawer::set_electric_potential(LOEF::experimental::electric_potential *of_parent) {
+    this->electric_potential_handler = of_parent;
+}
+// end lazy

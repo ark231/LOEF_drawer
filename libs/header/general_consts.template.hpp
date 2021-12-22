@@ -18,5 +18,9 @@ inline millimetre_quantity initial_fixed_pos_y = 50 * millimetre;
 inline coulomb_quantity initial_fixed_charge = 0.0 * boostunits::coulomb;
 inline inverse_permittivity_quantity initial_inverse_permittivity = 12.0 * inverse_permittivity_unit_quantity;
 inline millimetre_quantity interval_steps = 0.1 * millimetre;
+
+namespace experimental {
+constexpr auto k0 = 8.987'551'8 * N * m * m / (C * C);
+}
 }  // namespace LOEF
 #endif

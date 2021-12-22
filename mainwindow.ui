@@ -192,7 +192,38 @@ version</string>
     </widget>
     <addaction name="menulanguage"/>
    </widget>
+   <widget class="QMenu" name="menuexperimental">
+    <property name="title">
+     <string>experimental</string>
+    </property>
+    <widget class="QMenu" name="menucolorize_electric_potential">
+     <property name="title">
+      <string>colorize electric potential</string>
+     </property>
+     <widget class="QMenu" name="menumax_abs">
+      <property name="title">
+       <string>max_abs</string>
+      </property>
+      <addaction name="actionpositive"/>
+      <addaction name="actionnegative"/>
+     </widget>
+     <addaction name="actionenable_epcolor"/>
+     <addaction name="menumax_abs"/>
+    </widget>
+    <widget class="QMenu" name="menuequipotentioal_surface">
+     <property name="title">
+      <string>equipotentioal surface</string>
+     </property>
+     <addaction name="actionenable_epsurface"/>
+     <addaction name="actiondistance"/>
+    </widget>
+    <addaction name="menucolorize_electric_potential"/>
+    <addaction name="menuequipotentioal_surface"/>
+    <addaction name="actiondisable_LOEF"/>
+    <addaction name="separator"/>
+   </widget>
    <addaction name="menusettings"/>
+   <addaction name="menuexperimental"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionEnglish">
@@ -212,6 +243,45 @@ version</string>
    </property>
    <property name="text">
     <string>日本語</string>
+   </property>
+  </action>
+  <action name="actionenable_epcolor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>enable</string>
+   </property>
+  </action>
+  <action name="actionpositive">
+   <property name="text">
+    <string>positive</string>
+   </property>
+  </action>
+  <action name="actionnegative">
+   <property name="text">
+    <string>negative</string>
+   </property>
+  </action>
+  <action name="actionenable_epsurface">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>enable</string>
+   </property>
+  </action>
+  <action name="actiondistance">
+   <property name="text">
+    <string>distance</string>
+   </property>
+  </action>
+  <action name="actiondisable_LOEF">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>disable LOEF</string>
    </property>
   </action>
  </widget>

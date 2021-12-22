@@ -55,6 +55,9 @@ add_executable(LOEF_drawer
     loef_individual_fixed_charge_editor.hpp
     loef_individual_fixed_charge_editor.ui
     ${LOEF_QM_FILES}
+
+    experimental/electric_potential.cpp
+    experimental/lazy_helper.cpp
 )
 
 target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra )
@@ -70,6 +73,8 @@ target_link_libraries(LOEF_drawer PRIVATE
 target_include_directories(LOEF_drawer PRIVATE 
     ${LOEF_drawer_libs_header_SOURCE_DIR}
     ${LOEF_drawer_libs_header_BINARY_DIR}
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/experimental
     )
 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/LOEF_drawer${CMAKE_EXECUTABLE_SUFFIX}

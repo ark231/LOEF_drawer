@@ -14,6 +14,7 @@
 
 #include "./ui_mainwindow.h"
 #include "general_consts.hpp"
+#include "loef_drawer.hpp"
 #include "loef_individual_fixed_charge_editor.hpp"
 #include "qt_consts.hpp"
 
@@ -25,6 +26,9 @@ MainWindow::MainWindow(QLocale locale, QWidget *parent) : QMainWindow(parent), u
                                     .arg(LOEF::version_minor)
                                     .arg(LOEF::version_patch));
     this->setWindowTitle(LOEF::application_name);
+    // lazy
+    ui->loef_drawer->set_electric_potential(&this->electric_potential_handler);
+    // end lazy
     connect(ui->loef_drawer, SIGNAL(fixed_charge_selected(LOEF::id_type)), this,
             SLOT(slot_fixed_charge_selected(LOEF::id_type)));
     connect(ui->doubleSpinBox_inverse_permittivity, SIGNAL(valueChanged(double)), ui->loef_drawer,
@@ -256,3 +260,17 @@ void MainWindow::on_button_open_clicked() {
         this->add_fixed_charge(saved_charge_quantity, saved_position_x, saved_position_y);
     }
 }
+
+void MainWindow::on_actionenable_epcolor_toggled(bool arg1) { this->electric_potential_handler.color_enabled = arg1; }
+
+void MainWindow::on_actionpositive_triggered() {}
+
+void MainWindow::on_actionnegative_triggered() {}
+
+void MainWindow::on_actionenable_epsurface_toggled(bool arg1) {
+    this->electric_potential_handler.surface_enabled = arg1;
+}
+
+void MainWindow::on_actiondistance_triggered() {}
+
+void MainWindow::on_actiondisable_LOEF_toggled(bool arg1) { this->electric_potential_handler.disable_LOEF = arg1; }

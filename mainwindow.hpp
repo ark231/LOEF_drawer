@@ -6,6 +6,7 @@
 #include <optional>
 #include <unordered_map>
 
+#include "experimental/electric_potential.hpp"
 #include "general_consts.hpp"
 #include "qt_consts.hpp"
 
@@ -40,11 +41,27 @@ class MainWindow : public QMainWindow {
     void on_button_save_clicked();
     void on_button_open_clicked();
 
+    void on_actionenable_epcolor_toggled(bool arg1);
+
+    void on_actionpositive_triggered();
+
+    void on_actionnegative_triggered();
+
+    void on_actionenable_epsurface_toggled(bool arg1);
+
+    void on_actiondistance_triggered();
+
+    void on_actiondisable_LOEF_toggled(bool arg1);
+
    private:
     Ui::MainWindow *ui;
     std::unordered_map<LOEF::id_type, QListWidgetItem *> id_to_item_;
     LOEF_individual_fixed_charge_editor *current_selected_editor_ = nullptr;
     QPoint fixed_charge_editor_last_pos_ = LOEF::invalid_position;
+
+   public:
+    /*experimental*/
+    LOEF::experimental::electric_potential electric_potential_handler;
 
    private:
     void add_fixed_charge(const LOEF::coulomb_quantity initial_quantity, const LOEF::millimetre_quantity initial_X,

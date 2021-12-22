@@ -17,6 +17,15 @@ class state_charge_selected_;
 class id_handler;
 }  // namespace LOEF
 // using LOEF::id_type = size_t;
+
+// lazy
+namespace LOEF {
+namespace experimental {
+class electric_potential;
+}
+}  // namespace LOEF
+// end lazy
+
 class LOEF_drawer : public QWidget {
     Q_OBJECT
    public:
@@ -33,6 +42,10 @@ class LOEF_drawer : public QWidget {
     void unselect_fixed_charge(LOEF::id_type);
     void unselect_all_selected_fixed_charge();
 
+    // lazy impl
+    void set_electric_potential(LOEF::experimental::electric_potential *of_parent);
+    // end lazy impl
+
    private:
     LOEF::dot_per_millimetre_quantity dpmm_;
     std::unordered_map<LOEF::id_type, LOEF::fixed_charge> fixed_charges_;
@@ -45,6 +58,10 @@ class LOEF_drawer : public QWidget {
     LOEF::inverse_permittivity_quantity inverse_permittivity_ = LOEF::initial_inverse_permittivity;
     bool draw_LOEF_requested = true;
     bool is_multi_selecting = false;
+
+    // lazy impl
+    LOEF::experimental::electric_potential *electric_potential_handler = nullptr;
+    // end lazy impl
 
     void paintEvent(QPaintEvent *ev) override;
     void mousePressEvent(QMouseEvent *ev) override;

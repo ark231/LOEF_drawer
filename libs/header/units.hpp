@@ -23,5 +23,14 @@ using dimensionless_quantity = boost::units::quantity<boost::units::si::dimensio
 using inverse_permittivity_quantity = decltype(1.0 / boostunits::coulomb);
 inline auto inverse_permittivity_unit_quantity = 1.0 / boostunits::coulomb;
 using radian_quantity = boost::units::quantity<boostunits::plane_angle, double>;
+
+using volt_quantity = boost::units::quantity<boostunits::electric_potential, double>;
+namespace experimental {
+constexpr auto V = boostunits::volt;
+constexpr auto N = boostunits::newton;
+constexpr auto C = boostunits::coulomb;
+constexpr auto m = boostunits::metre;
+constexpr auto mm = millimetre;
+}  // namespace experimental
 }  // namespace LOEF
 #endif
