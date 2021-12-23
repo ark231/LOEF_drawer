@@ -19,6 +19,7 @@ inline millimetre_quantity interval_steps = 0.1 * millimetre;
 
 namespace experimental {
 constexpr auto k0 = 8.987'551'8 * N * m * m / (C * C);
-}
+inline double max_error_surface = 1.0;
+}  // namespace experimental
 }  // namespace LOEF
 #endif

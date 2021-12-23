@@ -294,3 +294,8 @@ void MainWindow::on_actiondistance_triggered() {
 void MainWindow::on_actiondisable_LOEF_toggled(bool arg1) { this->electric_potential_handler.disable_LOEF = arg1; }
 
 void MainWindow::on_actionuse_input_toggled(bool arg1) { this->electric_potential_handler.color_use_input = arg1; }
+
+void MainWindow::on_actionmax_error_triggered() {
+    auto input_max_error = QInputDialog::getDouble(this, tr("max_error"), tr("enter max_error"), 0, 0);
+    LOEF::experimental::max_error_surface = input_max_error;
+}

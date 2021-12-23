@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QGuiApplication>
+#include <QInputDialog>
 #include <QJsonArray>
 #include <QMouseEvent>
 #include <QScreen>
@@ -358,6 +359,19 @@ QImage LOEF_drawer::prepare_electric_potential_image() {
     auto height = this->height();
     qDebug() << "width=" << width << " , height=" << height;
     QImage result(width, height, QImage::Format_ARGB32);
+    if (this->electric_potential_handler->surface_enabled &&
+        this->electric_potential_handler->distance == 0.0 * LOEF::boostunits::volt) {
+        double distance = 0.0;
+        while (distance == 0.0) {
+            /* it seems this QInputDialog disables the painter and cause segfault
+             * so, this code is , actually, "crashes if distance is 0"
+             * to avoid it, you must set distance with the menu before enable surface
+             * */
+            distance =
+                QInputDialog::getDouble(nullptr, tr("distance cannot be zero!"), tr("enter non zero distance"), 0, 0);
+        }
+        this->electric_potential_handler->distance = distance * LOEF::boostunits::volt;
+    }
     for (auto y = 0; y < height; y++) {
         for (auto x = 0; x < width; x++) {
             LOEF::vec2d current_position(QPoint(x, y), this->dpmm_);
@@ -369,11 +383,19 @@ QImage LOEF_drawer::prepare_electric_potential_image() {
                 const auto &fixed_charge = fixed_charge_tuple.second;
                 auto charge_to_pos = fixed_charge.position() - current_position;
                 if (charge_to_pos.length() <= LOEF::radius::FIXED) {
-                    result.setPixel(x, y, QColor(0xff, 0xff, 0xff, 0x00).rgba());
+                    result.setPixel(x, y, QColor("transparent").rgba());
                     goto CONTINUE_TO_NEXT_POS;
                 }
                 potential += LOEF::experimental::k0 * fixed_charge.quantity() /
                              static_cast<LOEF::metre_quantity>(charge_to_pos.length());
+            }
+            if (this->electric_potential_handler->surface_enabled) {
+                auto remainder = boost::units::fmod(potential, this->electric_potential_handler->distance).value();
+                if (LOEF::experimental::is_about_same(remainder, 0.0, LOEF::experimental::max_error_surface)) {
+                    current_color = QColor("black");
+                    result.setPixel(x, y, current_color.rgb());
+                    goto CONTINUE_TO_NEXT_POS;
+                }
             }
             if (potential >= 0.0 * LOEF::experimental::V) {
                 auto diff = 0xff * (potential / max_abs_positive);

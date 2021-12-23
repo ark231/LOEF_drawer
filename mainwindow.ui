@@ -217,6 +217,7 @@ version</string>
      </property>
      <addaction name="actionenable_epsurface"/>
      <addaction name="actiondistance"/>
+     <addaction name="actionmax_error"/>
     </widget>
     <addaction name="menucolorize_electric_potential"/>
     <addaction name="menuequipotentioal_surface"/>
@@ -291,6 +292,11 @@ version</string>
    </property>
    <property name="text">
     <string>use input</string>
+   </property>
+  </action>
+  <action name="actionmax_error">
+   <property name="text">
+    <string>max_error</string>
    </property>
   </action>
  </widget>

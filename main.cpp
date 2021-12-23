@@ -47,6 +47,11 @@ void init_global_vars(QSettings &settings) {
     LOEF::initial_inverse_permittivity =
         settings.value("initial_inverse_permittivity", 12.0).value<double>() * LOEF::inverse_permittivity_unit_quantity;
     LOEF::interval_steps = settings.value("interval_steps", 0.5).value<double>() * LOEF::millimetre;
+    // lazy
+    settings.beginGroup("experimental");
+    LOEF::experimental::max_error_surface = settings.value("max_error_surface", 1.0).value<double>();
+    settings.endGroup();
+    // end lazy
     settings.endGroup();
 }
 void generate_settings_file(QSettings &settings) {
@@ -60,6 +65,11 @@ void generate_settings_file(QSettings &settings) {
     settings.setValue("initial_fixed_charge", 0.0);
     settings.setValue("initial_inverse_permittivity", 12.0);
     settings.setValue("interval_steps", 0.5);
+    // lazy
+    settings.beginGroup("experimental");
+    settings.setValue("max_error_surface", 1.0);
+    settings.endGroup();
+    // end lazy
     settings.endGroup();
     settings.sync();
 }
