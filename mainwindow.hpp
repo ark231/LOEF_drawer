@@ -53,7 +53,9 @@ class MainWindow : public QMainWindow {
 
     void on_actiondisable_LOEF_toggled(bool arg1);
 
-   private:
+    void on_actionuse_input_toggled(bool arg1);
+
+private:
     Ui::MainWindow *ui;
     std::unordered_map<LOEF::id_type, QListWidgetItem *> id_to_item_;
     LOEF_individual_fixed_charge_editor *current_selected_editor_ = nullptr;

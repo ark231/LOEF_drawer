@@ -7,6 +7,7 @@ namespace LOEF {
 namespace experimental {
 struct electric_potential {
     bool color_enabled = false;
+    bool color_use_input = false;
     bool surface_enabled = false;
     bool disable_LOEF = false;
     volt_quantity distance = 0.0 * boostunits::volt;

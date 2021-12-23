@@ -206,6 +206,7 @@ version</string>
       </property>
       <addaction name="actionpositive"/>
       <addaction name="actionnegative"/>
+      <addaction name="actionuse_input"/>
      </widget>
      <addaction name="actionenable_epcolor"/>
      <addaction name="menumax_abs"/>
@@ -282,6 +283,14 @@ version</string>
    </property>
    <property name="text">
     <string>disable LOEF</string>
+   </property>
+  </action>
+  <action name="actionuse_input">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>use input</string>
    </property>
   </action>
  </widget>

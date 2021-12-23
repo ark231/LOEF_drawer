@@ -263,14 +263,34 @@ void MainWindow::on_button_open_clicked() {
 
 void MainWindow::on_actionenable_epcolor_toggled(bool arg1) { this->electric_potential_handler.color_enabled = arg1; }
 
-void MainWindow::on_actionpositive_triggered() {}
+void MainWindow::on_actionpositive_triggered() {
+    if (this->electric_potential_handler.color_use_input) {
+        auto input_max_abs_positive =
+            QInputDialog::getDouble(this, tr("max absolute positive potential"), tr("enter max abs positive"),
+                                    this->electric_potential_handler.get_current_max_abs_positive().value(), 0);
+        this->electric_potential_handler.set_current_max_abs_positive(input_max_abs_positive * LOEF::boostunits::volt);
+    }
+}
 
-void MainWindow::on_actionnegative_triggered() {}
+void MainWindow::on_actionnegative_triggered() {
+    if (this->electric_potential_handler.color_use_input) {
+        auto input_max_abs_negative = QInputDialog::getDouble(
+            this, tr("max absolute negative potential"), tr("enter max abs negative"),
+            boost::units::abs(this->electric_potential_handler.get_current_max_abs_negative()).value(), 0);
+        this->electric_potential_handler.set_current_max_abs_negative(-input_max_abs_negative * LOEF::boostunits::volt);
+    }
+}
 
 void MainWindow::on_actionenable_epsurface_toggled(bool arg1) {
     this->electric_potential_handler.surface_enabled = arg1;
 }
 
-void MainWindow::on_actiondistance_triggered() {}
+void MainWindow::on_actiondistance_triggered() {
+    auto input_distance =
+        QInputDialog::getDouble(this, tr("distance between equipotential surfaces"), tr("enter distance"), 0, 0);
+    this->electric_potential_handler.distance = input_distance * LOEF::boostunits::volt;
+}
 
 void MainWindow::on_actiondisable_LOEF_toggled(bool arg1) { this->electric_potential_handler.disable_LOEF = arg1; }
+
+void MainWindow::on_actionuse_input_toggled(bool arg1) { this->electric_potential_handler.color_use_input = arg1; }

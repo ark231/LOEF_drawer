@@ -265,10 +265,12 @@ void LOEF_drawer::clear_and_redraw() {
     charge_pens_.clear();
     charge_paths_.clear();
     // lazy
-    this->electric_potential_handler->set_current_max_abs_positive(0.0 * LOEF::experimental::V);
-    this->electric_potential_handler->set_current_max_abs_negative(0.0 * LOEF::experimental::V);
-    for (const auto &fixed_charge : this->fixed_charges_) {
-        this->electric_potential_handler->hint_add_charge(fixed_charge.second.quantity());
+    if (!this->electric_potential_handler->color_use_input) {
+        this->electric_potential_handler->set_current_max_abs_positive(0.0 * LOEF::experimental::V);
+        this->electric_potential_handler->set_current_max_abs_negative(0.0 * LOEF::experimental::V);
+        for (const auto &fixed_charge : this->fixed_charges_) {
+            this->electric_potential_handler->hint_add_charge(fixed_charge.second.quantity());
+        }
     }
     // end lazy
     update();
