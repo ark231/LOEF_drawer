@@ -410,4 +410,11 @@ QImage LOEF_drawer::prepare_electric_potential_image() {
     }
     return result;
 }
+std::vector<LOEF::fixed_charge> LOEF_drawer::get_fixed_charges() {
+    decltype(get_fixed_charges()) result;
+    for (const auto &fixed_charge_tuple : fixed_charges_) {
+        result.push_back(fixed_charge_tuple.second);
+    }
+    return result;
+}
 // end lazy

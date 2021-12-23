@@ -50,14 +50,14 @@
     <message>
         <location filename="../mainwindow.ui" line="20"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="255"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="259"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="263"/>
         <source>MainWindow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="62"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="265"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="270"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="275"/>
         <source>appname
 version</source>
         <translation type="unfinished"></translation>
@@ -65,265 +65,283 @@ version</source>
     <message>
         <location filename="../mainwindow.ui" line="79"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="267"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="272"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="277"/>
         <source>draw</source>
         <translation>描画</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="95"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="268"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="273"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="278"/>
         <source>reciprocal permittivity?</source>
         <translation>誘電率の逆数？</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="107"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="269"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="274"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="279"/>
         <source>  lines/C</source>
         <translation>  本/C</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="119"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="270"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="275"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="280"/>
         <source>add a Fixed charge</source>
         <translation>固定電荷を追加</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="132"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="271"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="276"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="281"/>
         <source>Fixed charges</source>
         <translation>固定電荷一覧</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="154"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="272"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="277"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="282"/>
         <source>save</source>
         <translation>保存</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="161"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="273"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="278"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="283"/>
         <source>open</source>
         <translation>開く</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="184"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="274"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="279"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="284"/>
         <source>settings</source>
         <translation>設定</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="188"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="275"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="280"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="285"/>
         <source>language</source>
         <translation>言語</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="197"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="276"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="281"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="286"/>
         <source>experimental</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="201"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="277"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="282"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="287"/>
         <source>colorize electric potential</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="205"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="278"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="283"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="288"/>
         <source>max_abs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="216"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="279"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="284"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="289"/>
         <source>equipotentioal surface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="239"/>
+        <location filename="../mainwindow.ui" line="240"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="256"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="260"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="264"/>
         <source>English</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="247"/>
+        <location filename="../mainwindow.ui" line="248"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="257"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="261"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="265"/>
         <source>日本語</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="255"/>
-        <location filename="../mainwindow.ui" line="273"/>
+        <location filename="../mainwindow.ui" line="256"/>
+        <location filename="../mainwindow.ui" line="274"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="258"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="261"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="262"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="265"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="266"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="269"/>
         <source>enable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="260"/>
+        <location filename="../mainwindow.ui" line="261"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="259"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="263"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="267"/>
         <source>positive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="265"/>
+        <location filename="../mainwindow.ui" line="266"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="260"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="264"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="268"/>
         <source>negative</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="278"/>
+        <location filename="../mainwindow.ui" line="279"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="262"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="266"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="270"/>
+        <location filename="../mainwindow.cpp" line="309"/>
         <source>distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="286"/>
+        <location filename="../mainwindow.ui" line="287"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="263"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="267"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="271"/>
         <source>disable LOEF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="294"/>
+        <location filename="../mainwindow.ui" line="295"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="264"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="268"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="272"/>
         <source>use input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="299"/>
-        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="269"/>
-        <location filename="../mainwindow.cpp" line="299"/>
+        <location filename="../mainwindow.ui" line="300"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="273"/>
+        <location filename="../mainwindow.cpp" line="301"/>
         <source>max_error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="110"/>
-        <location filename="../mainwindow.cpp" line="123"/>
+        <location filename="../mainwindow.ui" line="305"/>
+        <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="274"/>
+        <location filename="../mainwindow.cpp" line="306"/>
+        <source>output samples</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="111"/>
+        <location filename="../mainwindow.cpp" line="124"/>
         <source>positive charge</source>
         <translation>正電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="112"/>
-        <location filename="../mainwindow.cpp" line="125"/>
+        <location filename="../mainwindow.cpp" line="113"/>
+        <location filename="../mainwindow.cpp" line="126"/>
         <source>null charge</source>
         <translatorcomment>もっとマシな呼び方募集中</translatorcomment>
         <translation>非荷電電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="114"/>
-        <location filename="../mainwindow.cpp" line="127"/>
+        <location filename="../mainwindow.cpp" line="115"/>
+        <location filename="../mainwindow.cpp" line="128"/>
         <source>negative charge</source>
         <translation>負電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="170"/>
+        <location filename="../mainwindow.cpp" line="171"/>
         <source>This change require restarting this program.
 Do you want to restart this program?</source>
         <translation>この変更を反映させるにはプログラムの再起動が必要です。
 このプログラムを再起動しますか？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="171"/>
+        <location filename="../mainwindow.cpp" line="172"/>
         <source>confirm restart</source>
         <translation>再起動を確認</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="202"/>
-        <location filename="../mainwindow.cpp" line="225"/>
+        <location filename="../mainwindow.cpp" line="203"/>
+        <location filename="../mainwindow.cpp" line="226"/>
+        <location filename="../mainwindow.cpp" line="311"/>
         <source>enter save name</source>
         <translation>保存名を入力してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="202"/>
-        <location filename="../mainwindow.cpp" line="225"/>
+        <location filename="../mainwindow.cpp" line="203"/>
+        <location filename="../mainwindow.cpp" line="226"/>
+        <location filename="../mainwindow.cpp" line="311"/>
         <source>save name:</source>
         <translatorcomment>もうちょっといい呼び名がある気がするが、、、</translatorcomment>
         <translation>保存タイトル:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="203"/>
-        <location filename="../mainwindow.cpp" line="226"/>
+        <location filename="../mainwindow.cpp" line="204"/>
+        <location filename="../mainwindow.cpp" line="227"/>
+        <location filename="../mainwindow.cpp" line="311"/>
         <source>untitled</source>
         <translation>無題</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="214"/>
+        <location filename="../mainwindow.cpp" line="215"/>
         <source>save file with entered name already exists.
 do you want to overwrite it?</source>
         <translation>同名のファイルがすでに存在しています。
 上書きしますか？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="215"/>
+        <location filename="../mainwindow.cpp" line="216"/>
         <source>save file exists</source>
         <translation>ファイルがすでに存在します</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="241"/>
+        <location filename="../mainwindow.cpp" line="242"/>
         <source>open save file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="241"/>
+        <location filename="../mainwindow.cpp" line="242"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="269"/>
+        <location filename="../mainwindow.cpp" line="271"/>
         <source>max absolute positive potential</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="269"/>
+        <location filename="../mainwindow.cpp" line="271"/>
         <source>enter max abs positive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="278"/>
+        <location filename="../mainwindow.cpp" line="280"/>
         <source>max absolute negative potential</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="278"/>
+        <location filename="../mainwindow.cpp" line="280"/>
         <source>enter max abs negative</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="290"/>
+        <location filename="../mainwindow.cpp" line="292"/>
         <source>distance between equipotential surfaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="290"/>
+        <location filename="../mainwindow.cpp" line="292"/>
+        <location filename="../mainwindow.cpp" line="309"/>
         <source>enter distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="299"/>
+        <location filename="../mainwindow.cpp" line="301"/>
         <source>enter max_error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="307"/>
+        <source>2塊の非荷電電荷の間の電位のサンプルを出力
+電荷が2つ重なってるほうが終端</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

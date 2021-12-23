@@ -1,5 +1,7 @@
 #ifndef LOEF_DRAWER_ELECTRIC_POTENTIAL
 #define LOEF_DRAWER_ELECTRIC_POTENTIAL
+#include <vector>
+
 #include "units.hpp"
 
 //適当な実装
@@ -11,6 +13,7 @@ struct electric_potential {
     bool surface_enabled = false;
     bool disable_LOEF = false;
     volt_quantity distance = 0.0 * boostunits::volt;
+    millimetre_quantity output_sample_diff = 1.0 * mm;
 
     volt_quantity get_current_max_abs_positive();
     volt_quantity get_current_max_abs_negative();

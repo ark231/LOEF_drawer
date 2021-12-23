@@ -45,6 +45,7 @@ class LOEF_drawer : public QWidget {
 
     // lazy impl
     void set_electric_potential(LOEF::experimental::electric_potential *of_parent);
+    std::vector<LOEF::fixed_charge> get_fixed_charges();
     // end lazy impl
 
    private:

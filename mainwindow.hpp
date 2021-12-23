@@ -41,23 +41,19 @@ class MainWindow : public QMainWindow {
     void on_button_save_clicked();
     void on_button_open_clicked();
 
+    // lazy
     void on_actionenable_epcolor_toggled(bool arg1);
-
     void on_actionpositive_triggered();
-
     void on_actionnegative_triggered();
-
     void on_actionenable_epsurface_toggled(bool arg1);
-
     void on_actiondistance_triggered();
-
     void on_actiondisable_LOEF_toggled(bool arg1);
-
     void on_actionuse_input_toggled(bool arg1);
-
     void on_actionmax_error_triggered();
+    void on_actionoutput_samples_triggered();
+    // end lazy
 
-private:
+   private:
     Ui::MainWindow *ui;
     std::unordered_map<LOEF::id_type, QListWidgetItem *> id_to_item_;
     LOEF_individual_fixed_charge_editor *current_selected_editor_ = nullptr;

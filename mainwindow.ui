@@ -223,6 +223,7 @@ version</string>
     <addaction name="menuequipotentioal_surface"/>
     <addaction name="actiondisable_LOEF"/>
     <addaction name="separator"/>
+    <addaction name="actionoutput_samples"/>
    </widget>
    <addaction name="menusettings"/>
    <addaction name="menuexperimental"/>
@@ -297,6 +298,11 @@ version</string>
   <action name="actionmax_error">
    <property name="text">
     <string>max_error</string>
+   </property>
+  </action>
+  <action name="actionoutput_samples">
+   <property name="text">
+    <string>output samples</string>
    </property>
   </action>
  </widget>

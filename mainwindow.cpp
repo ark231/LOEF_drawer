@@ -11,6 +11,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QString>
+#include <QTextStream>
 
 #include "./ui_mainwindow.h"
 #include "general_consts.hpp"
@@ -261,6 +262,7 @@ void MainWindow::on_button_open_clicked() {
     }
 }
 
+// lazy
 void MainWindow::on_actionenable_epcolor_toggled(bool arg1) { this->electric_potential_handler.color_enabled = arg1; }
 
 void MainWindow::on_actionpositive_triggered() {
@@ -299,3 +301,61 @@ void MainWindow::on_actionmax_error_triggered() {
     auto input_max_error = QInputDialog::getDouble(this, tr("max_error"), tr("enter max_error"), 0, 0);
     LOEF::experimental::max_error_surface = input_max_error;
 }
+using LOEF::experimental::mm;
+void MainWindow::on_actionoutput_samples_triggered() {
+    QMessageBox::information(this, tr("output samples"),
+                             tr("2塊の非荷電電荷の間の電位のサンプルを出力\n電荷が2つ重なってるほうが終端"));
+    LOEF::millimetre_quantity distance =
+        QInputDialog::getDouble(this, tr("distance"), tr("enter distance"), 1.0, 0, 2147483647, 10) * LOEF::millimetre;
+    QString output_filename =
+        QInputDialog::getText(this, tr("enter save name"), tr("save name:"), QLineEdit::Normal, tr("untitled"));
+    QFile output_file(QCoreApplication::applicationDirPath() + "/saves/" + output_filename + ".csv");
+    output_file.open(QIODevice::WriteOnly);  //失敗処理の実装は後回し
+    std::vector<LOEF::vec2d> line_ends;
+    auto fixed_charges = this->ui->loef_drawer->get_fixed_charges();
+    for (const auto &fixed_charge : fixed_charges) {
+        if (fixed_charge.quantity().value() == 0.0) {
+            line_ends.push_back(fixed_charge.position());
+        }
+    }
+    if (line_ends.size() != 3) {
+        QMessageBox::information(this, tr("output samples"), tr("couldn't make vector"));
+        output_file.close();
+        return;
+    }
+    LOEF::vec2d start;
+    LOEF::vec2d end;
+    auto diff_01 = (line_ends[0] - line_ends[1]).length().value();
+    auto diff_02 = (line_ends[0] - line_ends[2]).length().value();
+    auto diff_12 = (line_ends[1] - line_ends[2]).length().value();
+    auto min_diff = std::min({diff_01, diff_02, diff_12});
+    if (min_diff == diff_01) {
+        start = line_ends[2];
+        end = (line_ends[0] + line_ends[1]) / 2.0;
+    } else if (min_diff == diff_02) {
+        start = line_ends[1];
+        end = (line_ends[0] + line_ends[2]) / 2.0;
+    } else if (min_diff == diff_12) {
+        start = line_ends[0];
+        end = (line_ends[1] + line_ends[2]) / 2.0;
+    } else {
+        output_file.write("");
+        QMessageBox::information(this, tr("output samples"), tr("couldn't make vector"));
+        output_file.close();
+        return;
+    }
+    QTextStream output_stream(&output_file);
+    for (auto from_start = LOEF::vec2d(0 * mm, 0 * mm); from_start.length() <= (end - start).length();
+         from_start += (normalize(end - start) * distance.value())) {
+        LOEF::volt_quantity potential;
+        for (const auto &fixed_charge : fixed_charges) {
+            auto charge_to_pos = fixed_charge.position() - (start + from_start);
+            potential += LOEF::experimental::k0 * fixed_charge.quantity() /
+                         static_cast<LOEF::metre_quantity>(charge_to_pos.length());
+        }
+        output_stream << from_start.length().value() << "," << potential.value() << "\n";
+    }
+    output_file.close();
+    QMessageBox::information(this, tr("output samples"), tr("output successfully ends"));
+}
+// end lazy
