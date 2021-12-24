@@ -134,6 +134,38 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
     if (this->electric_potential_handler->color_enabled) {
         painter.drawImage(0, 0, prepare_electric_potential_image());
     }
+    if (this->electric_potential_handler->draw_sample_line) {
+        std::vector<LOEF::vec2d> line_ends;
+        for (const auto &charge : fixed_charges_) {
+            if (charge.second.quantity().value() == 0.0) {
+                line_ends.push_back(charge.second.position());
+            }
+        }
+        if (line_ends.size() == 3) {
+            LOEF::vec2d start;
+            LOEF::vec2d end;
+            auto diff_01 = (line_ends[0] - line_ends[1]).length().value();
+            auto diff_02 = (line_ends[0] - line_ends[2]).length().value();
+            auto diff_12 = (line_ends[1] - line_ends[2]).length().value();
+            auto min_diff = std::min({diff_01, diff_02, diff_12});
+            if (min_diff == diff_01) {
+                start = line_ends[2];
+                end = (line_ends[0] + line_ends[1]) / 2.0;
+            } else if (min_diff == diff_02) {
+                start = line_ends[1];
+                end = (line_ends[0] + line_ends[2]) / 2.0;
+            } else if (min_diff == diff_12) {
+                start = line_ends[0];
+                end = (line_ends[1] + line_ends[2]) / 2.0;
+            }
+            painter.save();
+            QPen pen;
+            pen.setColor(Qt::green);
+            painter.setPen(pen);
+            painter.drawLine(start.to_QPointF(dpmm_), end.to_QPointF(dpmm_));
+            painter.restore();
+        }
+    }
     if (this->electric_potential_handler->disable_LOEF == true) {
         return;
     }
@@ -160,37 +192,7 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
     for (auto charge_path = charge_paths_.begin(); charge_path != charge_paths_.end(); charge_path++) {
         painter.draw_LOEF_path(*(charge_path->second));
     }
-    // lazy
-    if (this->electric_potential_handler->draw_sample_line && newtral_fixed_charges.size() == 3) {
-        std::vector<LOEF::vec2d> line_ends;
-        for (const auto &newtral_charge : newtral_fixed_charges) {
-            line_ends.push_back(newtral_charge.second.position());
-        }
-        LOEF::vec2d start;
-        LOEF::vec2d end;
-        auto diff_01 = (line_ends[0] - line_ends[1]).length().value();
-        auto diff_02 = (line_ends[0] - line_ends[2]).length().value();
-        auto diff_12 = (line_ends[1] - line_ends[2]).length().value();
-        auto min_diff = std::min({diff_01, diff_02, diff_12});
-        if (min_diff == diff_01) {
-            start = line_ends[2];
-            end = (line_ends[0] + line_ends[1]) / 2.0;
-        } else if (min_diff == diff_02) {
-            start = line_ends[1];
-            end = (line_ends[0] + line_ends[2]) / 2.0;
-        } else if (min_diff == diff_12) {
-            start = line_ends[0];
-            end = (line_ends[1] + line_ends[2]) / 2.0;
-        }
-        painter.save();
-        QPen pen;
-        pen.setColor(Qt::green);
-        painter.setPen(pen);
-        painter.drawLine(start.to_QPointF(dpmm_), end.to_QPointF(dpmm_));
-        painter.restore();
-    }
 }
-// end lazy
 void LOEF_drawer::calc_LOEF_from_fixed_charges(decltype(fixed_charges_) &fixed_charges, int width, int height) {
     for (const auto &charge : fixed_charges) {
         for (const auto &position :
