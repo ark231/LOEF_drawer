@@ -251,6 +251,11 @@ void MainWindow::on_button_open_clicked() {
     id_to_item_.clear();
     ui->loef_drawer->destroy_all_fixed_charges();
     ui->doubleSpinBox_inverse_permittivity->setValue(saved_data["inverse permittivity"].toDouble());
+    if (saved_data.contains("fixed_charge_radius")) {  //互換性維持のためチェック
+        LOEF::radius::FIXED = saved_data["fixed_charge_radius"].toDouble() * LOEF::millimetre;
+    } else {
+        LOEF::radius::FIXED = LOEF::default_val::radius::FIXED;
+    }
     for (const auto &json_fixed_charge : saved_data["fixed_charges"].toArray()) {
         auto json_object_fixed_charge = json_fixed_charge.toObject();
         LOEF::coulomb_quantity saved_charge_quantity =

@@ -10,6 +10,11 @@ using id_type = size_t;
 namespace radius {
 inline millimetre_quantity FIXED = 2.5 * millimetre;
 }  // namespace radius
+namespace default_val {
+namespace radius {
+inline millimetre_quantity FIXED = 2.5 * millimetre;
+}  // namespace radius
+}  // namespace default_val
 inline millimetre_quantity ARROW_HEIGHT = 3.0 * millimetre;
 inline millimetre_quantity initial_fixed_pos_x = 50 * millimetre;
 inline millimetre_quantity initial_fixed_pos_y = 50 * millimetre;
