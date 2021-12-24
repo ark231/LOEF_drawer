@@ -224,6 +224,7 @@ version</string>
     <addaction name="actiondisable_LOEF"/>
     <addaction name="separator"/>
     <addaction name="actionoutput_samples"/>
+    <addaction name="actionshow_sample_line"/>
    </widget>
    <addaction name="menusettings"/>
    <addaction name="menuexperimental"/>
@@ -303,6 +304,17 @@ version</string>
   <action name="actionoutput_samples">
    <property name="text">
     <string>output samples</string>
+   </property>
+  </action>
+  <action name="actionshow_sample_line">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>show sample line</string>
    </property>
   </action>
  </widget>

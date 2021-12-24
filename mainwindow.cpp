@@ -358,4 +358,8 @@ void MainWindow::on_actionoutput_samples_triggered() {
     output_file.close();
     QMessageBox::information(this, tr("output samples"), tr("output successfully ends"));
 }
+
+void MainWindow::on_actionshow_sample_line_toggled(bool arg1) {
+    this->electric_potential_handler.draw_sample_line = arg1;
+}
 // end lazy
