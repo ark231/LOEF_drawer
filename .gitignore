@@ -76,5 +76,6 @@ compile_commands.json
 Doxyfile
 doc
 
-*build*
+#qtcreator
+build-LOEF_drawer*
 *.user

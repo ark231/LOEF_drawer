@@ -38,6 +38,7 @@ void init_global_vars(QSettings &settings) {
     settings.beginGroup("draw");
     settings.beginGroup("radius");
     LOEF::radius::FIXED = settings.value("FIXED", 2.5).value<double>() * LOEF::millimetre;
+    LOEF::default_val::radius::FIXED = LOEF::radius::FIXED;
     settings.endGroup();
     LOEF::ARROW_HEIGHT = settings.value("ARROW_HEIGHT", 3.0).value<double>() * LOEF::millimetre;
     LOEF::initial_fixed_pos_x = settings.value("initial_fixed_pos_x", 50.0).value<double>() * LOEF::millimetre;
