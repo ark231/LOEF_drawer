@@ -97,6 +97,7 @@ def main(argc,argv):
     general_infos=template_template["general"]
     result={
             "inverse permittivity":general_infos["inverse_permittivity"],
+            "fixed_charge_radius":general_infos["charge_radius"];
             "fixed_charges":[]
             }
     if "lines" in template_template["patterns"]:
