@@ -323,48 +323,75 @@ void MainWindow::on_actionoutput_samples_triggered() {
             line_ends.push_back(fixed_charge.position());
         }
     }
-    if (line_ends.size() != 3) {
-        QMessageBox::information(this, tr("output samples"), tr("couldn't make vector"));
-        output_file.close();
-        return;
-    }
-    LOEF::vec2d start;
-    LOEF::vec2d end;
-    auto diff_01 = (line_ends[0] - line_ends[1]).length().value();
-    auto diff_02 = (line_ends[0] - line_ends[2]).length().value();
-    auto diff_12 = (line_ends[1] - line_ends[2]).length().value();
-    auto min_diff = std::min({diff_01, diff_02, diff_12});
-    if (min_diff == diff_01) {
-        start = line_ends[2];
-        end = (line_ends[0] + line_ends[1]) / 2.0;
-    } else if (min_diff == diff_02) {
-        start = line_ends[1];
-        end = (line_ends[0] + line_ends[2]) / 2.0;
-    } else if (min_diff == diff_12) {
-        start = line_ends[0];
-        end = (line_ends[1] + line_ends[2]) / 2.0;
-    } else {
-        output_file.write("");
-        QMessageBox::information(this, tr("output samples"), tr("couldn't make vector"));
-        output_file.close();
-        return;
-    }
-    QTextStream output_stream(&output_file);
-    for (auto from_start = LOEF::vec2d(0 * mm, 0 * mm); from_start.length() <= (end - start).length();
-         from_start += (normalize(end - start) * distance.value())) {
-        LOEF::volt_quantity potential;
-        for (const auto &fixed_charge : fixed_charges) {
-            auto charge_to_pos = fixed_charge.position() - (start + from_start);
-            potential += LOEF::experimental::k0 * fixed_charge.quantity() /
-                         static_cast<LOEF::metre_quantity>(charge_to_pos.length());
+    if (this->electric_potential_handler.draw_sample_line) {
+        if (line_ends.size() != 3) {
+            QMessageBox::information(this, tr("output samples"), tr("couldn't make vector"));
+            output_file.close();
+            return;
         }
-        output_stream << from_start.length().value() << "," << potential.value() << "\n";
+        LOEF::vec2d start;
+        LOEF::vec2d end;
+        auto diff_01 = (line_ends[0] - line_ends[1]).length().value();
+        auto diff_02 = (line_ends[0] - line_ends[2]).length().value();
+        auto diff_12 = (line_ends[1] - line_ends[2]).length().value();
+        auto min_diff = std::min({diff_01, diff_02, diff_12});
+        if (min_diff == diff_01) {
+            start = line_ends[2];
+            end = (line_ends[0] + line_ends[1]) / 2.0;
+        } else if (min_diff == diff_02) {
+            start = line_ends[1];
+            end = (line_ends[0] + line_ends[2]) / 2.0;
+        } else if (min_diff == diff_12) {
+            start = line_ends[0];
+            end = (line_ends[1] + line_ends[2]) / 2.0;
+        } else {
+            output_file.write("");
+            QMessageBox::information(this, tr("output samples"), tr("couldn't make vector"));
+            output_file.close();
+            return;
+        }
+        QTextStream output_stream(&output_file);
+        for (auto from_start = LOEF::vec2d(0 * mm, 0 * mm); from_start.length() <= (end - start).length();
+             from_start += (normalize(end - start) * distance.value())) {
+            LOEF::volt_quantity potential;
+            for (const auto &fixed_charge : fixed_charges) {
+                auto charge_to_pos = fixed_charge.position() - (start + from_start);
+                potential += LOEF::experimental::k0 * fixed_charge.quantity() /
+                             static_cast<LOEF::metre_quantity>(charge_to_pos.length());
+            }
+            output_stream << from_start.length().value() << "," << potential.value() << "\n";
+        }
+    } else if (this->electric_potential_handler.draw_sample_rectangle) {
+        if (line_ends.size() != 2) {
+            QMessageBox::information(this, tr("output samples"), tr("couldn't make rectangle"));
+            output_file.close();
+            return;
+        }
+        QTextStream output_stream(&output_file);
+        output_stream << "#x,y,potential\n";
+        auto start_x = boost::units::fmin(line_ends[0].x(), line_ends[1].x());
+        auto start_y = boost::units::fmin(line_ends[0].y(), line_ends[1].y());
+        auto end_x = boost::units::fmax(line_ends[0].x(), line_ends[1].x());
+        auto end_y = boost::units::fmax(line_ends[0].y(), line_ends[1].y());
+        for (auto y = start_y; y <= end_y; y += distance) {
+            for (auto x = start_x; x <= end_x; x += distance) {
+                LOEF::volt_quantity potential;
+                for (const auto &fixed_charge : fixed_charges) {
+                    auto charge_to_pos = fixed_charge.position() - LOEF::vec2d(x, y);
+                    potential += LOEF::experimental::k0 * fixed_charge.quantity() /
+                                 static_cast<LOEF::metre_quantity>(charge_to_pos.length());
+                }
+                output_stream << x.value() << "," << y.value() << "," << potential.value() << "\n";
+            }
+        }
     }
     output_file.close();
     QMessageBox::information(this, tr("output samples"), tr("output successfully ends"));
 }
 
-void MainWindow::on_actionshow_sample_line_toggled(bool arg1) {
-    this->electric_potential_handler.draw_sample_line = arg1;
+void MainWindow::on_actionshow_line_toggled(bool arg1) { this->electric_potential_handler.draw_sample_line = arg1; }
+
+void MainWindow::on_actionshow_rectangle_toggled(bool arg1) {
+    this->electric_potential_handler.draw_sample_rectangle = arg1;
 }
 // end lazy

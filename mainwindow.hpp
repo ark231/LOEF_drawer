@@ -51,7 +51,8 @@ class MainWindow : public QMainWindow {
     void on_actionuse_input_toggled(bool arg1);
     void on_actionmax_error_triggered();
     void on_actionoutput_samples_triggered();
-    void on_actionshow_sample_line_toggled(bool arg1);
+    void on_actionshow_line_toggled(bool arg1);
+    void on_actionshow_rectangle_toggled(bool arg1);
     // end lazy
 
    private:

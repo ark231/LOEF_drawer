@@ -165,6 +165,25 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
             painter.drawLine(start.to_QPointF(dpmm_), end.to_QPointF(dpmm_));
             painter.restore();
         }
+    } else if (this->electric_potential_handler->draw_sample_rectangle) {
+        std::vector<LOEF::vec2d> line_ends;
+        for (const auto &charge : fixed_charges_) {
+            if (charge.second.quantity().value() == 0.0) {
+                line_ends.push_back(charge.second.position());
+            }
+        }
+        auto start_x = boost::units::fmin(line_ends[0].x(), line_ends[1].x()) * dpmm_;
+        auto start_y = boost::units::fmin(line_ends[0].y(), line_ends[1].y()) * dpmm_;
+        auto end_x = boost::units::fmax(line_ends[0].x(), line_ends[1].x()) * dpmm_;
+        auto end_y = boost::units::fmax(line_ends[0].y(), line_ends[1].y()) * dpmm_;
+        if (line_ends.size() == 2) {
+            painter.save();
+            QPen pen;
+            pen.setColor(Qt::green);
+            painter.setPen(pen);
+            painter.drawRect(start_x, start_y, end_x - start_x, end_y - start_y);
+            painter.restore();
+        }
     }
     if (this->electric_potential_handler->disable_LOEF == true) {
         return;

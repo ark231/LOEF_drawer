@@ -13,6 +13,7 @@ struct electric_potential {
     bool surface_enabled = false;
     bool disable_LOEF = false;
     bool draw_sample_line = false;
+    bool draw_sample_rectangle = false;
     volt_quantity distance = 0.0 * boostunits::volt;
     millimetre_quantity output_sample_diff = 1.0 * mm;
 

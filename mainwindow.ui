@@ -219,12 +219,20 @@ version</string>
      <addaction name="actiondistance"/>
      <addaction name="actionmax_error"/>
     </widget>
+    <widget class="QMenu" name="menushow_sample">
+     <property name="title">
+      <string>show sample</string>
+     </property>
+     <addaction name="separator"/>
+     <addaction name="actionshow_line"/>
+     <addaction name="actionshow_rectangle"/>
+    </widget>
     <addaction name="menucolorize_electric_potential"/>
     <addaction name="menuequipotentioal_surface"/>
     <addaction name="actiondisable_LOEF"/>
     <addaction name="separator"/>
+    <addaction name="menushow_sample"/>
     <addaction name="actionoutput_samples"/>
-    <addaction name="actionshow_sample_line"/>
    </widget>
    <addaction name="menusettings"/>
    <addaction name="menuexperimental"/>
@@ -301,20 +309,25 @@ version</string>
     <string>max_error</string>
    </property>
   </action>
-  <action name="actionoutput_samples">
-   <property name="text">
-    <string>output samples</string>
-   </property>
-  </action>
-  <action name="actionshow_sample_line">
+  <action name="actionshow_line">
    <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="checked">
-    <bool>false</bool>
+   <property name="text">
+    <string>line</string>
+   </property>
+  </action>
+  <action name="actionshow_rectangle">
+   <property name="checkable">
+    <bool>true</bool>
    </property>
    <property name="text">
-    <string>show sample line</string>
+    <string>rectangle</string>
+   </property>
+  </action>
+  <action name="actionoutput_samples">
+   <property name="text">
+    <string>output_samples</string>
    </property>
   </action>
  </widget>
