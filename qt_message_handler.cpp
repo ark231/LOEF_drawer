@@ -6,7 +6,7 @@
 
 namespace LOEF {
 namespace qt {
-void message_hander(QtMsgType type, const QMessageLogContext&, const QString& message) {
+void message_hander(QtMsgType type, const QMessageLogContext &, const QString &message) {
 #ifndef QT_NO_DEBUG_OUTPUT
     std::cerr << message.toStdString() << std::endl;
     if (type == QtFatalMsg) {

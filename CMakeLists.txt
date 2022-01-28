@@ -11,7 +11,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
+find_package(Qt5 5.13 COMPONENTS Widgets LinguistTools REQUIRED)
 
 add_subdirectory(libs)
 if(${LOEF_NOUPDATE}=="yes")
@@ -71,3 +71,10 @@ install(FILES ${LOEF_QM_FILES}
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/settings ${CMAKE_CURRENT_BINARY_DIR}/saves
     DESTINATION ${CMAKE_INSTALL_PREFIX}
     )
+##for debugging
+#message(STATUS "*** dump start cmake variables ***")
+#get_cmake_property(_variableNames VARIABLES)
+#foreach(_variableName ${_variableNames})
+#	message(STATUS "${_variableName}=${${_variableName}}")
+#endforeach()
+#message(STATUS "*** dump end ***")

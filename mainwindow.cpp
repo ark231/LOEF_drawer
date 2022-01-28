@@ -168,7 +168,9 @@ void MainWindow::on_actionJapanese_triggered(bool arg1) {
 
 bool MainWindow::confirm_restart() {
     QMessageBox msgbox(this);
-    msgbox.setText(tr("This change require restarting this program.\nDo you want to restart this program?"));
+    msgbox.setText(
+        tr("This change require restarting this program.\nDo you want "
+           "to restart this program?"));
     msgbox.setWindowTitle(tr("confirm restart"));
     msgbox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgbox.setDefaultButton(QMessageBox::Yes);
@@ -212,7 +214,9 @@ void MainWindow::on_button_save_clicked() {
                 break;
             } else {
                 QMessageBox msgbox(this);
-                msgbox.setText(tr("save file with entered name already exists.\ndo you want to overwrite it?"));
+                msgbox.setText(
+                    tr("save file with entered name already exists.\ndo you "
+                       "want to overwrite it?"));
                 msgbox.setWindowTitle(tr("save file exists"));
                 msgbox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgbox.setDefaultButton(QMessageBox::No);
@@ -309,7 +313,8 @@ void MainWindow::on_actionmax_error_triggered() {
 using LOEF::experimental::mm;
 void MainWindow::on_actionoutput_samples_triggered() {
     QMessageBox::information(this, tr("output samples"),
-                             tr("2塊の非荷電電荷の間の電位のサンプルを出力\n電荷が2つ重なってるほうが終端"));
+                             tr("2塊の非荷電電荷の間の電位のサンプルを出力\n電荷"
+                                "が2つ重なってるほうが終端"));
     LOEF::millimetre_quantity distance =
         QInputDialog::getDouble(this, tr("distance"), tr("enter distance"), 1.0, 0, 2147483647, 10) * LOEF::millimetre;
     QString output_filename =
