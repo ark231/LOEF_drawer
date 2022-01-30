@@ -45,6 +45,7 @@ class LOEF_drawer : public QWidget {
 
     // lazy impl
     void set_electric_potential(LOEF::experimental::electric_potential *of_parent);
+    void set_is_ready_made_requested(bool *of_parent);
     std::vector<LOEF::fixed_charge> get_fixed_charges();
     // end lazy impl
 
@@ -63,6 +64,7 @@ class LOEF_drawer : public QWidget {
 
     // lazy impl
     LOEF::experimental::electric_potential *electric_potential_handler = nullptr;
+    bool *is_ready_made_requested = nullptr;
     // end lazy impl
 
     void paintEvent(QPaintEvent *ev) override;

@@ -34,6 +34,9 @@ class charge_pen {
     step_status step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end,
                              dot_per_millimetre_quantity dpmm);
     std::shared_ptr<LOEF_path> get_path();
+    // lazy
+    vec2d position();
+    // end lazy
 };
 }  // namespace LOEF
 

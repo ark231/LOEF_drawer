@@ -29,6 +29,7 @@ MainWindow::MainWindow(QLocale locale, QWidget *parent) : QMainWindow(parent), u
     this->setWindowTitle(LOEF::application_name);
     // lazy
     ui->loef_drawer->set_electric_potential(&this->electric_potential_handler);
+    ui->loef_drawer->set_is_ready_made_requested(&this->is_ready_made_requested);
     // end lazy
     connect(ui->loef_drawer, SIGNAL(fixed_charge_selected(LOEF::id_type)), this,
             SLOT(slot_fixed_charge_selected(LOEF::id_type)));
@@ -400,3 +401,5 @@ void MainWindow::on_actionshow_rectangle_toggled(bool arg1) {
     this->electric_potential_handler.draw_sample_rectangle = arg1;
 }
 // end lazy
+
+void MainWindow::on_actionuse_ready_made_algorithm_triggered(bool checked) { this->is_ready_made_requested = checked; }

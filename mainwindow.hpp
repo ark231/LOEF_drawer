@@ -53,6 +53,7 @@ class MainWindow : public QMainWindow {
     void on_actionoutput_samples_triggered();
     void on_actionshow_line_toggled(bool arg1);
     void on_actionshow_rectangle_toggled(bool arg1);
+    void on_actionuse_ready_made_algorithm_triggered(bool checked);
     // end lazy
 
    private:
@@ -62,8 +63,11 @@ class MainWindow : public QMainWindow {
     QPoint fixed_charge_editor_last_pos_ = LOEF::invalid_position;
 
    public:
+    // lazy
     /*experimental*/
     LOEF::experimental::electric_potential electric_potential_handler;
+    bool is_ready_made_requested = false;
+    // end lazy
 
    private:
     void add_fixed_charge(const LOEF::coulomb_quantity initial_quantity, const LOEF::millimetre_quantity initial_X,

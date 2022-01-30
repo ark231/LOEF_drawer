@@ -233,6 +233,8 @@ version</string>
     <addaction name="separator"/>
     <addaction name="menushow_sample"/>
     <addaction name="actionoutput_samples"/>
+    <addaction name="separator"/>
+    <addaction name="actionuse_ready_made_algorithm"/>
    </widget>
    <addaction name="menusettings"/>
    <addaction name="menuexperimental"/>
@@ -328,6 +330,14 @@ version</string>
   <action name="actionoutput_samples">
    <property name="text">
     <string>output_samples</string>
+   </property>
+  </action>
+  <action name="actionuse_ready_made_algorithm">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>use ready-made algorithm</string>
    </property>
   </action>
  </widget>

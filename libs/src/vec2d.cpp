@@ -11,7 +11,6 @@ basic_vec2d_<QUANTITY>::basic_vec2d_(QUANTITY x, QUANTITY y) {
     this->x_ = x;
     this->y_ = y;
 }
-
 template <class QUANTITY>
 QUANTITY basic_vec2d_<QUANTITY>::length() const {
     return boost::units::sqrt(x_ * x_ + y_ * y_);
@@ -118,6 +117,10 @@ vec2d_position::vec2d_position(const basic_vec2d_<millimetre_quantity> &point) {
     this->x_ = point.x();
     this->y_ = point.y();
 }
+// lazy
+using LOEF::experimental::mm;
+vec2d_position::vec2d_position(std::array<double, 2> vec) : super(vec[0] * mm, vec[1] * mm) {}
+// end lazy
 decltype(vec2d_position::x_ * vec2d_position::x_) vec2d_position::length_square() const { return (x_ * x_ + y_ * y_); }
 
 QPoint vec2d_position::to_QPoint(dot_per_millimetre_quantity dpmm) { return QPoint(x_ * dpmm, y_ * dpmm); }

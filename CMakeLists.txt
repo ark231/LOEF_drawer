@@ -45,6 +45,7 @@ add_executable(LOEF_drawer
 
     experimental/electric_potential.cpp
     experimental/lazy_helper.cpp
+    experimental/differential_equation.cpp
 )
 
 target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra )

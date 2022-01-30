@@ -21,6 +21,9 @@ charge_pen::charge_pen(bool is_positive, vec2d initial_position, millimetre_quan
 }
 
 std::shared_ptr<LOEF_path> charge_pen::get_path() { return path; }
+// lazy
+vec2d charge_pen::position() { return this->position_; }
+// end lazy
 #endif
 template <class fixed_charge_map_iterator_>
 step_status charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end,

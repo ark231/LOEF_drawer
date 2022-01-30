@@ -11,7 +11,9 @@
 #include <iterator>
 
 #include "LOEF_QPainter.hpp"
+#include "boost/numeric/odeint.hpp"
 #include "debug_outputs.hpp"
+#include "experimental/differential_equation.hpp"
 #include "experimental/electric_potential.hpp"
 #include "experimental/lazy_helper.hpp"
 #include "general_consts.hpp"
@@ -226,6 +228,20 @@ void LOEF_drawer::calc_LOEF_from_fixed_charges(decltype(fixed_charges_) &fixed_c
     }
 }
 void LOEF_drawer::prepare_LOEF_pathes() {
+    if (*(this->is_ready_made_requested)) {
+        auto pen = (*charge_pens_.begin()).second;
+        auto path = pen.get_path();
+        using fixedMapIter = decltype(fixed_charges_.begin());
+        using LOEF::experimental::mm;
+        LOEF::experimental::LOEF_system<fixedMapIter>::state_type state0 = {pen.position().x().value(),
+                                                                            pen.position().y().value()};
+        LOEF::experimental::LOEF_system<fixedMapIter> system(fixed_charges_.begin(), fixed_charges_.end());
+        boost::numeric::odeint::integrate(std::ref(system), state0, 0., 10., 0.01,
+                                          [&](const LOEF::experimental::LOEF_system<fixedMapIter>::state_type &state,
+                                              const double) { path->lineTo(LOEF::vec2d(state).to_QPointF(dpmm_)); });
+        return;
+    }
+
     std::vector<LOEF::id_type> ids_to_erase;
     while (!charge_pens_.empty()) {
         for (auto charge_pen = charge_pens_.begin(); charge_pen != charge_pens_.end(); charge_pen++) {
@@ -405,6 +421,7 @@ void LOEF_drawer::keyReleaseEvent(QKeyEvent *ev) {
 void LOEF_drawer::set_electric_potential(LOEF::experimental::electric_potential *of_parent) {
     this->electric_potential_handler = of_parent;
 }
+void LOEF_drawer::set_is_ready_made_requested(bool *of_parent) { this->is_ready_made_requested = of_parent; }
 QImage LOEF_drawer::prepare_electric_potential_image() {
     auto width = this->width();
     auto height = this->height();
