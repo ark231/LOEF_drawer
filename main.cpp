@@ -51,6 +51,11 @@ void init_global_vars(QSettings &settings) {
     // lazy
     settings.beginGroup("experimental");
     LOEF::experimental::max_error_surface = settings.value("max_error_surface", 1.0).value<double>();
+    settings.beginGroup("integrate");
+    LOEF::experimental::integrate::start_time = settings.value("start_time", 0.).value<double>();
+    LOEF::experimental::integrate::end_time = settings.value("end_time", 10.).value<double>();
+    LOEF::experimental::integrate::dt = settings.value("dt", 0.1).value<double>();
+    settings.endGroup();
     settings.endGroup();
     // end lazy
     settings.endGroup();
@@ -69,6 +74,11 @@ void generate_settings_file(QSettings &settings) {
     // lazy
     settings.beginGroup("experimental");
     settings.setValue("max_error_surface", 1.0);
+    settings.beginGroup("integrate");
+    settings.setValue("start_time", 0.);
+    settings.setValue("end_time", qInf());
+    settings.setValue("dt", 0.1);
+    settings.endGroup();
     settings.endGroup();
     // end lazy
     settings.endGroup();

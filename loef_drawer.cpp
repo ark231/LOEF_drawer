@@ -222,6 +222,7 @@ void LOEF_drawer::calc_LOEF_from_fixed_charges(decltype(fixed_charges_) &fixed_c
             auto pen_id = charge_pen_id_handler_->new_id();
             charge_pens_[pen_id] = LOEF::charge_pen(charge.second.quantity() > 0.0 * LOEF::boostunits::coulomb,
                                                     position, LOEF::interval_steps, width, height, dpmm_);
+            charge_pens_[pen_id].origin = charge.first;
             charge_paths_[pen_id] = charge_pens_[pen_id].get_path();
         }
         prepare_LOEF_pathes();
@@ -229,16 +230,66 @@ void LOEF_drawer::calc_LOEF_from_fixed_charges(decltype(fixed_charges_) &fixed_c
 }
 void LOEF_drawer::prepare_LOEF_pathes() {
     if (*(this->is_ready_made_requested)) {
-        auto pen = (*charge_pens_.begin()).second;
-        auto path = pen.get_path();
-        using fixedMapIter = decltype(fixed_charges_.begin());
-        using LOEF::experimental::mm;
-        LOEF::experimental::LOEF_system<fixedMapIter>::state_type state0 = {pen.position().x().value(),
-                                                                            pen.position().y().value()};
-        LOEF::experimental::LOEF_system<fixedMapIter> system(fixed_charges_.begin(), fixed_charges_.end());
-        boost::numeric::odeint::integrate(std::ref(system), state0, 0., 10., 0.01,
-                                          [&](const LOEF::experimental::LOEF_system<fixedMapIter>::state_type &state,
-                                              const double) { path->lineTo(LOEF::vec2d(state).to_QPointF(dpmm_)); });
+        for (auto pen_itr = charge_pens_.begin(); pen_itr != charge_pens_.end(); pen_itr++) {
+            auto pen = pen_itr->second;
+            auto path = pen.get_path();
+            /*
+            if (not path->is_positive()) {
+                return;
+            }
+            */
+            using fixedMapIter = decltype(fixed_charges_.begin());
+            using LOEF::experimental::mm;
+            LOEF::experimental::LOEF_system<fixedMapIter>::state_type state0 = {pen.position().x().value(),
+                                                                                pen.position().y().value()};
+            LOEF::experimental::LOEF_system<fixedMapIter> system(fixed_charges_.begin(), fixed_charges_.end(),
+                                                                 path->is_positive());
+            path->moveTo(LOEF::vec2d(state0).to_QPointF(dpmm_));
+            try {
+                auto observer = [&, this](const LOEF::experimental::LOEF_system<fixedMapIter>::state_type &state,
+                                          const double) {
+                    if (LOEF::experimental::calc_shortest_distance(fixed_charges_.begin(), fixed_charges_.end(), state,
+                                                                   {pen.origin}, [](LOEF::fixed_charge charge) {
+                                                                       return charge.quantity() ==
+                                                                              0.0 * LOEF::boostunits::coulomb;
+                                                                   }) < LOEF::radius::FIXED) {
+                        auto idx_entered_charge = LOEF::experimental::find_closest(
+                            fixed_charges_.begin(), fixed_charges_.end(), state, [&](LOEF::fixed_charge charge) {
+                                if (path->is_positive()) {
+                                    return charge.quantity() >= 0.0 * LOEF::boostunits::coulomb;
+                                } else {
+                                    return charge.quantity() <= 0.0 * LOEF::boostunits::coulomb;
+                                }
+                            });
+                        auto &entered_charge = fixed_charges_[idx_entered_charge];
+                        auto charge_to_pos = LOEF::vec2d(state) - entered_charge.position();
+                        entered_charge.pen_arrive(charge_to_pos);
+                        throw std::runtime_error("entered into a charge");
+                    }
+                    if (not boost::units::isfinite(LOEF::vec2d(state).x()) or
+                        not boost::units::isfinite(LOEF::vec2d(state).y())) {
+                        throw std::runtime_error("illigal calculation happened");
+                    }
+                    if (not pen.is_on_screen(dpmm_)) {
+                        throw std::runtime_error("go out of screen");
+                    }
+                    path->lineTo(LOEF::vec2d(state).to_QPointF(dpmm_));
+                };
+                using StepperBase = boost::numeric::odeint::runge_kutta_dopri5<
+                    LOEF::experimental::LOEF_system<fixedMapIter>::state_type>;
+                auto stepper = boost::numeric::odeint::make_dense_output(0.001, 0.001, StepperBase());
+                boost::numeric::odeint::integrate_const(
+                    stepper, std::ref(system), state0, LOEF::experimental::integrate::start_time,
+                    LOEF::experimental::integrate::end_time, LOEF::experimental::integrate::dt, observer);
+                /*
+                boost::numeric::odeint::integrate(std::ref(system), state0, LOEF::experimental::integrate::start_time,
+                                                  LOEF::experimental::integrate::end_time,
+                                                  LOEF::experimental::integrate::dt, observer);
+                                                  */
+            } catch (std::runtime_error err) {  //握りつぶす
+                qDebug() << pen_itr->first << err.what();
+            }
+        }
         return;
     }
 

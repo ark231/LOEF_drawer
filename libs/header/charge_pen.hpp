@@ -7,6 +7,9 @@
 #include "basic_charge.hpp"
 #include "general_consts.hpp"
 #include "vec2d.hpp"
+// lazy
+#include "charges.hpp"
+// end lazy
 namespace LOEF {
 class LOEF_path : public QPainterPath {
     using QPainterPath::QPainterPath;
@@ -25,6 +28,10 @@ class charge_pen {
     int max_x = 0;
     int max_y = 0;
     std::shared_ptr<LOEF_path> path;
+    // lazy
+   public:
+    id_type origin;
+    // end lazy
 
    public:
     charge_pen(bool is_positive, vec2d initial_position, millimetre_quantity interval, int max_x, int max_y,
@@ -36,6 +43,7 @@ class charge_pen {
     std::shared_ptr<LOEF_path> get_path();
     // lazy
     vec2d position();
+    bool is_on_screen(dot_per_millimetre_quantity);
     // end lazy
 };
 }  // namespace LOEF

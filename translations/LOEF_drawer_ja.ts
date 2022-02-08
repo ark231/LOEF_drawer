@@ -4,12 +4,12 @@
 <context>
     <name>LOEF_drawer</name>
     <message>
-        <location filename="../loef_drawer.cpp" line="441"/>
+        <location filename="../loef_drawer.cpp" line="489"/>
         <source>distance cannot be zero!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../loef_drawer.cpp" line="441"/>
+        <location filename="../loef_drawer.cpp" line="489"/>
         <source>enter non zero distance</source>
         <translation type="unfinished"></translation>
     </message>
