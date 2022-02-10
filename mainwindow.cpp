@@ -27,7 +27,7 @@ MainWindow::MainWindow(QLocale locale, QWidget *parent) : QMainWindow(parent), u
                                     .arg(LOEF::version_major)
                                     .arg(LOEF::version_minor)
                                     .arg(LOEF::version_patch)
-                                    .arg(LOEF::version_suffix);
+                                    .arg(LOEF::version_suffix));
     this->setWindowTitle(LOEF::application_name);
     // lazy
     ui->loef_drawer->set_electric_potential(&this->electric_potential_handler);
@@ -404,3 +404,30 @@ void MainWindow::on_actionshow_rectangle_toggled(bool arg1) {
     this->electric_potential_handler.draw_sample_rectangle = arg1;
 }
 // end lazy
+
+void MainWindow::on_actionabout_qt_triggered() { QMessageBox::aboutQt(this, tr("about Qt")); }
+
+void MainWindow::on_actionabout_LOEF_drawer_triggered() {
+    QString locale_suffix = "";
+    if (this->ui->actionJapanese->isChecked()) {
+        locale_suffix = "ja";
+    } else if (this->ui->actionEnglish->isChecked()) {
+        locale_suffix = "en";
+    }
+    QFile description_file(QStringLiteral(":/res/text/about_LOEF_drawer_%1.html").arg(locale_suffix));
+    qDebug() << description_file.fileName() << "exists()==" << description_file.exists();
+    if (not description_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, tr("failed to open resource"),
+                             tr("failed to open resource %1").arg(description_file.fileName()));
+        return;
+    }
+    auto description = QTextStream(&description_file).readAll();
+    auto version = QString("%1.%2.%3%4")
+                       .arg(LOEF::version_major)
+                       .arg(LOEF::version_minor)
+                       .arg(LOEF::version_patch)
+                       .arg(LOEF::version_suffix);
+    qDebug() << description;
+    QMessageBox::about(this, tr("about LOEF_drawer"),
+                       description.replace("LOEF_VERSION", version).replace("LOEF_BUILD_TYPE", LOEF::build_type));
+}
