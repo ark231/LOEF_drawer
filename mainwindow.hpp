@@ -54,6 +54,9 @@ class MainWindow : public QMainWindow {
     void on_actionshow_line_toggled(bool arg1);
     void on_actionshow_rectangle_toggled(bool arg1);
     // end lazy
+    void on_actionabout_qt_triggered();
+
+    void on_actionabout_LOEF_drawer_triggered();
 
    private:
     Ui::MainWindow *ui;

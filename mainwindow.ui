@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="main_resources.qrc">
+    <normaloff>:/res/image/icon_round.png</normaloff>:/res/image/icon_round.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -234,8 +238,16 @@ version</string>
     <addaction name="menushow_sample"/>
     <addaction name="actionoutput_samples"/>
    </widget>
+   <widget class="QMenu" name="menucredit">
+    <property name="title">
+     <string>help</string>
+    </property>
+    <addaction name="actionabout_LOEF_drawer"/>
+    <addaction name="actionabout_qt"/>
+   </widget>
    <addaction name="menusettings"/>
    <addaction name="menuexperimental"/>
+   <addaction name="menucredit"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionEnglish">
@@ -330,6 +342,16 @@ version</string>
     <string>output_samples</string>
    </property>
   </action>
+  <action name="actionabout_qt">
+   <property name="text">
+    <string>about Qt</string>
+   </property>
+  </action>
+  <action name="actionabout_LOEF_drawer">
+   <property name="text">
+    <string>about LOEF_drawer</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -338,6 +360,8 @@ version</string>
    <header>loef_drawer.hpp</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="main_resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

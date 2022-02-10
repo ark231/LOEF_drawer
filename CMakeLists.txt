@@ -51,6 +51,7 @@ add_executable(LOEF_drawer
     loef_individual_fixed_charge_editor.hpp
     loef_individual_fixed_charge_editor.ui
     ${LOEF_QM_FILES}
+    main_resources.qrc
 
     experimental/electric_potential.cpp
     experimental/lazy_helper.cpp
