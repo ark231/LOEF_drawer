@@ -127,74 +127,74 @@ version</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="106"/>
-        <location filename="../mainwindow.cpp" line="119"/>
+        <location filename="../mainwindow.cpp" line="107"/>
+        <location filename="../mainwindow.cpp" line="120"/>
         <source>positive charge</source>
         <translation>正電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="108"/>
-        <location filename="../mainwindow.cpp" line="121"/>
+        <location filename="../mainwindow.cpp" line="109"/>
+        <location filename="../mainwindow.cpp" line="122"/>
         <source>null charge</source>
         <translatorcomment>もっとマシな呼び方募集中</translatorcomment>
         <translation>非荷電電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="110"/>
-        <location filename="../mainwindow.cpp" line="123"/>
+        <location filename="../mainwindow.cpp" line="111"/>
+        <location filename="../mainwindow.cpp" line="124"/>
         <source>negative charge</source>
         <translation>負電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="166"/>
+        <location filename="../mainwindow.cpp" line="169"/>
         <source>This change require restarting this program.
 Do you want to restart this program?</source>
         <translation>この変更を反映させるにはプログラムの再起動が必要です。
 このプログラムを再起動しますか？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="167"/>
+        <location filename="../mainwindow.cpp" line="170"/>
         <source>confirm restart</source>
         <translation>再起動を確認</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="198"/>
-        <location filename="../mainwindow.cpp" line="221"/>
+        <location filename="../mainwindow.cpp" line="201"/>
+        <location filename="../mainwindow.cpp" line="224"/>
         <source>enter save name</source>
         <translation>保存名を入力してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="198"/>
-        <location filename="../mainwindow.cpp" line="221"/>
+        <location filename="../mainwindow.cpp" line="201"/>
+        <location filename="../mainwindow.cpp" line="224"/>
         <source>save name:</source>
         <translatorcomment>もうちょっといい呼び名がある気がするが、、、</translatorcomment>
         <translation>保存タイトル:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="199"/>
-        <location filename="../mainwindow.cpp" line="222"/>
+        <location filename="../mainwindow.cpp" line="202"/>
+        <location filename="../mainwindow.cpp" line="225"/>
         <source>untitled</source>
         <translation>無題</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="210"/>
+        <location filename="../mainwindow.cpp" line="213"/>
         <source>save file with entered name already exists.
 do you want to overwrite it?</source>
         <translation>同名のファイルがすでに存在しています。
 上書きしますか？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="211"/>
+        <location filename="../mainwindow.cpp" line="214"/>
         <source>save file exists</source>
         <translation>ファイルがすでに存在します</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="237"/>
+        <location filename="../mainwindow.cpp" line="240"/>
         <source>open save file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="237"/>
+        <location filename="../mainwindow.cpp" line="240"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
