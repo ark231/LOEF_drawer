@@ -8,6 +8,7 @@
 #include "mainwindow.hpp"
 #include "qt_consts.hpp"
 #include "qt_message_handler.hpp"
+#include "qt_toml_settings.hpp"
 
 void init_global_vars(QSettings &);
 void generate_settings_file(QSettings &);
@@ -16,8 +17,11 @@ int main(int argc, char *argv[]) {
     do {
         qInstallMessageHandler(LOEF::qt::message_hander);
         QApplication a(argc, argv);
+        LOEF::qt::TOML_format = QSettings::registerFormat("toml", LOEF::qt::read_toml, LOEF::qt::write_toml);
 
-        QSettings settings(QCoreApplication::applicationDirPath() + "/settings/settings.ini", QSettings::IniFormat);
+        Q_ASSERT(LOEF::qt::TOML_format != QSettings::InvalidFormat);
+        QSettings settings(QCoreApplication::applicationDirPath() + "/settings/settings." + LOEF::configfile_ext,
+                           LOEF_QT_CONFIG_FORMAT);
         settings.beginGroup("init");
         QLocale selected_locale = settings.value("locale", QLocale("en")).value<QLocale>();
         settings.endGroup();

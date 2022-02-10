@@ -18,6 +18,7 @@
 #include "loef_drawer.hpp"
 #include "loef_individual_fixed_charge_editor.hpp"
 #include "qt_consts.hpp"
+#include "qt_toml_settings.hpp"
 
 MainWindow::MainWindow(QLocale locale, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -140,7 +141,8 @@ void MainWindow::slot_fixed_charge_selected(LOEF::id_type id) {
 
 void MainWindow::on_actionEnglish_triggered(bool arg1) {
     if (arg1) {
-        QSettings settings(QCoreApplication::applicationDirPath() + "/settings/settings.ini", QSettings::IniFormat);
+        QSettings settings(QCoreApplication::applicationDirPath() + "/settings/settings." + LOEF::configfile_ext,
+                           LOEF_QT_CONFIG_FORMAT);
         settings.beginGroup("init");
         settings.setValue("locale", QLocale("en"));
         settings.endGroup();
@@ -154,7 +156,8 @@ void MainWindow::on_actionEnglish_triggered(bool arg1) {
 
 void MainWindow::on_actionJapanese_triggered(bool arg1) {
     if (arg1) {
-        QSettings settings(QCoreApplication::applicationDirPath() + "/settings/settings.ini", QSettings::IniFormat);
+        QSettings settings(QCoreApplication::applicationDirPath() + "/settings/settings." + LOEF::configfile_ext,
+                           LOEF_QT_CONFIG_FORMAT);
         settings.beginGroup("init");
         settings.setValue("locale", QLocale("ja"));
         settings.endGroup();
