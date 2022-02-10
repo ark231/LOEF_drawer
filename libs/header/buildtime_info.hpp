@@ -7,6 +7,8 @@ namespace LOEF {
 constexpr const int version_major = -1;
 constexpr const int version_minor = -1;
 constexpr const int version_patch = -1;
+constexpr const char* version_suffix = "";
+constexpr const char* build_type = "";
 }  // namespace LOEF
 #endif
 #endif
