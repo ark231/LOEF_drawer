@@ -28,7 +28,6 @@ void decode_data(QSettings::SettingsMap &dst, const toml::value &data, const QSt
             auto matched = re.match(str);
             if (matched.hasMatch()) {
                 if (matched.captured(1) == "QLocale") {
-                    qDebug() << matched.captured(2);
                     dst[key_offset] = QVariant::fromValue(QLocale(matched.captured(2)));
                 } else {
                     std::stringstream err_msg;
@@ -84,7 +83,6 @@ bool read_toml(QIODevice &device, QSettings::SettingsMap &map) {
                 break;
         }
     }
-    qDebug() << map;
     return true;
 }
 void assign_variant(toml::value &table, const std::string &key, const QVariant &value) {
