@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(LOEF_drawer LANGUAGES CXX VERSION 1.0.3.0)
+project(LOEF_drawer LANGUAGES CXX VERSION 1.0.4.0)
+set(${CMAKE_PROJECT_NAME}_VERSION_SUFFIX -dev)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -31,9 +32,17 @@ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/translations)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/settings)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/saves)
 
+include(cmake/CPM.cmake)
+CPMAddPackage(
+    NAME toml11
+    GITHUB_REPOSITORY ToruNiina/toml11
+    GIT_TAG v3.7.0
+)
+
 add_executable(LOEF_drawer
     main.cpp
     qt_message_handler.cpp
+    qt_toml_settings.cpp
     mainwindow.cpp
     mainwindow.hpp
     mainwindow.ui
@@ -42,6 +51,7 @@ add_executable(LOEF_drawer
     loef_individual_fixed_charge_editor.hpp
     loef_individual_fixed_charge_editor.ui
     ${LOEF_QM_FILES}
+    main_resources.qrc
 
     experimental/electric_potential.cpp
     experimental/lazy_helper.cpp
@@ -61,6 +71,7 @@ target_include_directories(LOEF_drawer PRIVATE
     ${LOEF_drawer_libs_header_BINARY_DIR}
 
     ${CMAKE_CURRENT_SOURCE_DIR}/experimental
+    ${toml11_SOURCE_DIR}
     )
 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/LOEF_drawer${CMAKE_EXECUTABLE_SUFFIX}
