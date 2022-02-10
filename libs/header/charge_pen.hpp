@@ -38,7 +38,7 @@ class charge_pen {
 }  // namespace LOEF
 
 #ifndef LOEF_DRAWER_CHARGES_LIBRARY_BUILD
-#include "charge_pen.cpp"  //implementation of template function
+#    include "charge_pen.cpp"  //implementation of template function
 #endif
 
 #endif

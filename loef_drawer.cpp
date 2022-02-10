@@ -1,6 +1,8 @@
 #include "loef_drawer.hpp"
 
+#include <QDebug>
 #include <QGuiApplication>
+#include <QInputDialog>
 #include <QJsonArray>
 #include <QMouseEvent>
 #include <QScreen>
@@ -10,6 +12,9 @@
 
 #include "LOEF_QPainter.hpp"
 #include "debug_outputs.hpp"
+#include "experimental/electric_potential.hpp"
+#include "experimental/lazy_helper.hpp"
+#include "general_consts.hpp"
 #include "units.hpp"
 namespace LOEF {
 class state_charge_selected_ {
@@ -125,6 +130,65 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
     if (!draw_LOEF_requested) {
         return;
     }
+    // lazy
+    if (this->electric_potential_handler->color_enabled) {
+        painter.drawImage(0, 0, prepare_electric_potential_image());
+    }
+    if (this->electric_potential_handler->draw_sample_line) {
+        std::vector<LOEF::vec2d> line_ends;
+        for (const auto &charge : fixed_charges_) {
+            if (charge.second.quantity().value() == 0.0) {
+                line_ends.push_back(charge.second.position());
+            }
+        }
+        if (line_ends.size() == 3) {
+            LOEF::vec2d start;
+            LOEF::vec2d end;
+            auto diff_01 = (line_ends[0] - line_ends[1]).length().value();
+            auto diff_02 = (line_ends[0] - line_ends[2]).length().value();
+            auto diff_12 = (line_ends[1] - line_ends[2]).length().value();
+            auto min_diff = std::min({diff_01, diff_02, diff_12});
+            if (min_diff == diff_01) {
+                start = line_ends[2];
+                end = (line_ends[0] + line_ends[1]) / 2.0;
+            } else if (min_diff == diff_02) {
+                start = line_ends[1];
+                end = (line_ends[0] + line_ends[2]) / 2.0;
+            } else if (min_diff == diff_12) {
+                start = line_ends[0];
+                end = (line_ends[1] + line_ends[2]) / 2.0;
+            }
+            painter.save();
+            QPen pen;
+            pen.setColor(Qt::green);
+            painter.setPen(pen);
+            painter.drawLine(start.to_QPointF(dpmm_), end.to_QPointF(dpmm_));
+            painter.restore();
+        }
+    } else if (this->electric_potential_handler->draw_sample_rectangle) {
+        std::vector<LOEF::vec2d> line_ends;
+        for (const auto &charge : fixed_charges_) {
+            if (charge.second.quantity().value() == 0.0) {
+                line_ends.push_back(charge.second.position());
+            }
+        }
+        auto start_x = boost::units::fmin(line_ends[0].x(), line_ends[1].x()) * dpmm_;
+        auto start_y = boost::units::fmin(line_ends[0].y(), line_ends[1].y()) * dpmm_;
+        auto end_x = boost::units::fmax(line_ends[0].x(), line_ends[1].x()) * dpmm_;
+        auto end_y = boost::units::fmax(line_ends[0].y(), line_ends[1].y()) * dpmm_;
+        if (line_ends.size() == 2) {
+            painter.save();
+            QPen pen;
+            pen.setColor(Qt::green);
+            painter.setPen(pen);
+            painter.drawRect(start_x, start_y, end_x - start_x, end_y - start_y);
+            painter.restore();
+        }
+    }
+    if (this->electric_potential_handler->disable_LOEF == true) {
+        return;
+    }
+    // end lazy
     LOEF::clear_pens_arrival_to_fixed_charges(fixed_charges_.begin(), fixed_charges_.end());
     decltype(fixed_charges_) positive_fixed_charges;
     decltype(fixed_charges_) newtral_fixed_charges;
@@ -252,6 +316,15 @@ void LOEF_drawer::replace_fixed_charge(const LOEF::id_type id,
 void LOEF_drawer::clear_and_redraw() {
     charge_pens_.clear();
     charge_paths_.clear();
+    // lazy
+    if (!this->electric_potential_handler->color_use_input) {
+        this->electric_potential_handler->set_current_max_abs_positive(0.0 * LOEF::experimental::V);
+        this->electric_potential_handler->set_current_max_abs_negative(0.0 * LOEF::experimental::V);
+        for (const auto &fixed_charge : this->fixed_charges_) {
+            this->electric_potential_handler->hint_add_charge(fixed_charge.second.quantity());
+        }
+    }
+    // end lazy
     update();
 }
 void LOEF_drawer::replace_fixed_charge(const LOEF::id_type id,
@@ -328,3 +401,71 @@ void LOEF_drawer::keyReleaseEvent(QKeyEvent *ev) {
         QWidget::keyPressEvent(ev);
     }
 }
+// lazy
+void LOEF_drawer::set_electric_potential(LOEF::experimental::electric_potential *of_parent) {
+    this->electric_potential_handler = of_parent;
+}
+QImage LOEF_drawer::prepare_electric_potential_image() {
+    auto width = this->width();
+    auto height = this->height();
+    qDebug() << "width=" << width << " , height=" << height;
+    QImage result(width, height, QImage::Format_ARGB32);
+    if (this->electric_potential_handler->surface_enabled &&
+        this->electric_potential_handler->distance == 0.0 * LOEF::boostunits::volt) {
+        double distance = 0.0;
+        while (distance == 0.0) {
+            /* it seems this QInputDialog disables the painter and cause segfault
+             * so, this code is , actually, "crashes if distance is 0"
+             * to avoid it, you must set distance with the menu before enable surface
+             * */
+            distance =
+                QInputDialog::getDouble(nullptr, tr("distance cannot be zero!"), tr("enter non zero distance"), 0, 0);
+        }
+        this->electric_potential_handler->distance = distance * LOEF::boostunits::volt;
+    }
+    for (auto y = 0; y < height; y++) {
+        for (auto x = 0; x < width; x++) {
+            LOEF::vec2d current_position(QPoint(x, y), this->dpmm_);
+            LOEF::volt_quantity potential = 0.0 * LOEF::experimental::V;
+            QColor current_color("white");
+            auto max_abs_positive = this->electric_potential_handler->get_current_max_abs_positive();
+            auto max_abs_negative = this->electric_potential_handler->get_current_max_abs_negative();
+            for (const auto &fixed_charge_tuple : this->fixed_charges_) {
+                const auto &fixed_charge = fixed_charge_tuple.second;
+                auto charge_to_pos = fixed_charge.position() - current_position;
+                if (charge_to_pos.length() <= LOEF::radius::FIXED) {
+                    result.setPixel(x, y, QColor("transparent").rgba());
+                    goto CONTINUE_TO_NEXT_POS;
+                }
+                potential += LOEF::experimental::k0 * fixed_charge.quantity() /
+                             static_cast<LOEF::metre_quantity>(charge_to_pos.length());
+            }
+            if (this->electric_potential_handler->surface_enabled) {
+                auto remainder = boost::units::fmod(potential, this->electric_potential_handler->distance).value();
+                if (LOEF::experimental::is_about_same(remainder, 0.0, LOEF::experimental::max_error_surface)) {
+                    current_color = QColor("black");
+                    result.setPixel(x, y, current_color.rgb());
+                    goto CONTINUE_TO_NEXT_POS;
+                }
+            }
+            if (potential >= 0.0 * LOEF::experimental::V) {
+                auto diff = 0xff * (potential / max_abs_positive);
+                current_color = QColor(0xff, 0xff - diff, 0xff - diff);
+            } else {
+                auto diff = 0xff * (potential / max_abs_negative);
+                current_color = QColor(0xff - diff, 0xff - diff, 0xff);
+            }
+            result.setPixel(x, y, current_color.rgb());
+        CONTINUE_TO_NEXT_POS:;
+        }
+    }
+    return result;
+}
+std::vector<LOEF::fixed_charge> LOEF_drawer::get_fixed_charges() {
+    decltype(get_fixed_charges()) result;
+    for (const auto &fixed_charge_tuple : fixed_charges_) {
+        result.push_back(fixed_charge_tuple.second);
+    }
+    return result;
+}
+// end lazy

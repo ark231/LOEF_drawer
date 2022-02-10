@@ -1,7 +1,7 @@
 [general]
-charge_radius=2.5 #mm
-start_offset=1.0 #mm
-gap=1.0 #mm
+charge_radius=0.5 #mm
+start_offset=0 #mm
+gap=0 #mm
 inverse_permittivity=3 #[/C]
 
 [[patterns.lines]]

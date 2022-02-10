@@ -15,6 +15,7 @@ charge_pen::charge_pen(bool is_positive, vec2d initial_position, millimetre_quan
       max_x(max_x),
       max_y(max_y),
       path(new LOEF_path) {
+    path->reserve(5000);
     path->moveTo((initial_position.to_QPoint(dpmm)));
     path->set_is_positive(is_positive);
 }

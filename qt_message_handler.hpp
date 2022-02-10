@@ -6,7 +6,7 @@
 #include <iostream>
 namespace LOEF {
 namespace qt {
-void message_hander(QtMsgType, const QMessageLogContext&, const QString&);
+void message_hander(QtMsgType, const QMessageLogContext &, const QString &);
 }
 }  // namespace LOEF
 #endif
