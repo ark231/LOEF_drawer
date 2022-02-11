@@ -25,9 +25,6 @@ qt5_create_translation(LOEF_QM_FILES ${CMAKE_CURRENT_SOURCE_DIR}
     OPTIONS -no-obsolete
     )
 endif()
-
-#add_subdirectory(libs)
-
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/translations)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/settings)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/saves)
@@ -85,10 +82,3 @@ install(FILES ${LOEF_QM_FILES}
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/settings ${CMAKE_CURRENT_BINARY_DIR}/saves
     DESTINATION ${CMAKE_INSTALL_PREFIX}
     )
-##for debugging
-#message(STATUS "*** dump start cmake variables ***")
-#get_cmake_property(_variableNames VARIABLES)
-#foreach(_variableName ${_variableNames})
-#	message(STATUS "${_variableName}=${${_variableName}}")
-#endforeach()
-#message(STATUS "*** dump end ***")
