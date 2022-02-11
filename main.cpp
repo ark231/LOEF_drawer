@@ -59,6 +59,8 @@ void init_global_vars(QSettings &settings) {
     LOEF::experimental::integrate::start_time = settings.value("start_time", 0.).value<double>();
     LOEF::experimental::integrate::end_time = settings.value("end_time", 10.).value<double>();
     LOEF::experimental::integrate::dt = settings.value("dt", 0.1).value<double>();
+    LOEF::experimental::integrate::less_samples = settings.value("less_samples", false).value<bool>();
+    LOEF::experimental::integrate::more_precise = settings.value("more_precise", false).value<bool>();
     settings.endGroup();
     settings.endGroup();
     // end lazy
@@ -82,6 +84,8 @@ void generate_settings_file(QSettings &settings) {
     settings.setValue("start_time", 0.);
     settings.setValue("end_time", qInf());
     settings.setValue("dt", 0.1);
+    settings.setValue("less_samples", false);
+    settings.setValue("more_precise", false);
     settings.endGroup();
     settings.endGroup();
     // end lazy

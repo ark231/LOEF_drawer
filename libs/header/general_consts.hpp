@@ -31,7 +31,8 @@ namespace integrate {
 inline double start_time = 0.;
 inline double end_time = 10.;
 inline double dt = 1.;
-inline bool use_faster = false;
+inline bool less_samples = false;
+inline bool more_precise = false;
 }  // namespace integrate
 }  // namespace experimental
 }  // namespace LOEF

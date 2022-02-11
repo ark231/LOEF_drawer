@@ -47,8 +47,8 @@ class LOEF_drawer : public QWidget {
     void set_electric_potential(LOEF::experimental::electric_potential *of_parent);
     void set_is_ready_made_requested(bool *of_parent);
     std::vector<LOEF::fixed_charge> get_fixed_charges();
-    enum class 符号分布 { 全て正, 全て負, バラバラ };
-    符号分布 固定電荷符号分布;
+    enum class 符号分布 { 正多, 負多, 同等, デフォルト値 };
+    符号分布 固定電荷符号分布 = 符号分布::デフォルト値;
     // end lazy impl
 
    private:

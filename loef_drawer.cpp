@@ -208,8 +208,47 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
                         [](decltype(*(fixed_charges_.begin())) &charge) {
                             return charge.second.quantity() == 0.0 * LOEF::boostunits::coulomb;
                         });
-    calc_LOEF_from_fixed_charges(positive_fixed_charges, width, height);
-    calc_LOEF_from_fixed_charges(negative_fixed_charges, width, height);
+    // lazy
+    LOEF::coulomb_quantity positive_sum = 0.0 * LOEF::boostunits::coulomb;
+    LOEF::coulomb_quantity negative_sum = 0.0 * LOEF::boostunits::coulomb;
+    for (const auto &[key, value] : positive_fixed_charges) {
+        positive_sum += value.quantity();
+    }
+    for (const auto &[key, value] : negative_fixed_charges) {
+        negative_sum += value.quantity();
+    }
+    auto 正無し = qFuzzyIsNull(positive_sum.value());
+    auto 負無し = qFuzzyIsNull(negative_sum.value());
+    if (正無し && 負無し) {
+        固定電荷符号分布 = 符号分布::同等;
+    } else if (正無し) {
+        固定電荷符号分布 = 符号分布::負多;
+    } else if (負無し) {
+        固定電荷符号分布 = 符号分布::正多;
+    } else if (qFuzzyCompare(positive_sum.value(), boost::units::abs(negative_sum).value())) {
+        固定電荷符号分布 = 符号分布::同等;
+    } else if (positive_sum > boost::units::abs(negative_sum)) {
+        固定電荷符号分布 = 符号分布::正多;
+    } else if (boost::units::abs(negative_sum) > positive_sum) {
+        固定電荷符号分布 = 符号分布::負多;
+    }
+    switch (固定電荷符号分布) {
+        case 符号分布::正多:
+            calc_LOEF_from_fixed_charges(negative_fixed_charges, width, height);
+            calc_LOEF_from_fixed_charges(positive_fixed_charges, width, height);
+            break;
+        case 符号分布::負多:
+            calc_LOEF_from_fixed_charges(positive_fixed_charges, width, height);
+            calc_LOEF_from_fixed_charges(negative_fixed_charges, width, height);
+            break;
+        case 符号分布::同等:
+            calc_LOEF_from_fixed_charges(positive_fixed_charges, width, height);
+            calc_LOEF_from_fixed_charges(negative_fixed_charges, width, height);
+            break;
+        default:
+            throw std::logic_error("符号分布がセットされませんでした");
+    }
+    // end lazy
     for (auto charge_path = charge_paths_.begin(); charge_path != charge_paths_.end(); charge_path++) {
         painter.draw_LOEF_path(*(charge_path->second));
     }
@@ -233,11 +272,6 @@ void LOEF_drawer::prepare_LOEF_pathes() {
         for (auto pen_itr = charge_pens_.begin(); pen_itr != charge_pens_.end(); pen_itr++) {
             auto pen = pen_itr->second;
             auto path = pen.get_path();
-            /*
-            if (not path->is_positive()) {
-                return;
-            }
-            */
             using fixedMapIter = decltype(fixed_charges_.begin());
             using LOEF::experimental::mm;
             LOEF::experimental::LOEF_system<fixedMapIter>::state_type state0 = {pen.position().x().value(),
@@ -245,6 +279,23 @@ void LOEF_drawer::prepare_LOEF_pathes() {
             LOEF::experimental::LOEF_system<fixedMapIter> system(fixed_charges_.begin(), fixed_charges_.end(),
                                                                  path->is_positive());
             path->moveTo(LOEF::vec2d(state0).to_QPointF(dpmm_));
+            bool 全て発散 = false;
+            auto origin = fixed_charges_[pen.origin];
+            switch (固定電荷符号分布) {
+                case 符号分布::正多:
+                    if (origin.quantity() > 0.0 * LOEF::boostunits::coulomb) {
+                        全て発散 = true;
+                    }
+                    break;
+                case 符号分布::負多:
+                    if (origin.quantity() < 0.0 * LOEF::boostunits::coulomb) {
+                        全て発散 = true;
+                    }
+                    break;
+                case 符号分布::同等:
+                default:
+                    break;
+            }
             try {
                 auto observer = [&, this](const LOEF::experimental::LOEF_system<fixedMapIter>::state_type &state,
                                           const double) {
@@ -270,26 +321,34 @@ void LOEF_drawer::prepare_LOEF_pathes() {
                         not boost::units::isfinite(LOEF::vec2d(state).y())) {
                         throw std::runtime_error("illigal calculation happened");
                     }
-                    if (not pen.is_on_screen(dpmm_)) {
+                    if (全て発散 && not pen.is_on_screen(dpmm_)) {
                         throw std::runtime_error("go out of screen");
                     }
                     path->lineTo(LOEF::vec2d(state).to_QPointF(dpmm_));
                 };
                 using StepperBase = boost::numeric::odeint::runge_kutta_dopri5<
                     LOEF::experimental::LOEF_system<fixedMapIter>::state_type>;
+                if (LOEF::experimental::integrate::more_precise) {
+                    boost::numeric::odeint::integrate_const(
+                        StepperBase(), std::ref(system), state0, LOEF::experimental::integrate::start_time,
+                        LOEF::experimental::integrate::end_time, LOEF::experimental::integrate::dt, observer);
+                    //例外が必ず発出されて以下は飛ばされる
+                }  //よって、ここに実質elseがあるのと同じ
                 auto stepper = boost::numeric::odeint::make_dense_output(0.001, 0.001, StepperBase());
-                boost::numeric::odeint::integrate_const(
-                    stepper, std::ref(system), state0, LOEF::experimental::integrate::start_time,
-                    LOEF::experimental::integrate::end_time, LOEF::experimental::integrate::dt, observer);
-                /*
-                boost::numeric::odeint::integrate(std::ref(system), state0, LOEF::experimental::integrate::start_time,
-                                                  LOEF::experimental::integrate::end_time,
-                                                  LOEF::experimental::integrate::dt, observer);
-                                                  */
+                if (LOEF::experimental::integrate::less_samples) {
+                    boost::numeric::odeint::integrate(
+                        std::ref(system), state0, LOEF::experimental::integrate::start_time,
+                        LOEF::experimental::integrate::end_time, LOEF::experimental::integrate::dt, observer);
+                } else {
+                    boost::numeric::odeint::integrate_const(
+                        stepper, std::ref(system), state0, LOEF::experimental::integrate::start_time,
+                        LOEF::experimental::integrate::end_time, LOEF::experimental::integrate::dt, observer);
+                }
             } catch (std::runtime_error err) {  //握りつぶす
                 qDebug() << pen_itr->first << err.what();
             }
         }
+        charge_pens_.clear();
         return;
     }
 
