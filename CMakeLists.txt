@@ -38,6 +38,7 @@ CPMAddPackage(
     GITHUB_REPOSITORY ToruNiina/toml11
     #GIT_TAG v3.7.0 #このリリースの後に行われたinf/nanのシリアライズの修正が重要なので、最新版をとってくる
     GIT_TAG master
+    DOWNLOAD_ONLY YES #toml11はヘッダオンリーライブラリ
 )
 
 add_executable(LOEF_drawer
