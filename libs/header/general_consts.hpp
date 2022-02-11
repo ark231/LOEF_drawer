@@ -25,6 +25,15 @@ inline millimetre_quantity interval_steps = 0.1 * millimetre;
 namespace experimental {
 constexpr auto k0 = 8.987'551'8 * N * m * m / (C * C);
 inline double max_error_surface = 1.0;
+inline millimetre_quantity screen_expantion_x = 0.0 * mm;
+inline millimetre_quantity screen_expantion_y = 0.0 * mm;
+namespace integrate {
+inline double start_time = 0.;
+inline double end_time = 10.;
+inline double dt = 1.;
+inline bool less_samples = false;
+inline bool more_precise = false;
+}  // namespace integrate
 }  // namespace experimental
 }  // namespace LOEF
 #endif

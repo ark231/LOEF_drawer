@@ -22,15 +22,15 @@
 
 MainWindow::MainWindow(QLocale locale, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    ui->label_app_info->setText(QStringLiteral("%1 \nv%2.%3.%4%5")
+    ui->label_app_info->setText(QStringLiteral("%1 \nv%2.%3.%4")
                                     .arg(LOEF::application_name)
                                     .arg(LOEF::version_major)
                                     .arg(LOEF::version_minor)
-                                    .arg(LOEF::version_patch)
-                                    .arg(LOEF::version_suffix));
+                                    .arg(LOEF::version_patch));
     this->setWindowTitle(LOEF::application_name);
     // lazy
     ui->loef_drawer->set_electric_potential(&this->electric_potential_handler);
+    ui->loef_drawer->set_is_ready_made_requested(&this->is_ready_made_requested);
     // end lazy
     connect(ui->loef_drawer, SIGNAL(fixed_charge_selected(LOEF::id_type)), this,
             SLOT(slot_fixed_charge_selected(LOEF::id_type)));
@@ -405,6 +405,7 @@ void MainWindow::on_actionshow_rectangle_toggled(bool arg1) {
 }
 // end lazy
 
+void MainWindow::on_actionuse_ready_made_algorithm_triggered(bool checked) { this->is_ready_made_requested = checked; }
 void MainWindow::on_actionabout_qt_triggered() { QMessageBox::aboutQt(this, tr("about Qt")); }
 
 void MainWindow::on_actionabout_LOEF_drawer_triggered() {

@@ -21,6 +21,22 @@ charge_pen::charge_pen(bool is_positive, vec2d initial_position, millimetre_quan
 }
 
 std::shared_ptr<LOEF_path> charge_pen::get_path() { return path; }
+// lazy
+vec2d charge_pen::position() { return this->position_; }
+bool charge_pen::is_on_screen(dot_per_millimetre_quantity dpmm) {
+    if (path->isEmpty()) {
+        return true;
+    }
+    auto tail_elem = path->elementAt(path->elementCount() - 1);
+    auto tail_pos = vec2d(tail_elem.x / dpmm, tail_elem.y / dpmm);
+    // XXX:ultra lazy!!!
+    qDebug() << "pos:" << position_ << "tail" << tail_pos;
+    position_ = tail_pos;
+    // XXX:end ultra lazy!!!
+    return (0 <= position_.x() * dpmm && position_.x() * dpmm <= max_x) &&
+           (0 <= position_.y() * dpmm && position_.y() * dpmm <= max_y);
+}
+// end lazy
 #endif
 template <class fixed_charge_map_iterator_>
 step_status charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_charge_map_iterator_ end,
