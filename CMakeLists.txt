@@ -70,6 +70,7 @@ target_include_directories(LOEF_drawer PRIVATE
     ${LOEF_drawer_libs_header_SOURCE_DIR}
     ${LOEF_drawer_libs_header_BINARY_DIR}
 
+    ${Boost_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/experimental
     ${toml11_SOURCE_DIR}
     )
