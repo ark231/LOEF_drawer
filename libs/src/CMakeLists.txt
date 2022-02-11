@@ -27,7 +27,7 @@ link_libraries(
     -static-libgcc
     -static-libstdc++
     )
-message (STATUS "Boost_INSTALL_DIR:"${Boost_INCLUDE_DIR})
+message (STATUS "Boost_INSTALL_DIR:${Boost_INCLUDE_DIR}")
 
 add_library(vec2d STATIC
     vec2d.cpp
