@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="main_resources.qrc">
+    <normaloff>:/res/image/icon_round.png</normaloff>:/res/image/icon_round.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -192,7 +196,60 @@ version</string>
     </widget>
     <addaction name="menulanguage"/>
    </widget>
+   <widget class="QMenu" name="menuexperimental">
+    <property name="title">
+     <string>experimental</string>
+    </property>
+    <widget class="QMenu" name="menucolorize_electric_potential">
+     <property name="title">
+      <string>colorize electric potential</string>
+     </property>
+     <widget class="QMenu" name="menumax_abs">
+      <property name="title">
+       <string>max_abs</string>
+      </property>
+      <addaction name="actionpositive"/>
+      <addaction name="actionnegative"/>
+      <addaction name="actionuse_input"/>
+     </widget>
+     <addaction name="actionenable_epcolor"/>
+     <addaction name="menumax_abs"/>
+    </widget>
+    <widget class="QMenu" name="menuequipotentioal_surface">
+     <property name="title">
+      <string>equipotentioal surface</string>
+     </property>
+     <addaction name="actionenable_epsurface"/>
+     <addaction name="actiondistance"/>
+     <addaction name="actionmax_error"/>
+    </widget>
+    <widget class="QMenu" name="menushow_sample">
+     <property name="title">
+      <string>show sample</string>
+     </property>
+     <addaction name="separator"/>
+     <addaction name="actionshow_line"/>
+     <addaction name="actionshow_rectangle"/>
+    </widget>
+    <addaction name="menucolorize_electric_potential"/>
+    <addaction name="menuequipotentioal_surface"/>
+    <addaction name="actiondisable_LOEF"/>
+    <addaction name="separator"/>
+    <addaction name="menushow_sample"/>
+    <addaction name="actionoutput_samples"/>
+    <addaction name="separator"/>
+    <addaction name="actionuse_ready_made_algorithm"/>
+   </widget>
+   <widget class="QMenu" name="menucredit">
+    <property name="title">
+     <string>help</string>
+    </property>
+    <addaction name="actionabout_LOEF_drawer"/>
+    <addaction name="actionabout_qt"/>
+   </widget>
    <addaction name="menusettings"/>
+   <addaction name="menuexperimental"/>
+   <addaction name="menucredit"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionEnglish">
@@ -214,6 +271,97 @@ version</string>
     <string>日本語</string>
    </property>
   </action>
+  <action name="actionenable_epcolor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>enable</string>
+   </property>
+  </action>
+  <action name="actionpositive">
+   <property name="text">
+    <string>positive</string>
+   </property>
+  </action>
+  <action name="actionnegative">
+   <property name="text">
+    <string>negative</string>
+   </property>
+  </action>
+  <action name="actionenable_epsurface">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>enable</string>
+   </property>
+  </action>
+  <action name="actiondistance">
+   <property name="text">
+    <string>distance</string>
+   </property>
+  </action>
+  <action name="actiondisable_LOEF">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>disable LOEF</string>
+   </property>
+  </action>
+  <action name="actionuse_input">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>use input</string>
+   </property>
+  </action>
+  <action name="actionmax_error">
+   <property name="text">
+    <string>max_error</string>
+   </property>
+  </action>
+  <action name="actionshow_line">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>line</string>
+   </property>
+  </action>
+  <action name="actionshow_rectangle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>rectangle</string>
+   </property>
+  </action>
+  <action name="actionoutput_samples">
+   <property name="text">
+    <string>output_samples</string>
+   </property>
+  </action>
+  <action name="actionuse_ready_made_algorithm">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>use ready-made algorithm</string>
+   </property>
+  </action>
+  <action name="actionabout_qt">
+   <property name="text">
+    <string>about Qt</string>
+   </property>
+  </action>
+  <action name="actionabout_LOEF_drawer">
+   <property name="text">
+    <string>about LOEF_drawer</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -222,6 +370,8 @@ version</string>
    <header>loef_drawer.hpp</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="main_resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -11,85 +11,64 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# QtCreator supports the following variables for Android, which are identical to qmake Android variables.
-# Check http://doc.qt.io/qt-5/deployment-android.html for more information.
-# They need to be set before the find_package(Qt5 ...) call.
-
-#if(ANDROID)
-#        set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-#        if (ANDROID_ABI STREQUAL "armeabi-v7a")
-#                set(ANDROID_EXTRA_LIBS
-#                        ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libcrypto.so
-#                        ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libssl.so)
-#        endif()
-#endif()
-
 find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
-find_package(Boost REQUIRED)
 
 add_subdirectory(libs)
-#if(${LOEF_NOUPDATE}=="yes")
-message(STATUS "no update")
+if(${LOEF_NOUPDATE}=="yes")
 qt5_add_translation(LOEF_QM_FILES ${CMAKE_CURRENT_SOURCE_DIR}/translations/LOEF_drawer_ja.ts )
-#else()
-#message(STATUS "update")
-#qt5_create_translation(LOEF_QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} 
-#    ${CMAKE_CURRENT_SOURCE_DIR}/translations/LOEF_drawer_ja.ts 
-#    OPTIONS -no-obsolete
-#    )
-#endif()
-
-#add_subdirectory(libs)
-
+else()
+message(STATUS "update")
+qt5_create_translation(LOEF_QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} 
+    ${CMAKE_CURRENT_SOURCE_DIR}/translations/LOEF_drawer_ja.ts 
+    OPTIONS -no-obsolete
+    )
+endif()
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/translations)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/settings)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/saves)
 
+include(cmake/CPM.cmake)
+CPMAddPackage(
+    NAME toml11
+    GITHUB_REPOSITORY ToruNiina/toml11
+    #GIT_TAG v3.7.0 #このリリースの後に行われたinf/nanのシリアライズの修正が重要なので、最新版をとってくる
+    GIT_TAG master
+    DOWNLOAD_ONLY YES #toml11はヘッダオンリーライブラリ
+)
 
-if(ANDROID)
-    add_library(LOEF_drawer SHARED
-        main.cpp
-        mainwindow.cpp
-        mainwindow.hpp
-        mainwindow.ui
-        individual_fixed_charge_editor.ui
-        loef_drawer.cpp
-        individual_fixed_charge_editor.hpp
-        individual_fixed_charge_editor.cpp
-    )
-else()
-    add_executable(LOEF_drawer
-        main.cpp
-        mainwindow.cpp
-        mainwindow.hpp
-        mainwindow.ui
-        loef_drawer.cpp
-        loef_individual_fixed_charge_editor.cpp
-        loef_individual_fixed_charge_editor.hpp
-        loef_individual_fixed_charge_editor.ui
-        ${LOEF_QM_FILES}
-    )
-endif()
+add_executable(LOEF_drawer
+    main.cpp
+    qt_message_handler.cpp
+    qt_toml_settings.cpp
+    mainwindow.cpp
+    mainwindow.hpp
+    mainwindow.ui
+    loef_drawer.cpp
+    loef_individual_fixed_charge_editor.cpp
+    loef_individual_fixed_charge_editor.hpp
+    loef_individual_fixed_charge_editor.ui
+    ${LOEF_QM_FILES}
+    main_resources.qrc
 
-if(${LOEF_NOUPDATE}!="yes")
+    experimental/electric_potential.cpp
+    experimental/lazy_helper.cpp
+    experimental/differential_equation.cpp
+)
+
 target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra )
-endif()
-target_compile_options(LOEF_drawer PRIVATE -static-libgcc -static-libstdc++)
 target_compile_definitions(LOEF_drawer PUBLIC $<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
 target_link_libraries(LOEF_drawer PRIVATE Qt5::Widgets)
 target_link_libraries(LOEF_drawer PRIVATE 
     charges
     vec2d
     painter
-    -static
-    winpthread
-    -static-libgcc
-    -static-libstdc++
     )
 target_include_directories(LOEF_drawer PRIVATE 
     ${LOEF_drawer_libs_header_SOURCE_DIR}
     ${LOEF_drawer_libs_header_BINARY_DIR}
-    ${Boost_INCLUDE_DIRS}
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/experimental
+    ${toml11_SOURCE_DIR}
     )
 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/LOEF_drawer${CMAKE_EXECUTABLE_SUFFIX}

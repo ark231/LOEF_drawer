@@ -8,7 +8,7 @@ LOEF_individual_fixed_charge_editor::LOEF_individual_fixed_charge_editor(LOEF::i
                                                                          LOEF::coulomb_quantity initial_charge,
                                                                          LOEF::millimetre_quantity initial_X,
                                                                          LOEF::millimetre_quantity initial_Y,
-                                                                         QWidget* parent)
+                                                                         QWidget *parent)
     : QWidget(parent, Qt::WindowStaysOnTopHint), ui(new Ui::LOEF_individual_fixed_charge_editor) {
     ui->setupUi(this);
     this->id_ = id;
@@ -47,7 +47,7 @@ void LOEF_individual_fixed_charge_editor::on_remove_button_clicked() {
     emit fixed_charge_destroyed(this->id_);
     this->close();
 }
-void LOEF_individual_fixed_charge_editor::closeEvent(QCloseEvent*) {
+void LOEF_individual_fixed_charge_editor::closeEvent(QCloseEvent *) {
     QPoint pos_to_send = LOEF::invalid_position;
     if (moved_pos_ == LOEF::invalid_position) {
         pos_to_send = this->pos();
@@ -56,7 +56,7 @@ void LOEF_individual_fixed_charge_editor::closeEvent(QCloseEvent*) {
     }
     emit editor_fixed_charge_closed(pos_to_send);
 }
-void LOEF_individual_fixed_charge_editor::moveEvent(QMoveEvent* ev) { this->moved_pos_ = ev->pos(); }
+void LOEF_individual_fixed_charge_editor::moveEvent(QMoveEvent *ev) { this->moved_pos_ = ev->pos(); }
 void LOEF_individual_fixed_charge_editor::slot_fixed_charge_select_changed(LOEF::id_type new_id,
                                                                            LOEF::coulomb_quantity new_C,
                                                                            LOEF::millimetre_quantity new_X,

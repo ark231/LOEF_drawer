@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/res/text">
+        <file alias="about_LOEF_drawer_en.html">resources/about_LOEF_drawer_en.html</file>
+        <file alias="about_LOEF_drawer_ja.html">resources/about_LOEF_drawer_ja.html</file>
+    </qresource>
+    <qresource prefix="/res/image">
+        <file alias="icon_round.png">resources/LOEF2.png</file>
+    </qresource>
+</RCC>

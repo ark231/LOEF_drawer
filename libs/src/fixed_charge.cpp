@@ -34,7 +34,7 @@ std::vector<vec2d> fixed_charge::calc_pen_init_pos(fixed_charge_containter_itr b
         }
         electric_field sample_electric_field = {0.0 * (electric_field_strength_unit_quantity),
                                                 0.0 * (electric_field_strength_unit_quantity)};
-        vec2d sample_position = this->position_ + ((radius + 1.0 * millimetre) / millimetre) *
+        vec2d sample_position = this->position_ + ((radius + 1.0 * millimetre)).value() *
                                                       vec2d(boost::units::cos(current_argument) * millimetre,
                                                             boost::units::sin(current_argument) * millimetre);
         for (auto fixed_charge = begin; fixed_charge != end; fixed_charge++) {

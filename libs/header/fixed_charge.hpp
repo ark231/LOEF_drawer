@@ -43,6 +43,6 @@ template <class fixed_charge_containter_itr>
 void clear_pens_arrival_to_fixed_charges(fixed_charge_containter_itr begin, fixed_charge_containter_itr end);
 }  // namespace LOEF
 #ifndef LOEF_DRAWER_CHARGES_LIBRARY_BUILD
-#include "fixed_charge.cpp"
+#    include "fixed_charge.cpp"
 #endif
 #endif

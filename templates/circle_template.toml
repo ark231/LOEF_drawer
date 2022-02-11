@@ -1,0 +1,10 @@
+[general]
+charge_radius=2.5 #mm
+start_offset=1.0 #mm
+gap=1.0 #mm
+inverse_permittivity=3 #[/C]
+
+[[patterns.circles]]
+quantity=1.0
+centre={x=100,y=70}
+radius=25
