@@ -14,6 +14,8 @@ find_package(Boost  REQUIRED)
 if(${LOEF_NOUPDATE}!="yes")
 add_compile_options(-Wall -Wextra)
 endif()
+
+
 add_compile_options(-static-libgcc -static-libstdc++)
 add_compile_definitions($<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
 include_directories(
@@ -28,6 +30,7 @@ link_libraries(
     -static-libstdc++
     )
 message (STATUS "Boost_INSTALL_DIR:${Boost_INCLUDE_DIR}")
+message (STATUS "Boost_INSTALL_DIRS:${Boost_INCLUDE_DIRS}")
 
 add_library(vec2d STATIC
     vec2d.cpp
