@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 5.13 COMPONENTS Widgets LinguistTools REQUIRED)
+find_package(Boost  REQUIRED)
 
 add_subdirectory(libs)
 message(STATUS "${LOEF_NOUPDATE}")

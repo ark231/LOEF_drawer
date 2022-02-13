@@ -11,7 +11,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 find_package(Qt5 COMPONENTS Core Gui REQUIRED)
 find_package(Boost  REQUIRED)
 
-if(${LOEF_NOUPDATE}!="yes")
+if(NOT ${LOEF_NOUPDATE} STREQUAL "yes")
 add_compile_options(-Wall -Wextra)
 endif()
 
