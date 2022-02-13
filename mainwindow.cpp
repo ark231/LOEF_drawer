@@ -302,16 +302,22 @@ void MainWindow::on_actionenable_epsurface_toggled(bool arg1) {
 
 void MainWindow::on_actiondistance_triggered() {
     auto input_distance =
-        QInputDialog::getDouble(this, tr("distance between equipotential surfaces"), tr("enter distance"), 0, 0);
+        QInputDialog::getDouble(this, tr("distance between equipotential surfaces"), tr("enter distance"),
+                                this->electric_potential_handler.distance.value(), 0);
     this->electric_potential_handler.distance = input_distance * LOEF::boostunits::volt;
 }
 
 void MainWindow::on_actiondisable_LOEF_toggled(bool arg1) { this->electric_potential_handler.disable_LOEF = arg1; }
 
-void MainWindow::on_actionuse_input_toggled(bool arg1) { this->electric_potential_handler.color_use_input = arg1; }
+void MainWindow::on_actionuse_input_toggled(bool arg1) {
+    ui->actionpositive->setEnabled(arg1);
+    ui->actionnegative->setEnabled(arg1);
+    this->electric_potential_handler.color_use_input = arg1;
+}
 
 void MainWindow::on_actionmax_error_triggered() {
-    auto input_max_error = QInputDialog::getDouble(this, tr("max_error"), tr("enter max_error"), 0, 0);
+    auto input_max_error =
+        QInputDialog::getDouble(this, tr("max_error"), tr("enter max_error"), LOEF::experimental::max_error_surface, 0);
     LOEF::experimental::max_error_surface = input_max_error;
 }
 using LOEF::experimental::mm;

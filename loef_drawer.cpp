@@ -9,6 +9,7 @@
 #include <QtGlobal>
 #include <algorithm>
 #include <iterator>
+#include <optional>
 
 #include "LOEF_QPainter.hpp"
 #include "boost/numeric/odeint.hpp"
@@ -133,8 +134,11 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
         return;
     }
     // lazy
-    if (this->electric_potential_handler->color_enabled) {
-        painter.drawImage(0, 0, prepare_electric_potential_image());
+    if (this->electric_potential_handler->color_enabled || this->electric_potential_handler->surface_enabled) {
+        auto potential_image = prepare_electric_potential_image();
+        if (potential_image) {
+            painter.drawImage(0, 0, potential_image.value());
+        }
     }
     if (this->electric_potential_handler->draw_sample_line) {
         std::vector<LOEF::vec2d> line_ends;
@@ -532,7 +536,10 @@ void LOEF_drawer::set_electric_potential(LOEF::experimental::electric_potential 
     this->electric_potential_handler = of_parent;
 }
 void LOEF_drawer::set_is_ready_made_requested(bool *of_parent) { this->is_ready_made_requested = of_parent; }
-QImage LOEF_drawer::prepare_electric_potential_image() {
+std::optional<QImage> LOEF_drawer::prepare_electric_potential_image() {
+    if (this->fixed_charges_.empty()) {
+        return std::nullopt;
+    }
     auto width = this->width();
     auto height = this->height();
     qDebug() << "width=" << width << " , height=" << height;
@@ -541,14 +548,11 @@ QImage LOEF_drawer::prepare_electric_potential_image() {
         this->electric_potential_handler->distance == 0.0 * LOEF::boostunits::volt) {
         double distance = 0.0;
         while (distance == 0.0) {
-            /* it seems this QInputDialog disables the painter and cause segfault
-             * so, this code is , actually, "crashes if distance is 0"
-             * to avoid it, you must set distance with the menu before enable surface
-             * */
             distance =
                 QInputDialog::getDouble(nullptr, tr("distance cannot be zero!"), tr("enter non zero distance"), 0, 0);
         }
         this->electric_potential_handler->distance = distance * LOEF::boostunits::volt;
+        return std::nullopt;
     }
     for (auto y = 0; y < height; y++) {
         for (auto x = 0; x < width; x++) {
@@ -572,15 +576,17 @@ QImage LOEF_drawer::prepare_electric_potential_image() {
                 if (LOEF::experimental::is_about_same(remainder, 0.0, LOEF::experimental::max_error_surface)) {
                     current_color = QColor("black");
                     result.setPixel(x, y, current_color.rgb());
-                    goto CONTINUE_TO_NEXT_POS;
+                    goto CONTINUE_TO_NEXT_POS;  //ここに関しては普通のcontinueでもいいが、上と揃えておく
                 }
             }
-            if (potential >= 0.0 * LOEF::experimental::V) {
-                auto diff = 0xff * (potential / max_abs_positive);
-                current_color = QColor(0xff, 0xff - diff, 0xff - diff);
-            } else {
-                auto diff = 0xff * (potential / max_abs_negative);
-                current_color = QColor(0xff - diff, 0xff - diff, 0xff);
+            if (this->electric_potential_handler->color_enabled) {
+                if (potential >= 0.0 * LOEF::experimental::V) {
+                    auto diff = 0xff * (potential / max_abs_positive);
+                    current_color = QColor(0xff, 0xff - diff, 0xff - diff);
+                } else {
+                    auto diff = 0xff * (potential / max_abs_negative);
+                    current_color = QColor(0xff - diff, 0xff - diff, 0xff);
+                }
             }
             result.setPixel(x, y, current_color.rgb());
         CONTINUE_TO_NEXT_POS:;

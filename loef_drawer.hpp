@@ -85,7 +85,7 @@ class LOEF_drawer : public QWidget {
     void clear_and_redraw();
 
     // lazy impl
-    QImage prepare_electric_potential_image();
+    std::optional<QImage> prepare_electric_potential_image();
     // end lazy impl
 
    signals:

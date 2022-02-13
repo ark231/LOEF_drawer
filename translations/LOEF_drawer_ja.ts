@@ -4,12 +4,12 @@
 <context>
     <name>LOEF_drawer</name>
     <message>
-        <location filename="../loef_drawer.cpp" line="549"/>
+        <location filename="../loef_drawer.cpp" line="556"/>
         <source>distance cannot be zero!</source>
         <translation>等電位面の間隔はゼロより大きくなくてはなりません！</translation>
     </message>
     <message>
-        <location filename="../loef_drawer.cpp" line="549"/>
+        <location filename="../loef_drawer.cpp" line="556"/>
         <source>enter non zero distance</source>
         <translation>非ゼロの間隔を入力してください</translation>
     </message>
@@ -209,7 +209,7 @@ version</source>
         <location filename="../mainwindow.ui" line="302"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="307"/>
         <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="307"/>
-        <location filename="../mainwindow.cpp" line="323"/>
+        <location filename="../mainwindow.cpp" line="329"/>
         <source>distance</source>
         <translation>等電位線の間隔(V)</translation>
     </message>
@@ -231,7 +231,7 @@ version</source>
         <location filename="../mainwindow.ui" line="323"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="310"/>
         <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="310"/>
-        <location filename="../mainwindow.cpp" line="314"/>
+        <location filename="../mainwindow.cpp" line="320"/>
         <source>max_error</source>
         <translation>最大許容誤差（線の太さ）</translation>
     </message>
@@ -243,11 +243,11 @@ version</source>
         <translation>線出力</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="319"/>
-        <location filename="../mainwindow.cpp" line="337"/>
-        <location filename="../mainwindow.cpp" line="358"/>
-        <location filename="../mainwindow.cpp" line="375"/>
-        <location filename="../mainwindow.cpp" line="398"/>
+        <location filename="../mainwindow.cpp" line="325"/>
+        <location filename="../mainwindow.cpp" line="343"/>
+        <location filename="../mainwindow.cpp" line="364"/>
+        <location filename="../mainwindow.cpp" line="381"/>
+        <location filename="../mainwindow.cpp" line="404"/>
         <source>output samples</source>
         <translation>サンプルを出力</translation>
     </message>
@@ -289,7 +289,7 @@ version</source>
         <location filename="../mainwindow.ui" line="357"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="315"/>
         <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="315"/>
-        <location filename="../mainwindow.cpp" line="409"/>
+        <location filename="../mainwindow.cpp" line="415"/>
         <source>about Qt</source>
         <translation>Qtについて</translation>
     </message>
@@ -297,7 +297,7 @@ version</source>
         <location filename="../mainwindow.ui" line="362"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="316"/>
         <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="316"/>
-        <location filename="../mainwindow.cpp" line="432"/>
+        <location filename="../mainwindow.cpp" line="438"/>
         <source>about LOEF_drawer</source>
         <translation>LOEF_drawerについて</translation>
     </message>
@@ -322,21 +322,21 @@ Do you want to restart this program?</source>
     <message>
         <location filename="../mainwindow.cpp" line="209"/>
         <location filename="../mainwindow.cpp" line="234"/>
-        <location filename="../mainwindow.cpp" line="325"/>
+        <location filename="../mainwindow.cpp" line="331"/>
         <source>enter save name</source>
         <translation>保存名を入力してください</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="209"/>
         <location filename="../mainwindow.cpp" line="234"/>
-        <location filename="../mainwindow.cpp" line="325"/>
+        <location filename="../mainwindow.cpp" line="331"/>
         <source>save name:</source>
         <translation>セーブファイル名：</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="210"/>
         <location filename="../mainwindow.cpp" line="235"/>
-        <location filename="../mainwindow.cpp" line="325"/>
+        <location filename="../mainwindow.cpp" line="331"/>
         <source>untitled</source>
         <translation>無題</translation>
     </message>
@@ -389,44 +389,44 @@ do you want to overwrite it?</source>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="305"/>
-        <location filename="../mainwindow.cpp" line="323"/>
+        <location filename="../mainwindow.cpp" line="329"/>
         <source>enter distance</source>
         <translation>間隔を入力してください(V単位)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="314"/>
+        <location filename="../mainwindow.cpp" line="320"/>
         <source>enter max_error</source>
         <translation>最大許容誤差（等電位線の太さ）を入力してください(V単位)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="320"/>
+        <location filename="../mainwindow.cpp" line="326"/>
         <source>2塊の非荷電電荷の間の電位のサンプルを出力
 電荷が2つ重なってるほうが終端</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="337"/>
-        <location filename="../mainwindow.cpp" line="358"/>
+        <location filename="../mainwindow.cpp" line="343"/>
+        <location filename="../mainwindow.cpp" line="364"/>
         <source>couldn&apos;t make vector</source>
         <translation>サンプルマーカーの数が３でないためベクトルが作れませんでした</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="375"/>
+        <location filename="../mainwindow.cpp" line="381"/>
         <source>couldn&apos;t make rectangle</source>
         <translation>マーカーが２つでなかったため長方形を作れませんでした</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="398"/>
+        <location filename="../mainwindow.cpp" line="404"/>
         <source>output successfully ends</source>
         <translation>出力に成功しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="421"/>
+        <location filename="../mainwindow.cpp" line="427"/>
         <source>failed to open resource</source>
         <translation>リソースオープン失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="422"/>
+        <location filename="../mainwindow.cpp" line="428"/>
         <source>failed to open resource %1</source>
         <translation>%1というリソースを開くことに失敗しました</translation>
     </message>
