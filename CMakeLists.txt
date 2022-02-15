@@ -13,10 +13,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 5.13 COMPONENTS Widgets LinguistTools REQUIRED)
+find_package(Boost  REQUIRED)
 
 add_subdirectory(libs)
-if(${LOEF_NOUPDATE}STREQUAL"yes")
-messsage(STATUS "noupdate")
+message(STATUS "${LOEF_NOUPDATE}")
+if(${LOEF_NOUPDATE} STREQUAL "yes")
+message(STATUS "noupdate")
 qt5_add_translation(LOEF_QM_FILES ${CMAKE_CURRENT_SOURCE_DIR}/translations/LOEF_drawer_ja.ts )
 else()
 message(STATUS "update")
@@ -72,6 +74,7 @@ target_include_directories(LOEF_drawer PRIVATE
     ${LOEF_drawer_libs_header_SOURCE_DIR}
     ${LOEF_drawer_libs_header_BINARY_DIR}
 
+    ${Boost_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/experimental
     ${toml11_SOURCE_DIR}
     )

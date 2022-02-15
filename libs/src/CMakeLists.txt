@@ -11,13 +11,26 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 find_package(Qt5 COMPONENTS Core Gui REQUIRED)
 find_package(Boost  REQUIRED)
 
+if(NOT ${LOEF_NOUPDATE} STREQUAL "yes")
 add_compile_options(-Wall -Wextra)
+endif()
+
+
+add_compile_options(-static-libgcc -static-libstdc++)
 add_compile_definitions($<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
 include_directories(
     ${LOEF_drawer_libs_header_SOURCE_DIR}
     ${LOEF_drawer_libs_header_BINARY_DIR}
     ${Boost_INCLUDE_DIRS}
     )
+link_libraries(
+    -static
+    winpthread
+    -static-libgcc
+    -static-libstdc++
+    )
+message (STATUS "Boost_INSTALL_DIR:${Boost_INCLUDE_DIR}")
+message (STATUS "Boost_INSTALL_DIRS:${Boost_INCLUDE_DIRS}")
 
 add_library(vec2d STATIC
     vec2d.cpp
