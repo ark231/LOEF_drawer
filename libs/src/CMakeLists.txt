@@ -11,11 +11,11 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 find_package(Qt5 COMPONENTS Core Gui REQUIRED)
 find_package(Boost  REQUIRED)
 
-if(NOT ${LOEF_NOUPDATE} STREQUAL "yes")
+if(NOT "x${LOEF_NOUPDATE}" STREQUAL "xyes")
     add_compile_options(-Wall -Wextra)
 endif()
 
-if("${LOEF_STATIC}" STREQUAL "yes")
+if("x${LOEF_STATIC}" STREQUAL "xyes")
     add_compile_options(-static-libgcc -static-libstdc++)
 endif()
 add_compile_definitions($<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
@@ -24,7 +24,7 @@ include_directories(
     ${LOEF_drawer_libs_header_BINARY_DIR}
     ${Boost_INCLUDE_DIRS}
     )
-if("${LOEF_STATIC}" STREQUAL "yes")
+if("x${LOEF_STATIC}" STREQUAL "xyes")
     link_libraries(
         -static
         winpthread
