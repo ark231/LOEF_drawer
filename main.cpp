@@ -15,7 +15,7 @@ void generate_settings_file(QSettings &);
 int main(int argc, char *argv[]) {
     int exit_code;
     do {
-        qInstallMessageHandler(LOEF::qt::message_hander);
+        // qInstallMessageHandler(LOEF::qt::message_hander);
         QApplication a(argc, argv);
         LOEF::qt::TOML_format = QSettings::registerFormat("toml", LOEF::qt::read_toml, LOEF::qt::write_toml);
 

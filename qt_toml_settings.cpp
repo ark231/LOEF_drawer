@@ -8,19 +8,44 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#define TOML11_PRESERVE_COMMENTS_BY_DEFAULT
 #include <toml.hpp>
 namespace LOEF {
 namespace qt {
+constexpr const char *LOEF_TOML_COMMENT_SECTIONNAME = "__LOEF_toml_comment__";
+void store_comment(QSettings::SettingsMap &dst, const toml::value &data, const QString key_offset) {
+    size_t i = 0;
+    QString type = "";
+    switch (data.type()) {
+        case toml::value_t::boolean:
+        case toml::value_t::integer:
+        case toml::value_t::floating:
+        case toml::value_t::string:
+            type = "primitive";
+            break;
+        default:
+            type = "structure";
+            break;
+    }
+    for (const auto &comment : data.comments()) {
+        dst[QString("%1/%2/%3/_%4").arg(LOEF_TOML_COMMENT_SECTIONNAME).arg(type).arg(key_offset).arg(i)] =
+            QVariant::fromValue(QString::fromStdString(comment));
+        i++;
+    }
+}
 void decode_data(QSettings::SettingsMap &dst, const toml::value &data, const QString key_offset) {
     switch (data.type()) {
         case toml::value_t::boolean:
             dst[key_offset] = QVariant::fromValue(data.as_boolean());
+            store_comment(dst, data, key_offset);
             break;
         case toml::value_t::integer:
             dst[key_offset] = QVariant::fromValue(data.as_integer());
+            store_comment(dst, data, key_offset);
             break;
         case toml::value_t::floating:
             dst[key_offset] = QVariant::fromValue(data.as_floating());
+            store_comment(dst, data, key_offset);
             break;
         case toml::value_t::string: {
             QRegularExpression re(R"(@([a-zA-Z]+)\(([^)]+)\))");
@@ -37,12 +62,14 @@ void decode_data(QSettings::SettingsMap &dst, const toml::value &data, const QSt
             } else {
                 dst[key_offset] = QVariant::fromValue(str);
             }
+            store_comment(dst, data, key_offset);
         } break;
         case toml::value_t::array: {
             auto data_array = data.as_array();
             for (size_t i = 0; i < data_array.size(); i++) {
                 decode_data(dst, data_array[i], QString("%1/%2").arg(key_offset).arg(i));
             }
+            store_comment(dst, data, key_offset);
             break;
         }
         case toml::value_t::table:
@@ -50,6 +77,7 @@ void decode_data(QSettings::SettingsMap &dst, const toml::value &data, const QSt
                 auto key = QString::fromStdString(key_std);
                 decode_data(dst, value, QString("%1/%2").arg(key_offset).arg(key));
             }
+            store_comment(dst, data, key_offset);
             break;
         default:
             std::stringstream err_msg;
@@ -59,33 +87,15 @@ void decode_data(QSettings::SettingsMap &dst, const toml::value &data, const QSt
 }
 bool read_toml(QIODevice &device, QSettings::SettingsMap &map) {
     std::istringstream input_str(device.readAll().toStdString());
-    auto parsed = toml::parse(input_str);
+    auto parsed = toml::parse<toml::preserve_comments>(input_str);
     for (const auto &[key_std, value] : parsed.as_table()) {
         auto key = QString::fromStdString(key_std);
-        switch (value.type()) {
-            case toml::value_t::boolean:
-                map[key] = QVariant::fromValue(value.as_boolean());
-                break;
-            case toml::value_t::integer:
-                map[key] = QVariant::fromValue(value.as_integer());
-                break;
-            case toml::value_t::floating:
-                map[key] = QVariant::fromValue(value.as_floating());
-                break;
-            case toml::value_t::string:
-                map[key] = QVariant::fromValue(QString::fromStdString(value.as_string()));
-                break;
-            case toml::value_t::array:
-            case toml::value_t::table:
-                decode_data(map, value, key);
-                break;
-            default:
-                break;
-        }
+        decode_data(map, value, key);
     }
     return true;
 }
-void assign_variant(toml::value &table, const std::string &key, const QVariant &value) {
+void assign_variant(toml::value &table, const std::string &key, const QVariant &value,
+                    const std::vector<std::string> comments) {
     switch (value.type()) {
         case QVariant::Bool:
             table[key] = value.value<bool>();
@@ -107,15 +117,44 @@ void assign_variant(toml::value &table, const std::string &key, const QVariant &
             err_msg << value.typeName() << " is not supported";
             throw std::invalid_argument(err_msg.str());
     }
+    for (const auto &comment : comments) {
+        table[key].comments().push_back(comment);
+    }
 }
-void assign_recursive(toml::value &table, QStringList keys, QVariant &value) {
+void assign_recursive(toml::value &table, QStringList keys, QVariant &value, std::vector<std::string> comments) {
     if (keys.count() == 1) {
-        assign_variant(table, keys.front().toStdString(), value);
+        assign_variant(table, keys.front().toStdString(), value, comments);
     } else {
         auto key = keys.front().toStdString();
         keys.pop_front();
-        assign_recursive(table[key], keys, value);
+        assign_recursive(table[key], keys, value, comments);
     }
+}
+std::vector<std::string> retrive_comment(const QSettings::SettingsMap &map, QString &key, QVariant &value) {
+    std::vector<std::string> result;
+    QString type = "";
+    switch (value.type()) {
+        case QVariant::Bool:
+        case QVariant::Int:
+        case QVariant::Double:
+        case QVariant::String:
+        case QVariant::Locale:
+            type = "primitive";
+            break;
+        default:
+            type = "structure";
+            break;
+    }
+    auto comment_key = QString("%1/%2/%3").arg(LOEF_TOML_COMMENT_SECTIONNAME).arg(type).arg(key);
+    for (size_t i = 0;; i++) {
+        auto comment_idx_key = QString("%1/_%2").arg(comment_key).arg(i);
+        if (map.contains(comment_idx_key)) {
+            result.push_back(map[comment_idx_key].value<QString>().toStdString());
+        } else {
+            break;
+        }
+    }
+    return result;
 }
 bool write_toml(QIODevice &device, const QSettings::SettingsMap &map) {
     toml::value result;
@@ -123,7 +162,11 @@ bool write_toml(QIODevice &device, const QSettings::SettingsMap &map) {
         auto key = map_itr->first;
         auto value = map_itr->second;
         auto sections = key.split("/");
-        assign_recursive(result, sections, value);
+        if (sections[0] == LOEF_TOML_COMMENT_SECTIONNAME) {
+            continue;
+        }
+        auto comments = retrive_comment(map, key, value);
+        assign_recursive(result, sections, value, comments);
     }
     device.write(toml::format(result, 0).data());
     return true;

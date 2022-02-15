@@ -34,6 +34,8 @@ MainWindow::MainWindow(QLocale locale, QWidget *parent) : QMainWindow(parent), u
     // end lazy
     connect(ui->loef_drawer, SIGNAL(fixed_charge_selected(LOEF::id_type)), this,
             SLOT(slot_fixed_charge_selected(LOEF::id_type)));
+    connect(ui->loef_drawer, SIGNAL(editor_fixed_charge_open_requested(LOEF::id_type)), this,
+            SLOT(slot_editor_fixed_charge_open_requested(LOEF::id_type)));
     connect(ui->doubleSpinBox_inverse_permittivity, SIGNAL(valueChanged(double)), ui->loef_drawer,
             SLOT(slot_inverse_permittivity_changed(double)));
     ui->doubleSpinBox_inverse_permittivity->setValue(LOEF::initial_inverse_permittivity.value());
@@ -47,6 +49,16 @@ MainWindow::MainWindow(QLocale locale, QWidget *parent) : QMainWindow(parent), u
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::on_button_add_fixed_charge_clicked() { add_fixed_charge(); }
+void MainWindow::slot_editor_fixed_charge_open_requested(LOEF::id_type id) {
+    for (auto i = 0; i < ui->list_fixed_charges->count(); i++) {
+        auto item = ui->list_fixed_charges->item(i);
+        auto id_item = item->data(static_cast<int>(LOEF::item_data_role::id_role)).value<LOEF::id_type>();
+        if (id_item == id) {
+            this->on_list_fixed_charges_itemClicked(item);
+            break;
+        }
+    }
+}
 
 void MainWindow::on_list_fixed_charges_itemClicked(QListWidgetItem *item) {
     auto id_selected_charge = item->data(static_cast<int>(LOEF::item_data_role::id_role)).value<LOEF::id_type>();
@@ -302,16 +314,22 @@ void MainWindow::on_actionenable_epsurface_toggled(bool arg1) {
 
 void MainWindow::on_actiondistance_triggered() {
     auto input_distance =
-        QInputDialog::getDouble(this, tr("distance between equipotential surfaces"), tr("enter distance"), 0, 0);
+        QInputDialog::getDouble(this, tr("distance between equipotential surfaces"), tr("enter distance"),
+                                this->electric_potential_handler.distance.value(), 0);
     this->electric_potential_handler.distance = input_distance * LOEF::boostunits::volt;
 }
 
 void MainWindow::on_actiondisable_LOEF_toggled(bool arg1) { this->electric_potential_handler.disable_LOEF = arg1; }
 
-void MainWindow::on_actionuse_input_toggled(bool arg1) { this->electric_potential_handler.color_use_input = arg1; }
+void MainWindow::on_actionuse_input_toggled(bool arg1) {
+    ui->actionpositive->setEnabled(arg1);
+    ui->actionnegative->setEnabled(arg1);
+    this->electric_potential_handler.color_use_input = arg1;
+}
 
 void MainWindow::on_actionmax_error_triggered() {
-    auto input_max_error = QInputDialog::getDouble(this, tr("max_error"), tr("enter max_error"), 0, 0);
+    auto input_max_error =
+        QInputDialog::getDouble(this, tr("max_error"), tr("enter max_error"), LOEF::experimental::max_error_surface, 0);
     LOEF::experimental::max_error_surface = input_max_error;
 }
 using LOEF::experimental::mm;
@@ -332,12 +350,7 @@ void MainWindow::on_actionoutput_samples_triggered() {
             line_ends.push_back(fixed_charge.position());
         }
     }
-    if (this->electric_potential_handler.draw_sample_line) {
-        if (line_ends.size() != 3) {
-            QMessageBox::information(this, tr("output samples"), tr("couldn't make vector"));
-            output_file.close();
-            return;
-        }
+    if (line_ends.size() == 3) {
         LOEF::vec2d start;
         LOEF::vec2d end;
         auto diff_01 = (line_ends[0] - line_ends[1]).length().value();
@@ -355,7 +368,7 @@ void MainWindow::on_actionoutput_samples_triggered() {
             end = (line_ends[1] + line_ends[2]) / 2.0;
         } else {
             output_file.write("");
-            QMessageBox::information(this, tr("output samples"), tr("couldn't make vector"));
+            QMessageBox::warning(this, tr("output samples"), tr("couldn't make vector"));
             output_file.close();
             return;
         }
@@ -370,12 +383,7 @@ void MainWindow::on_actionoutput_samples_triggered() {
             }
             output_stream << from_start.length().value() << "," << potential.value() << "\n";
         }
-    } else if (this->electric_potential_handler.draw_sample_rectangle) {
-        if (line_ends.size() != 2) {
-            QMessageBox::information(this, tr("output samples"), tr("couldn't make rectangle"));
-            output_file.close();
-            return;
-        }
+    } else if (line_ends.size() == 2) {
         QTextStream output_stream(&output_file);
         output_stream << "#x,y,potential\n";
         auto start_x = boost::units::fmin(line_ends[0].x(), line_ends[1].x());
@@ -393,12 +401,18 @@ void MainWindow::on_actionoutput_samples_triggered() {
                 output_stream << x.value() << "," << y.value() << "," << potential.value() << "\n";
             }
         }
+    } else {
+        QMessageBox::warning(this, tr("output samples"),
+                             tr("you must specify line or rectangle by placing three or two null charges."));
+        output_file.close();
+        return;
     }
     output_file.close();
     QMessageBox::information(this, tr("output samples"), tr("output successfully ends"));
 }
 
 void MainWindow::on_actionshow_line_toggled(bool arg1) { this->electric_potential_handler.draw_sample_line = arg1; }
+// 両方選択してもOK
 
 void MainWindow::on_actionshow_rectangle_toggled(bool arg1) {
     this->electric_potential_handler.draw_sample_rectangle = arg1;
