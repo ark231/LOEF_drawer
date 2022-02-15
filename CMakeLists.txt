@@ -4,7 +4,6 @@ project(LOEF_drawer LANGUAGES CXX VERSION 1.0.4.0)
 set(${CMAKE_PROJECT_NAME}_VERSION_SUFFIX -dev)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -31,6 +30,7 @@ endif()
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/translations)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/settings)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/saves)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/templates/circle.json ${CMAKE_CURRENT_SOURCE_DIR}/templates/lines.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/saves)
 
 include(cmake/CPM.cmake)
 CPMAddPackage(
@@ -85,6 +85,7 @@ install(FILES ${LOEF_QM_FILES}
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/settings ${CMAKE_CURRENT_BINARY_DIR}/saves
     DESTINATION ${CMAKE_INSTALL_PREFIX}
     )
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/templates DESTINATION ${CMAKE_INSTALL_PREFIX})
 ##for debugging
 #message(STATUS "*** dump start cmake variables ***")
 #get_cmake_property(_variableNames VARIABLES)
