@@ -4,6 +4,7 @@
 #include <QGuiApplication>
 #include <QInputDialog>
 #include <QJsonArray>
+#include <QMetaEnum>
 #include <QMouseEvent>
 #include <QScreen>
 #include <QtGlobal>
@@ -348,7 +349,7 @@ void LOEF_drawer::prepare_LOEF_pathes() {
                         stepper, std::ref(system), state0, LOEF::experimental::integrate::start_time,
                         LOEF::experimental::integrate::end_time, LOEF::experimental::integrate::dt, observer);
                 }
-            } catch (std::runtime_error err) {  //握りつぶす
+            } catch (std::runtime_error &err) {  //握りつぶす
                 qDebug() << pen_itr->first << err.what();
             }
         }
@@ -385,28 +386,39 @@ void LOEF_drawer::mousePressEvent(QMouseEvent *ev) {
     if (this->is_multi_selecting) {
         charge_selected_manually_->update_offset(pos_mouse);
     }
+    int 新規選択数 = 0;
     for (auto charge = fixed_charges_.begin(); charge != fixed_charges_.end(); charge++) {
+        if (not this->is_multi_selecting && 新規選択数 >= 1) {
+            return;
+        }
         LOEF::vec2d offset = charge->second.position() - pos_mouse;
         if (offset.length() * dpmm_ <= LOEF::radius::FIXED * dpmm_) {
             if (this->is_multi_selecting && charge_selected_manually_->is_selected(charge->first)) {
                 charge_selected_manually_->unselect(charge->first);
             } else {
+                if (ev->button() == Qt::RightButton) {
+                    emit editor_fixed_charge_open_requested(charge->first);
+                    return;
+                }
                 charge_selected_manually_->set_selected(charge->first, offset);
                 charge_selected_automatically_->unselect_all();
                 charge_selected_automatically_->set_selected(charge->first, offset);
                 emit fixed_charge_selected(charge->first);
+                新規選択数++;
             }
         }
     }
 }
 void LOEF_drawer::mouseMoveEvent(QMouseEvent *ev) {
-    LOEF::vec2d pos_mouse(ev->pos(), dpmm_);
-    if (*charge_selected_manually_) {
-        auto id_selecteds = charge_selected_manually_->get_selected();
-        for (const auto &id_selected : id_selecteds) {
-            auto new_pos = pos_mouse + charge_selected_manually_->get_offset(id_selected);
-            replace_fixed_charge(id_selected, std::nullopt, new_pos);
-            emit fixed_charge_position_changed(id_selected, new_pos.x(), new_pos.y());
+    if ((ev->buttons() & Qt::LeftButton) != 0) {  //左クリック（も）されている
+        LOEF::vec2d pos_mouse(ev->pos(), dpmm_);
+        if (*charge_selected_manually_) {
+            auto id_selecteds = charge_selected_manually_->get_selected();
+            for (const auto &id_selected : id_selecteds) {
+                auto new_pos = pos_mouse + charge_selected_manually_->get_offset(id_selected);
+                replace_fixed_charge(id_selected, std::nullopt, new_pos);
+                emit fixed_charge_position_changed(id_selected, new_pos.x(), new_pos.y());
+            }
         }
     }
 }

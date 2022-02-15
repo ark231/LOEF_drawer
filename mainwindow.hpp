@@ -32,6 +32,7 @@ class MainWindow : public QMainWindow {
     void slot_fixed_charge_destroyed(LOEF::id_type);
     void slot_fixed_charge_selected(LOEF::id_type);
     void slot_editor_fixed_charge_closed(QPoint);
+    void slot_editor_fixed_charge_open_requested(LOEF::id_type);
 
     void on_button_add_fixed_charge_clicked();
     void on_list_fixed_charges_itemClicked(QListWidgetItem *item);
