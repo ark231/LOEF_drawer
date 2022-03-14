@@ -22,11 +22,12 @@
 
 MainWindow::MainWindow(QLocale locale, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    ui->label_app_info->setText(QStringLiteral("%1 \nv%2.%3.%4")
+    ui->label_app_info->setText(QStringLiteral("%1 \nv%2.%3.%4%5")
                                     .arg(LOEF::application_name)
                                     .arg(LOEF::version_major)
                                     .arg(LOEF::version_minor)
-                                    .arg(LOEF::version_patch));
+                                    .arg(LOEF::version_patch)
+                                    .arg(LOEF::version_suffix));
     this->setWindowTitle(LOEF::application_name);
     // lazy
     ui->loef_drawer->set_electric_potential(&this->electric_potential_handler);

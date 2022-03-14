@@ -209,7 +209,7 @@ version</source>
         <location filename="../mainwindow.ui" line="302"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="307"/>
         <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="307"/>
-        <location filename="../mainwindow.cpp" line="341"/>
+        <location filename="../mainwindow.cpp" line="342"/>
         <source>distance</source>
         <translation>等電位線の間隔(V)</translation>
     </message>
@@ -231,7 +231,7 @@ version</source>
         <location filename="../mainwindow.ui" line="323"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="310"/>
         <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="310"/>
-        <location filename="../mainwindow.cpp" line="332"/>
+        <location filename="../mainwindow.cpp" line="333"/>
         <source>max_error</source>
         <translation>最大許容誤差（線の太さ）</translation>
     </message>
@@ -243,10 +243,10 @@ version</source>
         <translation>線出力</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="337"/>
-        <location filename="../mainwindow.cpp" line="371"/>
-        <location filename="../mainwindow.cpp" line="405"/>
-        <location filename="../mainwindow.cpp" line="411"/>
+        <location filename="../mainwindow.cpp" line="338"/>
+        <location filename="../mainwindow.cpp" line="372"/>
+        <location filename="../mainwindow.cpp" line="406"/>
+        <location filename="../mainwindow.cpp" line="412"/>
         <source>output samples</source>
         <translation>サンプルを出力</translation>
     </message>
@@ -272,14 +272,14 @@ version</source>
         <translation>既存のアルゴリズム実装を使用する</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="125"/>
-        <location filename="../mainwindow.cpp" line="138"/>
+        <location filename="../mainwindow.cpp" line="126"/>
+        <location filename="../mainwindow.cpp" line="139"/>
         <source>positive charge</source>
         <translation>正電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="127"/>
-        <location filename="../mainwindow.cpp" line="140"/>
+        <location filename="../mainwindow.cpp" line="128"/>
+        <location filename="../mainwindow.cpp" line="141"/>
         <source>null charge</source>
         <translatorcomment>もっとマシな呼び方募集中</translatorcomment>
         <translation>非荷電電荷</translation>
@@ -288,7 +288,7 @@ version</source>
         <location filename="../mainwindow.ui" line="357"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="315"/>
         <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="315"/>
-        <location filename="../mainwindow.cpp" line="423"/>
+        <location filename="../mainwindow.cpp" line="424"/>
         <source>about Qt</source>
         <translation>Qtについて</translation>
     </message>
@@ -296,135 +296,135 @@ version</source>
         <location filename="../mainwindow.ui" line="362"/>
         <location filename="../build-LOEF_drawer-unknown-Debug/LOEF_drawer_autogen/include/ui_mainwindow.h" line="316"/>
         <location filename="../build-LOEF_drawer-unknown-Release/LOEF_drawer_autogen/include/ui_mainwindow.h" line="316"/>
-        <location filename="../mainwindow.cpp" line="446"/>
+        <location filename="../mainwindow.cpp" line="447"/>
         <source>about LOEF_drawer</source>
         <translation>LOEF_drawerについて</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="129"/>
-        <location filename="../mainwindow.cpp" line="142"/>
+        <location filename="../mainwindow.cpp" line="130"/>
+        <location filename="../mainwindow.cpp" line="143"/>
         <source>negative charge</source>
         <translation>負電荷</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="188"/>
+        <location filename="../mainwindow.cpp" line="189"/>
         <source>This change require restarting this program.
 Do you want to restart this program?</source>
         <translation>この変更を反映させるにはプログラムの再起動が必要です。
 このプログラムを再起動しますか？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="190"/>
+        <location filename="../mainwindow.cpp" line="191"/>
         <source>confirm restart</source>
         <translation>再起動を確認</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="221"/>
-        <location filename="../mainwindow.cpp" line="246"/>
-        <location filename="../mainwindow.cpp" line="343"/>
+        <location filename="../mainwindow.cpp" line="222"/>
+        <location filename="../mainwindow.cpp" line="247"/>
+        <location filename="../mainwindow.cpp" line="344"/>
         <source>enter save name</source>
         <translation>保存名を入力してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="221"/>
-        <location filename="../mainwindow.cpp" line="246"/>
-        <location filename="../mainwindow.cpp" line="343"/>
+        <location filename="../mainwindow.cpp" line="222"/>
+        <location filename="../mainwindow.cpp" line="247"/>
+        <location filename="../mainwindow.cpp" line="344"/>
         <source>save name:</source>
         <translation>セーブファイル名：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="222"/>
-        <location filename="../mainwindow.cpp" line="247"/>
-        <location filename="../mainwindow.cpp" line="343"/>
+        <location filename="../mainwindow.cpp" line="223"/>
+        <location filename="../mainwindow.cpp" line="248"/>
+        <location filename="../mainwindow.cpp" line="344"/>
         <source>untitled</source>
         <translation>無題</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="234"/>
+        <location filename="../mainwindow.cpp" line="235"/>
         <source>save file with entered name already exists.
 do you want to overwrite it?</source>
         <translation>同名のファイルがすでに存在しています。
 上書きしますか？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="236"/>
+        <location filename="../mainwindow.cpp" line="237"/>
         <source>save file exists</source>
         <translation>ファイルがすでに存在します</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="262"/>
+        <location filename="../mainwindow.cpp" line="263"/>
         <source>open save file</source>
         <translation>セーブファイルを開く</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="262"/>
+        <location filename="../mainwindow.cpp" line="263"/>
         <source>JSON files (*.json)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="296"/>
+        <location filename="../mainwindow.cpp" line="297"/>
         <source>max absolute positive potential</source>
         <translation>正電位の最大値の絶対値</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="296"/>
+        <location filename="../mainwindow.cpp" line="297"/>
         <source>enter max abs positive</source>
         <translation>生電位の絶対値の最大値を入力してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="305"/>
+        <location filename="../mainwindow.cpp" line="306"/>
         <source>max absolute negative potential</source>
         <translation>負電位の絶対値の最大値</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="305"/>
+        <location filename="../mainwindow.cpp" line="306"/>
         <source>enter max abs negative</source>
         <translation>負電位の絶対値の最大値を入力してください</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="317"/>
+        <location filename="../mainwindow.cpp" line="318"/>
         <source>distance between equipotential surfaces</source>
         <translation>等電位線間隔</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="317"/>
-        <location filename="../mainwindow.cpp" line="341"/>
+        <location filename="../mainwindow.cpp" line="318"/>
+        <location filename="../mainwindow.cpp" line="342"/>
         <source>enter distance</source>
         <translation>間隔を入力してください(V単位)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="332"/>
+        <location filename="../mainwindow.cpp" line="333"/>
         <source>enter max_error</source>
         <translation>最大許容誤差（等電位線の太さ）を入力してください(V単位)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="338"/>
+        <location filename="../mainwindow.cpp" line="339"/>
         <source>2塊の非荷電電荷の間の電位のサンプルを出力
 電荷が2つ重なってるほうが終端</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="371"/>
+        <location filename="../mainwindow.cpp" line="372"/>
         <source>couldn&apos;t make vector</source>
         <translation>サンプルマーカーの数が３でないためベクトルが作れませんでした</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="406"/>
+        <location filename="../mainwindow.cpp" line="407"/>
         <source>you must specify line or rectangle by placing three or two null charges.</source>
         <translation>線出力か長方形出力かを、非荷電電荷を3つか2つ置くことによって指定してください。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="411"/>
+        <location filename="../mainwindow.cpp" line="412"/>
         <source>output successfully ends</source>
         <translation>出力に成功しました</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="435"/>
+        <location filename="../mainwindow.cpp" line="436"/>
         <source>failed to open resource</source>
         <translation>リソースオープン失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="436"/>
+        <location filename="../mainwindow.cpp" line="437"/>
         <source>failed to open resource %1</source>
         <translation>%1というリソースを開くことに失敗しました</translation>
     </message>
