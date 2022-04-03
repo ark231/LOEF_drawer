@@ -11,21 +11,15 @@
 #include <vector>
 
 #include "charges.hpp"
+#include "experimental/electric_potential.hpp"
 #include "general_consts.hpp"
 #include "vec2d.hpp"
+
 namespace LOEF {
 class state_charge_selected_;
 class id_handler;
 }  // namespace LOEF
 // using LOEF::id_type = size_t;
-
-// lazy
-namespace LOEF {
-namespace experimental {
-class electric_potential;
-}
-}  // namespace LOEF
-// end lazy
 
 class LOEF_drawer : public QWidget {
     Q_OBJECT
@@ -44,12 +38,14 @@ class LOEF_drawer : public QWidget {
     void unselect_all_selected_fixed_charge();
 
     // lazy impl
-    void set_electric_potential(LOEF::experimental::electric_potential *of_parent);
-    void set_is_ready_made_requested(bool *of_parent);
     std::vector<LOEF::fixed_charge> get_fixed_charges();
-    enum class 符号分布 { 正多, 負多, 同等, デフォルト値 };
-    符号分布 固定電荷符号分布 = 符号分布::デフォルト値;
+    enum class total_polarity { positive, negative, equal, default_value };
+    total_polarity fixed_charges_total_polarity = total_polarity::default_value;
     // end lazy impl
+    // experimental
+    void set_is_ready_made_requested(bool new_value);
+    LOEF::experimental::electric_potential_handler ep_handler;
+    // end experimental
 
    private:
     LOEF::dot_per_millimetre_quantity dpmm_;
@@ -64,10 +60,9 @@ class LOEF_drawer : public QWidget {
     bool draw_LOEF_requested = true;
     bool is_multi_selecting = false;
 
-    // lazy impl
-    LOEF::experimental::electric_potential *electric_potential_handler = nullptr;
-    bool *is_ready_made_requested = nullptr;
-    // end lazy impl
+    // experimental
+    bool is_ready_made_requested;
+    // end experimental
 
     void paintEvent(QPaintEvent *ev) override;
     void mousePressEvent(QMouseEvent *ev) override;

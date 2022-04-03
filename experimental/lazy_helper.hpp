@@ -49,9 +49,9 @@ millimetre_quantity calc_shortest_distance(
         if (contains<>(excludes.begin(), excludes.end(), itr->first) || exclude_cond(itr->second)) {
             continue;
         }
-        auto 候補 = (itr->second.position() - pos).length();
-        if (候補 < current_least) {
-            current_least = 候補;
+        auto new_value = (itr->second.position() - pos).length();
+        if (new_value < current_least) {
+            current_least = new_value;
         }
     }
     return current_least;
@@ -59,19 +59,19 @@ millimetre_quantity calc_shortest_distance(
 template <class MapIterator>
 id_type find_closest(MapIterator fixed_begin, MapIterator fixed_end, vec2d pos,
                      std::function<bool(fixed_charge)> exclude_cond) {
-    millimetre_quantity 最短距離 = std::numeric_limits<millimetre_quantity::value_type>::infinity() * mm;
-    id_type 最短id = -1;
+    millimetre_quantity shortest_distance = std::numeric_limits<millimetre_quantity::value_type>::infinity() * mm;
+    id_type id_shortest = -1;
     for (auto itr = fixed_begin; itr != fixed_end; itr++) {
         if (exclude_cond(itr->second)) {
             continue;
         }
-        auto 候補 = (itr->second.position() - pos).length();
-        if (候補 < 最短距離) {
-            最短距離 = 候補;
-            最短id = itr->first;
+        auto new_value = (itr->second.position() - pos).length();
+        if (new_value < shortest_distance) {
+            shortest_distance = new_value;
+            id_shortest = itr->first;
         }
     }
-    return 最短id;
+    return id_shortest;
 }
 }  // namespace experimental
 }  // namespace LOEF

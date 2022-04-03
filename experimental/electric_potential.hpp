@@ -7,7 +7,7 @@
 //適当な実装
 namespace LOEF {
 namespace experimental {
-struct electric_potential {
+struct electric_potential_handler {
     bool color_enabled = false;
     bool color_use_input = false;
     bool surface_enabled = false;

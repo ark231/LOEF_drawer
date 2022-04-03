@@ -135,13 +135,13 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
         return;
     }
     // lazy
-    if (this->electric_potential_handler->color_enabled || this->electric_potential_handler->surface_enabled) {
+    if (this->ep_handler.color_enabled || this->ep_handler.surface_enabled) {
         auto potential_image = prepare_electric_potential_image();
         if (potential_image) {
             painter.drawImage(0, 0, potential_image.value());
         }
     }
-    if (this->electric_potential_handler->draw_sample_line) {
+    if (this->ep_handler.draw_sample_line) {
         std::vector<LOEF::vec2d> line_ends;
         for (const auto &charge : fixed_charges_) {
             if (charge.second.quantity().value() == 0.0) {
@@ -172,7 +172,7 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
             painter.drawLine(start.to_QPointF(dpmm_), end.to_QPointF(dpmm_));
             painter.restore();
         }
-    } else if (this->electric_potential_handler->draw_sample_rectangle) {
+    } else if (this->ep_handler.draw_sample_rectangle) {
         std::vector<LOEF::vec2d> line_ends;
         for (const auto &charge : fixed_charges_) {
             if (charge.second.quantity().value() == 0.0) {
@@ -192,7 +192,7 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
             painter.restore();
         }
     }
-    if (this->electric_potential_handler->disable_LOEF == true) {
+    if (this->ep_handler.disable_LOEF == true) {
         return;
     }
     // end lazy
@@ -222,31 +222,31 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
     for (const auto &[key, value] : negative_fixed_charges) {
         negative_sum += value.quantity();
     }
-    auto 正無し = qFuzzyIsNull(positive_sum.value());
-    auto 負無し = qFuzzyIsNull(negative_sum.value());
-    if (正無し && 負無し) {
-        固定電荷符号分布 = 符号分布::同等;
-    } else if (正無し) {
-        固定電荷符号分布 = 符号分布::負多;
-    } else if (負無し) {
-        固定電荷符号分布 = 符号分布::正多;
+    auto no_positive_charge_exists = qFuzzyIsNull(positive_sum.value());
+    auto no_negative_charge_exists = qFuzzyIsNull(negative_sum.value());
+    if (no_positive_charge_exists && no_negative_charge_exists) {
+        fixed_charges_total_polarity = total_polarity::equal;
+    } else if (no_positive_charge_exists) {
+        fixed_charges_total_polarity = total_polarity::negative;
+    } else if (no_negative_charge_exists) {
+        fixed_charges_total_polarity = total_polarity::positive;
     } else if (qFuzzyCompare(positive_sum.value(), boost::units::abs(negative_sum).value())) {
-        固定電荷符号分布 = 符号分布::同等;
+        fixed_charges_total_polarity = total_polarity::equal;
     } else if (positive_sum > boost::units::abs(negative_sum)) {
-        固定電荷符号分布 = 符号分布::正多;
+        fixed_charges_total_polarity = total_polarity::positive;
     } else if (boost::units::abs(negative_sum) > positive_sum) {
-        固定電荷符号分布 = 符号分布::負多;
+        fixed_charges_total_polarity = total_polarity::negative;
     }
-    switch (固定電荷符号分布) {
-        case 符号分布::正多:
+    switch (fixed_charges_total_polarity) {
+        case total_polarity::positive:
             calc_LOEF_from_fixed_charges(negative_fixed_charges, width, height);
             calc_LOEF_from_fixed_charges(positive_fixed_charges, width, height);
             break;
-        case 符号分布::負多:
+        case total_polarity::negative:
             calc_LOEF_from_fixed_charges(positive_fixed_charges, width, height);
             calc_LOEF_from_fixed_charges(negative_fixed_charges, width, height);
             break;
-        case 符号分布::同等:
+        case total_polarity::equal:
             calc_LOEF_from_fixed_charges(positive_fixed_charges, width, height);
             calc_LOEF_from_fixed_charges(negative_fixed_charges, width, height);
             break;
@@ -273,7 +273,7 @@ void LOEF_drawer::calc_LOEF_from_fixed_charges(decltype(fixed_charges_) &fixed_c
     }
 }
 void LOEF_drawer::prepare_LOEF_pathes() {
-    if (*(this->is_ready_made_requested)) {
+    if (this->is_ready_made_requested) {
         for (auto pen_itr = charge_pens_.begin(); pen_itr != charge_pens_.end(); pen_itr++) {
             auto pen = pen_itr->second;
             auto path = pen.get_path();
@@ -284,20 +284,20 @@ void LOEF_drawer::prepare_LOEF_pathes() {
             LOEF::experimental::LOEF_system<fixedMapIter> system(fixed_charges_.begin(), fixed_charges_.end(),
                                                                  path->is_positive());
             path->moveTo(LOEF::vec2d(state0).to_QPointF(dpmm_));
-            bool 全て発散 = false;
+            bool is_every_charge_divergent = false;
             auto origin = fixed_charges_[pen.origin];
-            switch (固定電荷符号分布) {
-                case 符号分布::正多:
+            switch (fixed_charges_total_polarity) {
+                case total_polarity::positive:
                     if (origin.quantity() > 0.0 * LOEF::boostunits::coulomb) {
-                        全て発散 = true;
+                        is_every_charge_divergent = true;
                     }
                     break;
-                case 符号分布::負多:
+                case total_polarity::negative:
                     if (origin.quantity() < 0.0 * LOEF::boostunits::coulomb) {
-                        全て発散 = true;
+                        is_every_charge_divergent = true;
                     }
                     break;
-                case 符号分布::同等:
+                case total_polarity::equal:
                 default:
                     break;
             }
@@ -326,7 +326,7 @@ void LOEF_drawer::prepare_LOEF_pathes() {
                         not boost::units::isfinite(LOEF::vec2d(state).y())) {
                         throw std::runtime_error("illigal calculation happened");
                     }
-                    if (全て発散 && not pen.is_on_screen(dpmm_)) {
+                    if (is_every_charge_divergent && not pen.is_on_screen(dpmm_)) {
                         throw std::runtime_error("go out of screen");
                     }
                     path->lineTo(LOEF::vec2d(state).to_QPointF(dpmm_));
@@ -386,9 +386,9 @@ void LOEF_drawer::mousePressEvent(QMouseEvent *ev) {
     if (this->is_multi_selecting) {
         charge_selected_manually_->update_offset(pos_mouse);
     }
-    int 新規選択数 = 0;
+    int num_new_selected = 0;
     for (auto charge = fixed_charges_.begin(); charge != fixed_charges_.end(); charge++) {
-        if (not this->is_multi_selecting && 新規選択数 >= 1) {
+        if (not this->is_multi_selecting && num_new_selected >= 1) {
             return;
         }
         LOEF::vec2d offset = charge->second.position() - pos_mouse;
@@ -404,7 +404,7 @@ void LOEF_drawer::mousePressEvent(QMouseEvent *ev) {
                 charge_selected_automatically_->unselect_all();
                 charge_selected_automatically_->set_selected(charge->first, offset);
                 emit fixed_charge_selected(charge->first);
-                新規選択数++;
+                num_new_selected++;
             }
         }
     }
@@ -459,11 +459,11 @@ void LOEF_drawer::clear_and_redraw() {
     charge_pens_.clear();
     charge_paths_.clear();
     // lazy
-    if (!this->electric_potential_handler->color_use_input) {
-        this->electric_potential_handler->set_current_max_abs_positive(0.0 * LOEF::experimental::V);
-        this->electric_potential_handler->set_current_max_abs_negative(0.0 * LOEF::experimental::V);
+    if (!this->ep_handler.color_use_input) {
+        this->ep_handler.set_current_max_abs_positive(0.0 * LOEF::experimental::V);
+        this->ep_handler.set_current_max_abs_negative(0.0 * LOEF::experimental::V);
         for (const auto &fixed_charge : this->fixed_charges_) {
-            this->electric_potential_handler->hint_add_charge(fixed_charge.second.quantity());
+            this->ep_handler.hint_add_charge(fixed_charge.second.quantity());
         }
     }
     // end lazy
@@ -544,10 +544,6 @@ void LOEF_drawer::keyReleaseEvent(QKeyEvent *ev) {
     }
 }
 // lazy
-void LOEF_drawer::set_electric_potential(LOEF::experimental::electric_potential *of_parent) {
-    this->electric_potential_handler = of_parent;
-}
-void LOEF_drawer::set_is_ready_made_requested(bool *of_parent) { this->is_ready_made_requested = of_parent; }
 std::optional<QImage> LOEF_drawer::prepare_electric_potential_image() {
     if (this->fixed_charges_.empty()) {
         return std::nullopt;
@@ -556,14 +552,13 @@ std::optional<QImage> LOEF_drawer::prepare_electric_potential_image() {
     auto height = this->height();
     qDebug() << "width=" << width << " , height=" << height;
     QImage result(width, height, QImage::Format_ARGB32);
-    if (this->electric_potential_handler->surface_enabled &&
-        this->electric_potential_handler->distance == 0.0 * LOEF::boostunits::volt) {
+    if (this->ep_handler.surface_enabled && this->ep_handler.distance == 0.0 * LOEF::boostunits::volt) {
         double distance = 0.0;
         while (distance == 0.0) {
             distance =
                 QInputDialog::getDouble(nullptr, tr("distance cannot be zero!"), tr("enter non zero distance"), 0, 0);
         }
-        this->electric_potential_handler->distance = distance * LOEF::boostunits::volt;
+        this->ep_handler.distance = distance * LOEF::boostunits::volt;
         return std::nullopt;
     }
     for (auto y = 0; y < height; y++) {
@@ -571,8 +566,8 @@ std::optional<QImage> LOEF_drawer::prepare_electric_potential_image() {
             LOEF::vec2d current_position(QPoint(x, y), this->dpmm_);
             LOEF::volt_quantity potential = 0.0 * LOEF::experimental::V;
             QColor current_color("white");
-            auto max_abs_positive = this->electric_potential_handler->get_current_max_abs_positive();
-            auto max_abs_negative = this->electric_potential_handler->get_current_max_abs_negative();
+            auto max_abs_positive = this->ep_handler.get_current_max_abs_positive();
+            auto max_abs_negative = this->ep_handler.get_current_max_abs_negative();
             for (const auto &fixed_charge_tuple : this->fixed_charges_) {
                 const auto &fixed_charge = fixed_charge_tuple.second;
                 auto charge_to_pos = fixed_charge.position() - current_position;
@@ -583,15 +578,15 @@ std::optional<QImage> LOEF_drawer::prepare_electric_potential_image() {
                 potential += LOEF::experimental::k0 * fixed_charge.quantity() /
                              static_cast<LOEF::metre_quantity>(charge_to_pos.length());
             }
-            if (this->electric_potential_handler->surface_enabled) {
-                auto remainder = boost::units::fmod(potential, this->electric_potential_handler->distance).value();
+            if (this->ep_handler.surface_enabled) {
+                auto remainder = boost::units::fmod(potential, this->ep_handler.distance).value();
                 if (LOEF::experimental::is_about_same(remainder, 0.0, LOEF::experimental::max_error_surface)) {
                     current_color = QColor("black");
                     result.setPixel(x, y, current_color.rgb());
                     goto CONTINUE_TO_NEXT_POS;  //ここに関しては普通のcontinueでもいいが、上と揃えておく
                 }
             }
-            if (this->electric_potential_handler->color_enabled) {
+            if (this->ep_handler.color_enabled) {
                 if (potential >= 0.0 * LOEF::experimental::V) {
                     auto diff = 0xff * (potential / max_abs_positive);
                     current_color = QColor(0xff, 0xff - diff, 0xff - diff);
@@ -614,3 +609,6 @@ std::vector<LOEF::fixed_charge> LOEF_drawer::get_fixed_charges() {
     return result;
 }
 // end lazy
+// experimental
+void LOEF_drawer::set_is_ready_made_requested(bool new_value) { this->is_ready_made_requested = new_value; }
+// end experimental

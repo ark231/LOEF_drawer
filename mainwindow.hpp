@@ -66,13 +66,6 @@ class MainWindow : public QMainWindow {
     LOEF_individual_fixed_charge_editor *current_selected_editor_ = nullptr;
     QPoint fixed_charge_editor_last_pos_ = LOEF::invalid_position;
 
-   public:
-    // lazy
-    /*experimental*/
-    LOEF::experimental::electric_potential electric_potential_handler;
-    bool is_ready_made_requested = false;
-    // end lazy
-
    private:
     void add_fixed_charge(const LOEF::coulomb_quantity initial_quantity, const LOEF::millimetre_quantity initial_X,
                           const LOEF::millimetre_quantity initial_Y);

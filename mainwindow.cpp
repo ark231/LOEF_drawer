@@ -29,10 +29,6 @@ MainWindow::MainWindow(QLocale locale, QWidget *parent) : QMainWindow(parent), u
                                     .arg(LOEF::version_patch)
                                     .arg(LOEF::version_suffix));
     this->setWindowTitle(LOEF::application_name);
-    // lazy
-    ui->loef_drawer->set_electric_potential(&this->electric_potential_handler);
-    ui->loef_drawer->set_is_ready_made_requested(&this->is_ready_made_requested);
-    // end lazy
     connect(ui->loef_drawer, SIGNAL(fixed_charge_selected(LOEF::id_type)), this,
             SLOT(slot_fixed_charge_selected(LOEF::id_type)));
     connect(ui->loef_drawer, SIGNAL(editor_fixed_charge_open_requested(LOEF::id_type)), this,
@@ -289,43 +285,41 @@ void MainWindow::on_button_open_clicked() {
 }
 
 // lazy
-void MainWindow::on_actionenable_epcolor_toggled(bool arg1) { this->electric_potential_handler.color_enabled = arg1; }
+void MainWindow::on_actionenable_epcolor_toggled(bool arg1) { ui->loef_drawer->ep_handler.color_enabled = arg1; }
 
 void MainWindow::on_actionpositive_triggered() {
-    if (this->electric_potential_handler.color_use_input) {
+    if (ui->loef_drawer->ep_handler.color_use_input) {
         auto input_max_abs_positive =
             QInputDialog::getDouble(this, tr("max absolute positive potential"), tr("enter max abs positive"),
-                                    this->electric_potential_handler.get_current_max_abs_positive().value(), 0);
-        this->electric_potential_handler.set_current_max_abs_positive(input_max_abs_positive * LOEF::boostunits::volt);
+                                    ui->loef_drawer->ep_handler.get_current_max_abs_positive().value(), 0);
+        ui->loef_drawer->ep_handler.set_current_max_abs_positive(input_max_abs_positive * LOEF::boostunits::volt);
     }
 }
 
 void MainWindow::on_actionnegative_triggered() {
-    if (this->electric_potential_handler.color_use_input) {
+    if (ui->loef_drawer->ep_handler.color_use_input) {
         auto input_max_abs_negative = QInputDialog::getDouble(
             this, tr("max absolute negative potential"), tr("enter max abs negative"),
-            boost::units::abs(this->electric_potential_handler.get_current_max_abs_negative()).value(), 0);
-        this->electric_potential_handler.set_current_max_abs_negative(-input_max_abs_negative * LOEF::boostunits::volt);
+            boost::units::abs(ui->loef_drawer->ep_handler.get_current_max_abs_negative()).value(), 0);
+        ui->loef_drawer->ep_handler.set_current_max_abs_negative(-input_max_abs_negative * LOEF::boostunits::volt);
     }
 }
 
-void MainWindow::on_actionenable_epsurface_toggled(bool arg1) {
-    this->electric_potential_handler.surface_enabled = arg1;
-}
+void MainWindow::on_actionenable_epsurface_toggled(bool arg1) { ui->loef_drawer->ep_handler.surface_enabled = arg1; }
 
 void MainWindow::on_actiondistance_triggered() {
     auto input_distance =
         QInputDialog::getDouble(this, tr("distance between equipotential surfaces"), tr("enter distance"),
-                                this->electric_potential_handler.distance.value(), 0);
-    this->electric_potential_handler.distance = input_distance * LOEF::boostunits::volt;
+                                ui->loef_drawer->ep_handler.distance.value(), 0);
+    ui->loef_drawer->ep_handler.distance = input_distance * LOEF::boostunits::volt;
 }
 
-void MainWindow::on_actiondisable_LOEF_toggled(bool arg1) { this->electric_potential_handler.disable_LOEF = arg1; }
+void MainWindow::on_actiondisable_LOEF_toggled(bool arg1) { ui->loef_drawer->ep_handler.disable_LOEF = arg1; }
 
 void MainWindow::on_actionuse_input_toggled(bool arg1) {
     ui->actionpositive->setEnabled(arg1);
     ui->actionnegative->setEnabled(arg1);
-    this->electric_potential_handler.color_use_input = arg1;
+    ui->loef_drawer->ep_handler.color_use_input = arg1;
 }
 
 void MainWindow::on_actionmax_error_triggered() {
@@ -412,15 +406,17 @@ void MainWindow::on_actionoutput_samples_triggered() {
     QMessageBox::information(this, tr("output samples"), tr("output successfully ends"));
 }
 
-void MainWindow::on_actionshow_line_toggled(bool arg1) { this->electric_potential_handler.draw_sample_line = arg1; }
+void MainWindow::on_actionshow_line_toggled(bool arg1) { ui->loef_drawer->ep_handler.draw_sample_line = arg1; }
 // 両方選択してもOK
 
 void MainWindow::on_actionshow_rectangle_toggled(bool arg1) {
-    this->electric_potential_handler.draw_sample_rectangle = arg1;
+    ui->loef_drawer->ep_handler.draw_sample_rectangle = arg1;
 }
 // end lazy
 
-void MainWindow::on_actionuse_ready_made_algorithm_triggered(bool checked) { this->is_ready_made_requested = checked; }
+void MainWindow::on_actionuse_ready_made_algorithm_triggered(bool checked) {
+    this->ui->loef_drawer->set_is_ready_made_requested(checked);
+}
 void MainWindow::on_actionabout_qt_triggered() { QMessageBox::aboutQt(this, tr("about Qt")); }
 
 void MainWindow::on_actionabout_LOEF_drawer_triggered() {
