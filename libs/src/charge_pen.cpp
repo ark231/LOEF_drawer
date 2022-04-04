@@ -30,7 +30,7 @@ bool charge_pen::is_on_screen(dot_per_millimetre_quantity dpmm) {
     auto tail_elem = path->elementAt(path->elementCount() - 1);
     auto tail_pos = vec2d(tail_elem.x / dpmm, tail_elem.y / dpmm);
     // XXX:ultra lazy!!!
-    qDebug() << "pos:" << position_ << "tail" << tail_pos;
+    // qDebug() << "pos:" << position_ << "tail" << tail_pos;
     position_ = tail_pos;
     // XXX:end ultra lazy!!!
     return (0 <= position_.x() * dpmm && position_.x() * dpmm <= max_x) &&
@@ -56,7 +56,7 @@ step_status charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_cha
     if (qFuzzyIsNull(electric_field.length().value())) {
         return step_status::ABORT;  // meaning this will stay here forever!
     }
-    qDebug() << electric_field;
+    // qDebug() << electric_field;
     if (fuzzy_compare(this->previous_delta_position_, -normalize(electric_field).to_dimentionless() * interval_)) {
         return step_status::ABORT;  // or will loop forever!
     }

@@ -35,5 +35,8 @@ constexpr auto m = boostunits::metre;
 constexpr auto mm = millimetre;
 }  // namespace experimental
 // end lazy
+// experimental
+using dots_quantity = dimensionless_quantity;
+// end experimental
 }  // namespace LOEF
 #endif

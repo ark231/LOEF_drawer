@@ -44,6 +44,8 @@ class LOEF_drawer : public QWidget {
     // end lazy impl
     // experimental
     void set_is_ready_made_requested(bool new_value);
+    void set_is_draw_sample_line_requested(bool new_value);
+    void set_is_draw_sample_rectangle_requested(bool new_value);
     LOEF::experimental::electric_potential_handler ep_handler;
     // end experimental
 
@@ -62,6 +64,8 @@ class LOEF_drawer : public QWidget {
 
     // experimental
     bool is_ready_made_requested;
+    bool is_draw_sample_line_requested = false;
+    bool is_draw_sample_rectangle_requested = false;
     // end experimental
 
     void paintEvent(QPaintEvent *ev) override;
@@ -78,10 +82,6 @@ class LOEF_drawer : public QWidget {
     void replace_fixed_charge(const LOEF::id_type id, const std::optional<LOEF::coulomb_quantity> &maybe_new_charge,
                               const LOEF::millimetre_quantity new_pos_x, const LOEF::millimetre_quantity new_pos_y);
     void clear_and_redraw();
-
-    // lazy impl
-    std::optional<QImage> prepare_electric_potential_image();
-    // end lazy impl
 
    signals:
     void fixed_charge_position_changed(LOEF::id_type id, LOEF::millimetre_quantity new_X,
