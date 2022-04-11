@@ -63,7 +63,7 @@ electric_potential_handler::prepare_electric_potential_image_(
         for (auto x = 0; x < width; x++) {
             LOEF::vec2d current_position(QPoint(x, y), dpmm);
             LOEF::volt_quantity potential = 0.0 * LOEF::experimental::V;
-            QColor current_color("white");
+            QColor current_color("transparent");
             auto max_abs_positive = this->get_current_max_abs_positive();
             auto max_abs_negative = this->get_current_max_abs_negative();
             for (const auto &fixed_charge_tuple : fixed_charges) {
@@ -80,7 +80,7 @@ electric_potential_handler::prepare_electric_potential_image_(
                 auto remainder = boost::units::fmod(potential, this->distance).value();
                 if (LOEF::experimental::is_about_same(remainder, 0.0, this->max_error_surface)) {
                     current_color = QColor("black");
-                    potential_image.setPixel(x, y, current_color.rgb());
+                    potential_image.setPixel(x, y, current_color.rgba());
                     goto CONTINUE_TO_NEXT_POS;  //ここに関しては普通のcontinueでもいいが、上と揃えておく
                 }
             }
@@ -93,7 +93,7 @@ electric_potential_handler::prepare_electric_potential_image_(
                     current_color = QColor(0xff - diff, 0xff - diff, 0xff);
                 }
             }
-            potential_image.setPixel(x, y, current_color.rgb());
+            potential_image.setPixel(x, y, current_color.rgba());
         CONTINUE_TO_NEXT_POS:;
         }
     }
