@@ -421,6 +421,14 @@ void MainWindow::on_actionuse_ready_made_algorithm_triggered(bool checked) {
 }
 void MainWindow::on_actionabout_qt_triggered() { QMessageBox::aboutQt(this, tr("about Qt")); }
 
+QString replace_about_LOEF_placeholder(QString str) {
+    auto version = QString("%1.%2.%3%4")
+                       .arg(LOEF::version_major)
+                       .arg(LOEF::version_minor)
+                       .arg(LOEF::version_patch)
+                       .arg(LOEF::version_suffix);
+    return str.replace("LOEF_VERSION", version).replace("LOEF_BUILD_TYPE", LOEF::build_type);
+}
 void MainWindow::on_actionabout_LOEF_drawer_triggered() {
     QString locale_suffix = "";
     if (this->ui->actionJapanese->isChecked()) {
@@ -435,15 +443,10 @@ void MainWindow::on_actionabout_LOEF_drawer_triggered() {
                              tr("failed to open resource %1").arg(description_file.fileName()));
         return;
     }
-    auto description = QTextStream(&description_file).readAll();
-    auto version = QString("%1.%2.%3%4")
-                       .arg(LOEF::version_major)
-                       .arg(LOEF::version_minor)
-                       .arg(LOEF::version_patch)
-                       .arg(LOEF::version_suffix);
-    // qDebug() << description;
-    QMessageBox::about(this, tr("about LOEF_drawer"),
-                       description.replace("LOEF_VERSION", version).replace("LOEF_BUILD_TYPE", LOEF::build_type));
+    QTextStream description_stream(&description_file);
+    description_stream.setCodec("UTF-8");
+    auto description = replace_about_LOEF_placeholder(description_stream.readAll());
+    QMessageBox::about(this, tr("about LOEF_drawer"), description);
 }
 
 void MainWindow::on_actionalgorythm_type_triggered() {
