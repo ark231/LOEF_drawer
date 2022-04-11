@@ -4,6 +4,7 @@
 #include <QPoint>
 #include <QPointF>
 #include <array>
+#include <initializer_list>
 
 #include "units.hpp"
 namespace LOEF {
@@ -20,6 +21,7 @@ class basic_vec2d_ {
 
    public:
     basic_vec2d_(QUANTITY x, QUANTITY y);
+    basic_vec2d_(std::initializer_list<QUANTITY> init);
     /*
     basic_vec2d_(const QPoint &point, dot_per_millimetre_quantity dpmm);
     basic_vec2d_(const QPointF &point, dot_per_millimetre_quantity dpmm);
@@ -28,7 +30,7 @@ class basic_vec2d_ {
     QUANTITY length() const;
     QUANTITY x() const noexcept;
     QUANTITY y() const noexcept;
-    basic_vec2d_<dimensionless_quantity> to_dimentionless();
+    basic_vec2d_<dimensionless_quantity> to_dimensionless();
     void operator+=(const basic_vec2d_ &that);
     void operator-=(const basic_vec2d_ &that);
     void operator*=(double k);

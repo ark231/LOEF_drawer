@@ -9,8 +9,10 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMessageBox>
+#include <QMetaEnum>
 #include <QSettings>
 #include <QString>
+#include <QStringList>
 #include <QTextStream>
 
 #include "./ui_mainwindow.h"
@@ -323,9 +325,9 @@ void MainWindow::on_actionuse_input_toggled(bool arg1) {
 }
 
 void MainWindow::on_actionmax_error_triggered() {
-    auto input_max_error =
-        QInputDialog::getDouble(this, tr("max_error"), tr("enter max_error"), LOEF::experimental::max_error_surface, 0);
-    LOEF::experimental::max_error_surface = input_max_error;
+    auto input_max_error = QInputDialog::getDouble(this, tr("max_error"), tr("enter max_error"),
+                                                   ui->loef_drawer->ep_handler.max_error_surface, 0);
+    ui->loef_drawer->ep_handler.max_error_surface = input_max_error;
 }
 using LOEF::experimental::mm;
 void MainWindow::on_actionoutput_samples_triggered() {
@@ -442,4 +444,39 @@ void MainWindow::on_actionabout_LOEF_drawer_triggered() {
     // qDebug() << description;
     QMessageBox::about(this, tr("about LOEF_drawer"),
                        description.replace("LOEF_VERSION", version).replace("LOEF_BUILD_TYPE", LOEF::build_type));
+}
+
+void MainWindow::on_actionalgorythm_type_triggered() {
+    auto meta_ep_algorithm_type = QMetaEnum::fromType<LOEF::experimental::ep_algorithm_type>();
+    QStringList algorithm_names;
+    for (auto i = 0; i < meta_ep_algorithm_type.keyCount(); i++) {
+        algorithm_names.append(meta_ep_algorithm_type.key(i));
+    }
+    bool algorithm_selection_completed;
+    QString selected_algorithm =
+        QInputDialog::getItem(this, tr("select algorithm type"), tr("select algorithm of drawing equipotential lines"),
+                              algorithm_names, 0, false, &algorithm_selection_completed);
+    if (not algorithm_selection_completed) {
+        QMessageBox::warning(this, tr("algorithm not selected"), tr("it seems you didn't select any algorithm. "));
+        ui->loef_drawer->ep_handler.algorithm_type =
+            static_cast<LOEF::experimental::ep_algorithm_type>(meta_ep_algorithm_type.value(0));
+        return;
+    }
+    ui->loef_drawer->ep_handler.algorithm_type = static_cast<LOEF::experimental::ep_algorithm_type>(
+        meta_ep_algorithm_type.value(algorithm_names.indexOf(selected_algorithm)));
+}
+
+void MainWindow::on_actionside_length_triggered() {
+    auto meta_ep_algorithm_type = QMetaEnum::fromType<LOEF::experimental::ep_algorithm_type>();
+    if (ui->loef_drawer->ep_handler.algorithm_type != LOEF::experimental::ep_algorithm_type::marching_square) {
+        QMessageBox::warning(
+            this, tr("variable not needed"),
+            tr("current algorithm '%1' doesn't use this variable.")
+                .arg(meta_ep_algorithm_type.valueToKey(static_cast<int>(ui->loef_drawer->ep_handler.algorithm_type))));
+        return;
+    }
+    double input_length = QInputDialog::getDouble(this, tr("square side length"),
+                                                  tr("enter length of sides for marching square algorithm"),
+                                                  ui->loef_drawer->ep_handler.square_side_length.value());
+    ui->loef_drawer->ep_handler.square_side_length = input_length * mm;
 }

@@ -12,11 +12,17 @@ basic_vec2d_<QUANTITY>::basic_vec2d_(QUANTITY x, QUANTITY y) {
     this->y_ = y;
 }
 template <class QUANTITY>
+basic_vec2d_<QUANTITY>::basic_vec2d_(std::initializer_list<QUANTITY> init) {
+    Q_ASSERT(init.size() == 2);
+    this->x_ = *(init.begin());
+    this->y_ = *(init.begin() + 1);
+}
+template <class QUANTITY>
 QUANTITY basic_vec2d_<QUANTITY>::length() const {
     return boost::units::sqrt(x_ * x_ + y_ * y_);
 }
 template <class QUANTITY>
-basic_vec2d_<dimensionless_quantity> basic_vec2d_<QUANTITY>::to_dimentionless() {
+basic_vec2d_<dimensionless_quantity> basic_vec2d_<QUANTITY>::to_dimensionless() {
     return basic_vec2d_<dimensionless_quantity>(this->x_.value(), this->y_.value());
 }
 template <class QUANTITY>

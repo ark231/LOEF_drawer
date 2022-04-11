@@ -55,12 +55,15 @@ class MainWindow : public QMainWindow {
     void on_actionshow_line_toggled(bool arg1);
     void on_actionshow_rectangle_toggled(bool arg1);
     void on_actionuse_ready_made_algorithm_triggered(bool checked);
+    void on_actionalgorythm_type_triggered();
     // end lazy
     void on_actionabout_qt_triggered();
 
     void on_actionabout_LOEF_drawer_triggered();
 
-   private:
+    void on_actionside_length_triggered();
+
+private:
     Ui::MainWindow *ui;
     std::unordered_map<LOEF::id_type, QListWidgetItem *> id_to_item_;
     LOEF_individual_fixed_charge_editor *current_selected_editor_ = nullptr;

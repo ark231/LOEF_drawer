@@ -51,21 +51,21 @@ step_status charge_pen::step_forward(fixed_charge_map_iterator_ begin, fixed_cha
          */
 
         electric_field +=
-            normalize(charge_to_pen).to_dimentionless() * (fixed_charge.quantity() / (charge_to_pen.length_square()));
+            normalize(charge_to_pen).to_dimensionless() * (fixed_charge.quantity() / (charge_to_pen.length_square()));
     }
     if (qFuzzyIsNull(electric_field.length().value())) {
         return step_status::ABORT;  // meaning this will stay here forever!
     }
     // qDebug() << electric_field;
-    if (fuzzy_compare(this->previous_delta_position_, -normalize(electric_field).to_dimentionless() * interval_)) {
+    if (fuzzy_compare(this->previous_delta_position_, -normalize(electric_field).to_dimensionless() * interval_)) {
         return step_status::ABORT;  // or will loop forever!
     }
     if (this->is_positive_) {
-        this->position_ += normalize(electric_field).to_dimentionless() * interval_;
+        this->position_ += normalize(electric_field).to_dimensionless() * interval_;
     } else {  // negative
-        this->position_ += -normalize(electric_field).to_dimentionless() * (interval_);
+        this->position_ += -normalize(electric_field).to_dimensionless() * (interval_);
     }
-    this->previous_delta_position_ = normalize(electric_field).to_dimentionless() * (interval_);
+    this->previous_delta_position_ = normalize(electric_field).to_dimensionless() * (interval_);
     path->lineTo((this->position_).to_QPoint(dpmm));
     if ((0 <= position_.x() * dpmm && position_.x() * dpmm <= max_x) &&
         (0 <= position_.y() * dpmm && position_.y() * dpmm <= max_y)) {

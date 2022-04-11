@@ -17,7 +17,7 @@
 #include "debug_outputs.hpp"
 #include "experimental/differential_equation.hpp"
 #include "experimental/electric_potential.hpp"
-#include "experimental/lazy_helper.hpp"
+#include "experimental/experimental_helper.hpp"
 #include "general_consts.hpp"
 #include "units.hpp"
 namespace LOEF {
@@ -193,7 +193,7 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
     // end lazy
     LOEF::clear_pens_arrival_to_fixed_charges(fixed_charges_.begin(), fixed_charges_.end());
     decltype(fixed_charges_) positive_fixed_charges;
-    decltype(fixed_charges_) newtral_fixed_charges;
+    decltype(fixed_charges_) neutral_fixed_charges;
     decltype(fixed_charges_) nonpositive_fixed_charges;
     decltype(fixed_charges_) negative_fixed_charges;
     std::partition_copy(fixed_charges_.begin(), fixed_charges_.end(),
@@ -203,7 +203,7 @@ void LOEF_drawer::paintEvent(QPaintEvent *) {
                             return charge.second.quantity() > 0.0 * LOEF::boostunits::coulomb;
                         });
     std::partition_copy(nonpositive_fixed_charges.begin(), nonpositive_fixed_charges.end(),
-                        std::inserter(newtral_fixed_charges, newtral_fixed_charges.end()),
+                        std::inserter(neutral_fixed_charges, neutral_fixed_charges.end()),
                         std::inserter(negative_fixed_charges, negative_fixed_charges.end()),
                         [](decltype(*(fixed_charges_.begin())) &charge) {
                             return charge.second.quantity() == 0.0 * LOEF::boostunits::coulomb;
@@ -319,7 +319,7 @@ void LOEF_drawer::prepare_LOEF_pathes() {
                     }
                     if (not boost::units::isfinite(LOEF::vec2d(state).x()) or
                         not boost::units::isfinite(LOEF::vec2d(state).y())) {
-                        throw std::runtime_error("illigal calculation happened");
+                        throw std::runtime_error("illegal calculation happened");
                     }
                     if (is_every_charge_divergent && not pen.is_on_screen(dpmm_)) {
                         throw std::runtime_error("go out of screen");

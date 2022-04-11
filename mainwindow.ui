@@ -180,7 +180,7 @@ version</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>28</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="menusettings">
@@ -222,6 +222,10 @@ version</string>
      <addaction name="actionenable_epsurface"/>
      <addaction name="actiondistance"/>
      <addaction name="actionmax_error"/>
+     <addaction name="separator"/>
+     <addaction name="actionside_length"/>
+     <addaction name="separator"/>
+     <addaction name="actionalgorythm_type"/>
     </widget>
     <widget class="QMenu" name="menushow_sample">
      <property name="title">
@@ -360,6 +364,19 @@ version</string>
   <action name="actionabout_LOEF_drawer">
    <property name="text">
     <string>about LOEF_drawer</string>
+   </property>
+  </action>
+  <action name="actionalgorythm_type">
+   <property name="text">
+    <string>algorythm type</string>
+   </property>
+  </action>
+  <action name="actionside_length">
+   <property name="text">
+    <string>side length</string>
+   </property>
+   <property name="whatsThis">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The length of sides for marching square algorithm&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </action>
  </widget>

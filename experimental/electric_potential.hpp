@@ -11,6 +11,7 @@
 #include <QtCore>
 #include <optional>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 
 #include "fixed_charge.hpp"
@@ -19,7 +20,22 @@
 
 // experimental
 namespace LOEF {
+Q_NAMESPACE
 namespace experimental {
+Q_NAMESPACE
+/**
+ * @brief 電位描画アルゴリズムの種類
+ *
+ * @bug オリジナルのアルゴリズムでは、線の太さが一定にならない。電位の変化が少ない所では太く、多いところでは細くなる
+ *
+ */
+enum class ep_algorithm_type {
+    //! 全ピクセルを調べて、そこでの電位を間隔で割った余りが許容誤差範囲内なら色を付ける
+    original,
+    //! マーチングスクエア法
+    marching_square
+};
+Q_ENUM_NS(ep_algorithm_type)
 /**
  * @brief 実験的な電位関連の機能を実装するクラス
  *
@@ -31,8 +47,11 @@ class electric_potential_handler {
     bool color_use_input = false;
     bool surface_enabled = false;
     bool disable_LOEF = false;
+    double max_error_surface = 1.0;
     volt_quantity distance = 0.0 * boostunits::volt;
     millimetre_quantity output_sample_diff = 1.0 * mm;
+    ep_algorithm_type algorithm_type = ep_algorithm_type::original;
+    millimetre_quantity square_side_length = 1.0 * mm;
 
     volt_quantity get_current_max_abs_positive();
     volt_quantity get_current_max_abs_negative();
@@ -60,9 +79,14 @@ class electric_potential_handler {
    private:
     volt_quantity current_max_abs_positive = 0.0 * boostunits::volt;
     volt_quantity current_max_abs_negative = 0.0 * boostunits::volt;
-    std::optional<QImage> prepare_electric_potential_image_(
+    struct PaintImageSkipped_ {};
+    struct PaintAborted_ {};
+    std::variant<QImage, PaintImageSkipped_, PaintAborted_> prepare_electric_potential_image_(
         std::unordered_map<LOEF::id_type, LOEF::fixed_charge> fixed_charges, LOEF::dots_quantity width,
         LOEF::dots_quantity height, LOEF::dot_per_millimetre_quantity dpmm);
+    QVector<QLineF> find_equipotential_lines_at_(millimetre_quantity x, millimetre_quantity y,
+                                                 std::unordered_map<id_type, fixed_charge> fixed_charges,
+                                                 dot_per_millimetre_quantity dpmm);
 };
 }  // namespace experimental
 }  // namespace LOEF

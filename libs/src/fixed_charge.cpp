@@ -41,7 +41,7 @@ std::vector<vec2d> fixed_charge::calc_pen_init_pos(fixed_charge_containter_itr b
             vec2d charge_to_sample = sample_position - fixed_charge->second.position();
             electric_field_strength_quantity sample_field_strength =
                 (fixed_charge->second.quantity() / charge_to_sample.length_square());
-            auto field_direction = charge_to_sample.to_dimentionless();
+            auto field_direction = charge_to_sample.to_dimensionless();
             sample_electric_field += electric_field(field_direction.x() * sample_field_strength,
                                                     field_direction.y() * sample_field_strength);
         }

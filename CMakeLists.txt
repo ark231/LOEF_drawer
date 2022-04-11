@@ -58,7 +58,7 @@ add_executable(LOEF_drawer
     main_resources.qrc
 
     experimental/electric_potential.cpp
-    experimental/lazy_helper.cpp
+    experimental/experimental_helper.cpp
     experimental/differential_equation.cpp
 )
 

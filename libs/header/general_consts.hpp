@@ -24,7 +24,6 @@ inline millimetre_quantity interval_steps = 0.1 * millimetre;
 
 namespace experimental {
 constexpr auto k0 = 8.987'551'8 * N * m * m / (C * C);
-inline double max_error_surface = 1.0;
 inline millimetre_quantity screen_expantion_x = 0.0 * mm;
 inline millimetre_quantity screen_expantion_y = 0.0 * mm;
 namespace integrate {
