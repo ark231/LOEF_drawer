@@ -23,7 +23,7 @@ class fixed_charge : public basic_charge_ {
     /**
      * @brief ペンが到着したときに呼び出す
      *
-     * @param offset 到着したペンとこの電荷の位置関係
+     * @param offset 到着したペンとこの電荷の位置関係 電荷→ペン
      *
      * @return そのペンは到着しても良いかどうか
      * @retval false 定員オーバーで、到着してはならないはずである

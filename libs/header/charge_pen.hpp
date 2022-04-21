@@ -3,6 +3,7 @@
 #include <QPainterPath>
 #include <iterator>
 #include <memory>
+#include <utility>
 
 #include "basic_charge.hpp"
 #include "general_consts.hpp"
@@ -30,7 +31,7 @@ class charge_pen {
     std::shared_ptr<LOEF_path> path;
     // lazy
    public:
-    id_type origin;
+    std::pair<id_type, fixed_charge> origin;
     // end lazy
 
    public:

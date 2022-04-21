@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "charges.hpp"
+#include "differential_equation.hpp"
 #include "experimental/electric_potential.hpp"
 #include "general_consts.hpp"
 #include "vec2d.hpp"
@@ -39,14 +40,13 @@ class LOEF_drawer : public QWidget {
 
     // lazy impl
     std::vector<LOEF::fixed_charge> get_fixed_charges();
-    enum class total_polarity { positive, negative, equal, default_value };
-    total_polarity fixed_charges_total_polarity = total_polarity::default_value;
     // end lazy impl
     // experimental
     void set_is_ready_made_requested(bool new_value);
     void set_is_draw_sample_line_requested(bool new_value);
     void set_is_draw_sample_rectangle_requested(bool new_value);
     LOEF::experimental::electric_potential_handler ep_handler;
+    LOEF::experimental::differential_equation_handler diff_equ_handler;
     // end experimental
 
    private:
@@ -63,7 +63,7 @@ class LOEF_drawer : public QWidget {
     bool is_multi_selecting = false;
 
     // experimental
-    bool is_ready_made_requested;
+    bool is_ready_made_requested = false;
     bool is_draw_sample_line_requested = false;
     bool is_draw_sample_rectangle_requested = false;
     // end experimental
