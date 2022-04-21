@@ -109,9 +109,7 @@ QVector<QLineF> electric_potential_handler::find_equipotential_lines_at_(
     vec2d bottom_right = {x + this->square_side_length, y + this->square_side_length};
     vec2d bottom_left = {x, y + this->square_side_length};
     for (const auto &vertex : {top_left, top_right, bottom_right, bottom_left}) {
-        auto nearest_charge_id = find_closest(fixed_charges.cbegin(), fixed_charges.cend(), vertex);
-        auto vertex_to_nearest = fixed_charges[nearest_charge_id].position() - vertex;
-        if (vertex_to_nearest.length() < radius::FIXED) {
+        if (calc_shortest_distance(fixed_charges.cbegin(), fixed_charges.cend(), vertex, {}) < radius::FIXED) {
             return QVector<QLineF>();  //さもなくば、無限本の等電位線を描こうとして無限ループの危険性がある
         }
     }
