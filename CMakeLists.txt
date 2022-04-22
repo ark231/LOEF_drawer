@@ -11,7 +11,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 5.13 COMPONENTS Widgets LinguistTools REQUIRED)
+find_package(Qt5 5.13 COMPONENTS Widgets LinguistTools Concurrent REQUIRED)
 find_package(Boost  REQUIRED)
 
 add_subdirectory(libs)
@@ -64,7 +64,7 @@ add_executable(LOEF_drawer
 
 target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra )
 target_compile_definitions(LOEF_drawer PUBLIC $<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
-target_link_libraries(LOEF_drawer PRIVATE Qt5::Widgets)
+target_link_libraries(LOEF_drawer PRIVATE Qt5::Widgets Qt5::Concurrent)
 target_link_libraries(LOEF_drawer PRIVATE 
     charges
     vec2d

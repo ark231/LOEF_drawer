@@ -4,6 +4,7 @@
 #include <QImage>
 #include <QJsonObject>
 #include <QKeyEvent>
+#include <QMutex>
 #include <QWidget>
 #include <optional>
 #include <tuple>
@@ -63,6 +64,7 @@ class LOEF_drawer : public QWidget {
     bool is_multi_selecting = false;
 
     // experimental
+    QMutex fixed_charge_mutex_;
     bool is_ready_made_requested = false;
     bool is_draw_sample_line_requested = false;
     bool is_draw_sample_rectangle_requested = false;

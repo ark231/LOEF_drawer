@@ -6,7 +6,9 @@
 #include <QJsonArray>
 #include <QMetaEnum>
 #include <QMouseEvent>
+#include <QMutexLocker>
 #include <QScreen>
+#include <QtConcurrent>
 #include <QtGlobal>
 #include <algorithm>
 #include <iterator>
@@ -250,18 +252,19 @@ void LOEF_drawer::prepare_LOEF_pathes() {
     std::vector<LOEF::id_type> ids_to_erase;
     while (!charge_pens_.empty()) {
         if (this->is_ready_made_requested) {
-#warning "change to multithread here"
-            for (auto &charge_pen : this->charge_pens_) {
-                auto entered_info = diff_equ_handler.integrate_pen(charge_pen);
+            auto future = QtConcurrent::map(this->charge_pens_, [&, this](auto item) {
+                auto entered_info = diff_equ_handler.integrate_pen(item);
+                QMutexLocker locker(&this->fixed_charge_mutex_);
                 if (entered_info.is_entered) {
                     auto entered_charge = fixed_charges_[entered_info.id];
                     entered_charge.pen_arrive(entered_info.pen_final_pos - entered_charge.position());
-                    ids_to_erase.push_back(charge_pen.first);
+                    ids_to_erase.push_back(item.first);
                 } else {
-                    qDebug() << "@LOEF_drawer prepare_LOEF_pathes() charge pen not entered. id:" << charge_pen.first;
-                    ids_to_erase.push_back(charge_pen.first);
+                    qDebug() << "@LOEF_drawer prepare_LOEF_pathes() charge pen not entered. id:" << item.first;
+                    ids_to_erase.push_back(item.first);
                 }
-            }
+            });
+            future.waitForFinished();
         } else {
             for (auto charge_pen = charge_pens_.begin(); charge_pen != charge_pens_.end(); charge_pen++) {
                 switch (charge_pen->second.step_forward(fixed_charges_.begin(), fixed_charges_.end(), dpmm_)) {
