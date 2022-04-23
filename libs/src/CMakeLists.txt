@@ -11,29 +11,47 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 find_package(Qt5 COMPONENTS Core Gui REQUIRED)
 find_package(Boost  REQUIRED)
 
-if(NOT "x${LOEF_NOUPDATE}" STREQUAL "xyes")
+include(${CMAKE_SOURCE_DIR}/tools.cmake)
+
+if(NOT "${LOEF_NOUPDATE}")
     add_compile_options(-Wall -Wextra)
+    scoped_message(STATUS "update")
+else()
+    scoped_message(STATUS "noupdate")
 endif()
 
-if("x${LOEF_STATIC}" STREQUAL "xyes")
+if("${LOEF_STATIC}")
     add_compile_options(-static-libgcc -static-libstdc++)
+    scoped_message(STATUS "static linking build")
+else()
+    scoped_message(STATUS "dynamic linking build")
 endif()
-add_compile_definitions($<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
+add_compile_definitions($<$<NOT:$<CONFIG:Debug>>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
+if("${LOEF_USE_PROFILER}")
+    add_compile_options(-pg)
+    add_link_options(-pg)
+    scoped_message(STATUS "use profiler")
+else()
+    scoped_message(STATUS "not use profiler")
+endif()
 include_directories(
     ${LOEF_drawer_libs_header_SOURCE_DIR}
     ${LOEF_drawer_libs_header_BINARY_DIR}
     ${Boost_INCLUDE_DIRS}
     )
-if("x${LOEF_STATIC}" STREQUAL "xyes")
+if("${LOEF_STATIC}")
+    scoped_message(STATUS "static linking build")
     link_libraries(
         -static
         winpthread
         -static-libgcc
         -static-libstdc++
         )
+else()
+    scoped_message(STATUS "dynamic linking build")
 endif()
-message (STATUS "Boost_INSTALL_DIR:${Boost_INCLUDE_DIR}")
-message (STATUS "Boost_INSTALL_DIRS:${Boost_INCLUDE_DIRS}")
+scoped_message (STATUS "Boost_INSTALL_DIR:${Boost_INCLUDE_DIR}")
+scoped_message (STATUS "Boost_INSTALL_DIRS:${Boost_INCLUDE_DIRS}")
 
 add_library(vec2d STATIC
     vec2d.cpp

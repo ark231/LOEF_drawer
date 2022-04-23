@@ -14,13 +14,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt5 5.13 COMPONENTS Widgets LinguistTools Concurrent REQUIRED)
 find_package(Boost  REQUIRED)
 
+include(${CMAKE_SOURCE_DIR}/tools.cmake)
+
 add_subdirectory(libs)
-message(STATUS "x${LOEF_NOUPDATE}")
-if("x${LOEF_NOUPDATE}" STREQUAL "xyes")
-message(STATUS "noupdate")
+if("${LOEF_NOUPDATE}")
+scoped_message(STATUS "noupdate")
 qt5_add_translation(LOEF_QM_FILES ${CMAKE_CURRENT_SOURCE_DIR}/translations/LOEF_drawer_ja.ts )
 else()
-message(STATUS "update")
+scoped_message(STATUS "update")
 qt5_create_translation(LOEF_QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} 
     ${CMAKE_CURRENT_SOURCE_DIR}/translations/LOEF_drawer_ja.ts 
     OPTIONS -no-obsolete
@@ -63,7 +64,14 @@ add_executable(LOEF_drawer
 )
 
 target_compile_options(LOEF_drawer PUBLIC -Wall -Wextra )
-target_compile_definitions(LOEF_drawer PUBLIC $<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
+target_compile_definitions(LOEF_drawer PUBLIC $<$<NOT:$<CONFIG:Debug>>:QT_NO_DEBUG_OUTPUT$<SEMICOLON>QT_NO_DEBUG>)
+if(${LOEF_USE_PROFILER})
+scoped_message(STATUS "use profiler")
+target_compile_options(LOEF_drawer PUBLIC -pg)
+target_link_options(LOEF_drawer PUBLIC -pg)
+else()
+scoped_message(STATUS "not use profiler")
+endif()
 target_link_libraries(LOEF_drawer PRIVATE Qt5::Widgets Qt5::Concurrent)
 target_link_libraries(LOEF_drawer PRIVATE 
     charges
